@@ -1,0 +1,518 @@
+10
+Game/Blocks/Dirt.tga dirt
+Game/Blocks/Stone.tga stone
+Game/Blocks/Stone_side.tga stone_side
+Game/Blocks/Exit_green.tga exit_green
+Game/Blocks/Water_1.tga water_1
+Game/Blocks/Water_2.tga water_2
+Game/Blocks/Water_3.tga water_3
+Game/Blocks/Lava_1.tga lava_1
+Game/Blocks/Lava_2.tga lava_2
+Game/Blocks/Lava_3.tga lava_3
+
+15
+Game/Entities/Bolts/Wizard/Wizard_bolt_up.tga wizard_bolt_up
+Game/Entities/Bolts/Wizard/Wizard_bolt_down.tga wizard_bolt_down
+Game/Entities/Bolts/Wizard/Wizard_bolt_left.tga wizard_bolt_left
+Game/Entities/Bolts/Wizard/Wizard_bolt_right.tga wizard_bolt_right
+
+Game/Entities/Bolts/Lich/Lich_bolt_up.tga lich_bolt_up
+Game/Entities/Bolts/Lich/Lich_bolt_down.tga lich_bolt_down
+Game/Entities/Bolts/Lich/Lich_bolt_left.tga lich_bolt_left
+Game/Entities/Bolts/Lich/Lich_bolt_right.tga lich_bolt_right
+
+Game/Entities/Gold/Gold_1.tga gold_1
+Game/Entities/Gold/Gold_2.tga gold_2
+Game/Entities/Gold/Gold_3.tga gold_3
+Game/Entities/Gold/Gold_4.tga gold_4
+Game/Entities/Gold/Gold_5.tga gold_5
+Game/Entities/Gold/Gold_6.tga gold_6
+Game/Entities/Gold/Gold_7.tga gold_7
+
+8
+Game/Player/Player_idle_left_1.tga player_idle_left_1
+Game/Player/Player_idle_left_2.tga player_idle_left_2
+Game/Player/Player_idle_right_1.tga player_idle_right_1
+Game/Player/Player_idle_right_2.tga player_idle_right_2
+Game/Player/Player_jump_left_1.tga player_jump_left_1
+Game/Player/Player_jump_left_2.tga player_jump_left_2
+Game/Player/Player_jump_right_1.tga player_jump_right_1
+Game/Player/Player_jump_right_2.tga player_jump_right_2
+
+9
+Game/Wiring/Crate.tga crate
+Game/Wiring/Wooden_plate.tga wooden_plate
+Game/Wiring/Wooden_plate_pressed.tga wooden_plate_pressed
+Game/Wiring/Steel_plate.tga steel_plate
+Game/Wiring/Steel_plate_pressed.tga steel_plate_pressed
+Game/Wiring/Gold_plate.tga gold_plate
+Game/Wiring/Gold_plate_pressed.tga gold_plate_pressed
+Game/Wiring/Lamp_led_off.tga lamp_led_off
+Game/Wiring/Lamp_led_on.tga lamp_led_on
+
+4
+Game/Door/Door_up.tga door_up
+Game/Door/Door_down.tga door_down
+Game/Door/Door_left.tga door_left
+Game/Door/Door_right.tga door_right
+
+13
+Game/UI/Healthbars/Enemies/Armor/Shield_small_half.tga shield_small_half
+Game/UI/Healthbars/Enemies/Armor/Shield_small_full.tga shield_small_full
+
+Game/UI/Healthbars/Enemies/Health/Heart_small_empty.tga heart_small_empty
+Game/UI/Healthbars/Enemies/Health/Heart_small_half.tga heart_small_half
+Game/UI/Healthbars/Enemies/Health/Heart_small_full.tga heart_small_full
+
+Game/UI/Healthbars/Player/Armor/Shield_half.tga shield_half
+Game/UI/Healthbars/Player/Armor/Shield_full.tga shield_full
+
+Game/UI/Healthbars/Player/Health/Heart_empty.tga heart_empty
+Game/UI/Healthbars/Player/Health/Heart_half.tga heart_half
+Game/UI/Healthbars/Player/Health/Heart_full.tga heart_full
+
+Game/UI/Itembar/Item_frame.tga item_frame
+Game/UI/Itembar/Item_frame_selected.tga item_frame_selected
+
+Game/UI/Gold_coin.tga gold_coin
+
+4
+Game/Other/Sign.tga sign
+Game/Other/Effect_slowed.tga effect_slowed
+Game/Other/Effect_stunned.tga effect_stunned
+Game/Other/Effect_burning.tga effect_burning
+
+5
+Menu/Elements/Selectionmarker.tga selectionmarker
+Menu/Elements/Selectionarrowleft.tga selectionarrowleft
+Menu/Elements/Selectionarrowright.tga selectionarrowright
+Menu/Elements/Sliderbody.tga sliderbody
+Menu/Elements/Sliderhead.tga sliderhead
+
+7
+Game/Animations/Attack/Attack_chop_up_animation.tga attack_chop_up_animation
+Game/Animations/Attack/Attack_chop_down_animation.tga attack_chop_down_animation
+Game/Animations/Attack/Attack_chop_left_animation.tga attack_chop_left_animation
+Game/Animations/Attack/Attack_chop_right_animation.tga attack_chop_right_animation
+
+Game/Animations/Spell/Eruption_windup_animation.tga eruption_windup_animation
+Game/Animations/Spell/Eruption_animation.tga eruption_animation
+
+Game/Animations/Spawn/Zombie_small_spawn_animation.tga zombie_small_spawn_animation
+
+96
+Misc/Fonts/Large/Space.tga Space
+Misc/Fonts/Large/Exclamation_mark.tga ExMark
+Misc/Fonts/Large/Quotation_mark.tga QuoMark
+Misc/Fonts/Large/Hashtag.tga Hashtag
+Misc/Fonts/Large/Dollar_sign.tga DSign
+Misc/Fonts/Large/Percent.tga Percent
+Misc/Fonts/Large/Ampersand.tga Ampersand
+Misc/Fonts/Large/Apostrophe.tga	Apostrophe
+Misc/Fonts/Large/Open_parenthesis.tga OParentheses
+Misc/Fonts/Large/Close_parenthesis.tga CParenthesis
+Misc/Fonts/Large/Asterisk.tga Asterisk
+Misc/Fonts/Large/Plus.tga Plus
+Misc/Fonts/Large/Comma.tga Comma
+Misc/Fonts/Large/Minus.tga Minus
+Misc/Fonts/Large/Dot.tga Dot
+Misc/Fonts/Large/Forward_slash.tga FSlash
+Misc/Fonts/Large/0.tga 0
+Misc/Fonts/Large/1.tga 1
+Misc/Fonts/Large/2.tga 2
+Misc/Fonts/Large/3.tga 3
+Misc/Fonts/Large/4.tga 4
+Misc/Fonts/Large/5.tga 5
+Misc/Fonts/Large/6.tga 6
+Misc/Fonts/Large/7.tga 7
+Misc/Fonts/Large/8.tga 8
+Misc/Fonts/Large/9.tga 9
+Misc/Fonts/Large/Colon.tga Colon
+Misc/Fonts/Large/Semicolon.tga Semicolon
+Misc/Fonts/Large/Less_than.tga Less
+Misc/Fonts/Large/Equals.tga Equals
+Misc/Fonts/Large/More_than.tga More
+Misc/Fonts/Large/Question_mark.tga QueMark
+Misc/Fonts/Large/At.tga At
+Misc/Fonts/Large/A.tga A
+Misc/Fonts/Large/B.tga B
+Misc/Fonts/Large/C.tga C
+Misc/Fonts/Large/D.tga D
+Misc/Fonts/Large/E.tga E
+Misc/Fonts/Large/F.tga F
+Misc/Fonts/Large/G.tga G
+Misc/Fonts/Large/H.tga H
+Misc/Fonts/Large/I.tga I
+Misc/Fonts/Large/J.tga J
+Misc/Fonts/Large/K.tga K
+Misc/Fonts/Large/L.tga L
+Misc/Fonts/Large/M.tga M
+Misc/Fonts/Large/N.tga N
+Misc/Fonts/Large/O.tga O
+Misc/Fonts/Large/P.tga P
+Misc/Fonts/Large/Q.tga Q
+Misc/Fonts/Large/R.tga R
+Misc/Fonts/Large/S.tga S
+Misc/Fonts/Large/T.tga T
+Misc/Fonts/Large/U.tga U
+Misc/Fonts/Large/V.tga V
+Misc/Fonts/Large/W.tga W
+Misc/Fonts/Large/X.tga X
+Misc/Fonts/Large/Y.tga Y
+Misc/Fonts/Large/Z.tga Z
+Misc/Fonts/Large/Open_bracket.tga OBracket
+Misc/Fonts/Large/Backslash.tga BSlash
+Misc/Fonts/Large/Closed_bracket.tga CBracket
+Misc/Fonts/Large/Caret.tga Caret
+Misc/Fonts/Large/Underscore.tga Underscore
+Misc/Fonts/Large/Grave.tga Grave
+Misc/Fonts/Large/A.tga A
+Misc/Fonts/Large/B.tga B
+Misc/Fonts/Large/C.tga C
+Misc/Fonts/Large/D.tga D
+Misc/Fonts/Large/E.tga E
+Misc/Fonts/Large/F.tga F
+Misc/Fonts/Large/G.tga G
+Misc/Fonts/Large/H.tga H
+Misc/Fonts/Large/I.tga I
+Misc/Fonts/Large/J.tga J
+Misc/Fonts/Large/K.tga K
+Misc/Fonts/Large/L.tga L
+Misc/Fonts/Large/M.tga M
+Misc/Fonts/Large/N.tga N
+Misc/Fonts/Large/O.tga O
+Misc/Fonts/Large/P.tga P
+Misc/Fonts/Large/Q.tga Q
+Misc/Fonts/Large/R.tga R
+Misc/Fonts/Large/S.tga S
+Misc/Fonts/Large/T.tga T
+Misc/Fonts/Large/U.tga U
+Misc/Fonts/Large/V.tga V
+Misc/Fonts/Large/W.tga W
+Misc/Fonts/Large/X.tga X
+Misc/Fonts/Large/Y.tga Y
+Misc/Fonts/Large/Z.tga Z
+Misc/Fonts/Large/Open_brace.tga OBrace
+Misc/Fonts/Large/Pipe.tga Pipe
+Misc/Fonts/Large/Close_brace.tga CBrace
+Misc/Fonts/Large/Tilde.tga Tilde
+Misc/Fonts/Large/Del.tga Del
+
+96
+Misc/Fonts/Small/Space.tga Space
+Misc/Fonts/Small/Exclamation_mark.tga ExMark
+Misc/Fonts/Small/Quotation_mark.tga QuoMark
+Misc/Fonts/Small/Hashtag.tga Hashtag
+Misc/Fonts/Small/Dollar_sign.tga DSign
+Misc/Fonts/Small/Percent.tga Percent
+Misc/Fonts/Small/Ampersand.tga Ampersand
+Misc/Fonts/Small/Apostrophe.tga	Apostrophe
+Misc/Fonts/Small/Open_parenthesis.tga OParentheses
+Misc/Fonts/Small/Close_parenthesis.tga CParenthesis
+Misc/Fonts/Small/Asterisk.tga Asterisk
+Misc/Fonts/Small/Plus.tga Plus
+Misc/Fonts/Small/Comma.tga Comma
+Misc/Fonts/Small/Minus.tga Minus
+Misc/Fonts/Small/Dot.tga Dot
+Misc/Fonts/Small/Forward_slash.tga FSlash
+Misc/Fonts/Small/0.tga 0
+Misc/Fonts/Small/1.tga 1
+Misc/Fonts/Small/2.tga 2
+Misc/Fonts/Small/3.tga 3
+Misc/Fonts/Small/4.tga 4
+Misc/Fonts/Small/5.tga 5
+Misc/Fonts/Small/6.tga 6
+Misc/Fonts/Small/7.tga 7
+Misc/Fonts/Small/8.tga 8
+Misc/Fonts/Small/9.tga 9
+Misc/Fonts/Small/Colon.tga Colon
+Misc/Fonts/Small/Semicolon.tga Semicolon
+Misc/Fonts/Small/Less_than.tga Less
+Misc/Fonts/Small/Equals.tga Equals
+Misc/Fonts/Small/More_than.tga More
+Misc/Fonts/Small/Question_mark.tga QueMark
+Misc/Fonts/Small/At.tga At
+Misc/Fonts/Small/A.tga A
+Misc/Fonts/Small/B.tga B
+Misc/Fonts/Small/C.tga C
+Misc/Fonts/Small/D.tga D
+Misc/Fonts/Small/E.tga E
+Misc/Fonts/Small/F.tga F
+Misc/Fonts/Small/G.tga G
+Misc/Fonts/Small/H.tga H
+Misc/Fonts/Small/I.tga I
+Misc/Fonts/Small/J.tga J
+Misc/Fonts/Small/K.tga K
+Misc/Fonts/Small/L.tga L
+Misc/Fonts/Small/M.tga M
+Misc/Fonts/Small/N.tga N
+Misc/Fonts/Small/O.tga O
+Misc/Fonts/Small/P.tga P
+Misc/Fonts/Small/Q.tga Q
+Misc/Fonts/Small/R.tga R
+Misc/Fonts/Small/S.tga S
+Misc/Fonts/Small/T.tga T
+Misc/Fonts/Small/U.tga U
+Misc/Fonts/Small/V.tga V
+Misc/Fonts/Small/W.tga W
+Misc/Fonts/Small/X.tga X
+Misc/Fonts/Small/Y.tga Y
+Misc/Fonts/Small/Z.tga Z
+Misc/Fonts/Small/Open_bracket.tga OBracket
+Misc/Fonts/Small/Backslash.tga BSlash
+Misc/Fonts/Small/Closed_bracket.tga CBracket
+Misc/Fonts/Small/Caret.tga Caret
+Misc/Fonts/Small/Underscore.tga Underscore
+Misc/Fonts/Small/Grave.tga Grave
+Misc/Fonts/Small/A.tga A
+Misc/Fonts/Small/B.tga B
+Misc/Fonts/Small/C.tga C
+Misc/Fonts/Small/D.tga D
+Misc/Fonts/Small/E.tga E
+Misc/Fonts/Small/F.tga F
+Misc/Fonts/Small/G.tga G
+Misc/Fonts/Small/H.tga H
+Misc/Fonts/Small/I.tga I
+Misc/Fonts/Small/J.tga J
+Misc/Fonts/Small/K.tga K
+Misc/Fonts/Small/L.tga L
+Misc/Fonts/Small/M.tga M
+Misc/Fonts/Small/N.tga N
+Misc/Fonts/Small/O.tga O
+Misc/Fonts/Small/P.tga P
+Misc/Fonts/Small/Q.tga Q
+Misc/Fonts/Small/R.tga R
+Misc/Fonts/Small/S.tga S
+Misc/Fonts/Small/T.tga T
+Misc/Fonts/Small/U.tga U
+Misc/Fonts/Small/V.tga V
+Misc/Fonts/Small/W.tga W
+Misc/Fonts/Small/X.tga X
+Misc/Fonts/Small/Y.tga Y
+Misc/Fonts/Small/Z.tga Z
+Misc/Fonts/Small/Open_brace.tga OBrace
+Misc/Fonts/Small/Pipe.tga Pipe
+Misc/Fonts/Small/Close_brace.tga CBrace
+Misc/Fonts/Small/Tilde.tga Tilde
+Misc/Fonts/Small/Del.tga Del
+
+1
+Game/Items/Wooden_sword.tga wooden_sword
+
+10
+Game/Mobs/Barbarian/Barbarian_idle_left_1.tga barbarian_small_idle_left_1
+Game/Mobs/Barbarian/Barbarian_idle_left_2.tga barbarian_small_idle_left_2
+Game/Mobs/Barbarian/Barbarian_idle_right_1.tga barbarian_small_idle_right_1
+Game/Mobs/Barbarian/Barbarian_idle_right_2.tga barbarian_small_idle_right_2
+Game/Mobs/Barbarian/Barbarian_jump_left_1.tga barbarian_small_jump_left_1
+Game/Mobs/Barbarian/Barbarian_jump_left_2.tga barbarian_small_jump_left_2
+Game/Mobs/Barbarian/Barbarian_jump_right_1.tga barbarian_small_jump_right_1
+Game/Mobs/Barbarian/Barbarian_jump_right_2.tga barbarian_small_jump_right_2
+Game/Mobs/Barbarian/Barbarian_attack_left_1.tga barbarian_small_attack_left_1
+Game/Mobs/Barbarian/Barbarian_attack_right_1.tga barbarian_small_attack_right_1
+
+16
+Game/Mobs/Wizard/Wizard_idle_left_1.tga wizard_small_idle_left_1
+Game/Mobs/Wizard/Wizard_idle_left_2.tga wizard_small_idle_left_2
+Game/Mobs/Wizard/Wizard_idle_right_1.tga wizard_small_idle_right_1
+Game/Mobs/Wizard/Wizard_idle_right_2.tga wizard_small_idle_right_2
+Game/Mobs/Wizard/Wizard_jump_left_1.tga wizard_small_jump_left_1
+Game/Mobs/Wizard/Wizard_jump_left_2.tga wizard_small_jump_left_2
+Game/Mobs/Wizard/Wizard_jump_right_2.tga wizard_small_jump_right_1
+Game/Mobs/Wizard/Wizard_jump_right_2.tga wizard_small_jump_right_2
+Game/Mobs/Wizard/Wizard_casting_bolt_left_1.tga wizard_small_casting_bolt_left_1
+Game/Mobs/Wizard/Wizard_casting_bolt_left_2.tga wizard_small_casting_bolt_left_2
+Game/Mobs/Wizard/Wizard_casting_bolt_right_1.tga wizard_small_casting_bolt_right_1
+Game/Mobs/Wizard/Wizard_casting_bolt_right_2.tga wizard_small_casting_bolt_right_2
+Game/Mobs/Wizard/Wizard_casting_slow_left_1.tga wizard_small_casting_slow_left_1
+Game/Mobs/Wizard/Wizard_casting_slow_right_1.tga wizard_small_casting_slow_right_1
+Game/Mobs/Wizard/Wizard_casting_eruption_left_1.tga wizard_small_casting_eruption_left_1
+Game/Mobs/Wizard/Wizard_casting_eruption_right_1.tga wizard_small_casting_eruption_right_1
+
+16
+Game/Mobs/Paladin/Paladin_idle_left_1.tga paladin_small_idle_left_1
+Game/Mobs/Paladin/Paladin_idle_left_2.tga paladin_small_idle_left_2
+Game/Mobs/Paladin/Paladin_idle_right_1.tga paladin_small_idle_right_1
+Game/Mobs/Paladin/Paladin_idle_right_2.tga paladin_small_idle_right_2
+Game/Mobs/Paladin/Paladin_jump_left_1.tga paladin_small_jump_left_1
+Game/Mobs/Paladin/Paladin_jump_right_1.tga paladin_small_jump_right_1
+Game/Mobs/Paladin/Paladin_attack_left_1.tga paladin_small_attack_left_1
+Game/Mobs/Paladin/Paladin_attack_right_1.tga paladin_small_attack_right_1
+Game/Mobs/Paladin/Paladin_blocking_left_1.tga paladin_small_blocking_left_1
+Game/Mobs/Paladin/Paladin_blocking_right_1.tga paladin_small_blocking_right_1
+Game/Mobs/Paladin/Paladin_charging_left_1.tga paladin_small_charging_left_1
+Game/Mobs/Paladin/Paladin_charging_left_2.tga paladin_small_charging_left_2
+Game/Mobs/Paladin/Paladin_charging_left_3.tga paladin_small_charging_left_3
+Game/Mobs/Paladin/Paladin_charging_right_1.tga paladin_small_charging_right_1
+Game/Mobs/Paladin/Paladin_charging_right_2.tga paladin_small_charging_right_2
+Game/Mobs/Paladin/Paladin_charging_right_3.tga paladin_small_charging_right_3
+
+8
+Game/Mobs/Zombie/Zombie_small_idle_left_1.tga zombie_small_idle_left_1
+Game/Mobs/Zombie/Zombie_small_idle_left_2.tga zombie_small_idle_left_2
+Game/Mobs/Zombie/Zombie_small_idle_right_1.tga zombie_small_idle_right_1
+Game/Mobs/Zombie/Zombie_small_idle_right_2.tga zombie_small_idle_right_2
+Game/Mobs/Zombie/Zombie_small_jump_left_1.tga zombie_small_jump_left_1
+Game/Mobs/Zombie/Zombie_small_jump_right_1.tga zombie_small_jump_right_1
+Game/Mobs/Zombie/Zombie_small_attack_left_1.tga zombie_small_attack_left_1
+Game/Mobs/Zombie/Zombie_small_attack_right_1.tga zombie_small_attack_right_1
+
+8
+Game/Mobs/Lich/Lich_small_idle_left_1.tga lich_small_idle_left_1
+Game/Mobs/Lich/Lich_small_idle_right_1.tga lich_small_idle_right_1
+Game/Mobs/Lich/Lich_small_casting_bolt_left_1.tga lich_small_casting_bolt_left_1
+Game/Mobs/Lich/Lich_small_casting_bolt_left_2.tga lich_small_casting_bolt_left_2
+Game/Mobs/Lich/Lich_small_casting_bolt_right_1.tga lich_small_casting_bolt_right_1
+Game/Mobs/Lich/Lich_small_casting_bolt_right_2.tga lich_small_casting_bolt_right_2
+Game/Mobs/Lich/Lich_small_spawning_zombie_left_1.tga lich_small_spawning_zombie_left_1
+Game/Mobs/Lich/Lich_small_spawning_zombie_right_1.tga lich_small_spawning_zombie_right_1
+
+4
+Game/Mobs/Wraith/Wraith_small_idle_left_1.tga wraith_small_idle_left_1
+Game/Mobs/Wraith/Wraith_small_idle_right_1.tga wraith_small_idle_right_1
+Game/Mobs/Wraith/Wraith_small_move_left_1.tga wraith_small_move_left_1
+Game/Mobs/Wraith/Wraith_small_move_right_1.tga wraith_small_move_right_1
+
+//////
+2
+Game/Particles/General/Test_particle.tga test_particle
+Game/Particles/General/Square_lightorange.tga square_lightorange
+
+15
+Game/UI/Minimap/Blank.tga blank
+Game/UI/Minimap/Wall.tga wall
+Game/UI/Minimap/Floor.tga floor
+Game/UI/Minimap/Water.tga water
+Game/UI/Minimap/Lava.tga lava
+Game/UI/Minimap/WireComponent.tga wireComponent
+Game/UI/Minimap/Crate.tga crate
+Game/UI/Minimap/Trap.tga trap
+Game/UI/Minimap/Door.tga door
+Game/UI/Minimap/Sign.tga sign
+Game/UI/Minimap/Gold.tga gold
+Game/UI/Minimap/Item.tga item
+Game/UI/Minimap/Enemy.tga enemy
+Game/UI/Minimap/Exit.tga exit
+Game/UI/Minimap/Player.tga player
+
+Misc/Fonts/Small/letterA.tga a
+Misc/Fonts/Small/letterB.tga b
+Misc/Fonts/Small/letterC.tga c
+Misc/Fonts/Small/letterD.tga d
+Misc/Fonts/Small/letterE.tga e
+Misc/Fonts/Small/letterF.tga f
+Misc/Fonts/Small/letterG.tga g
+Misc/Fonts/Small/letterH.tga h
+Misc/Fonts/Small/letterI.tga i
+Misc/Fonts/Small/letterJ.tga j
+Misc/Fonts/Small/letterK.tga k
+Misc/Fonts/Small/letterL.tga l
+Misc/Fonts/Small/letterM.tga m
+Misc/Fonts/Small/letterN.tga n
+Misc/Fonts/Small/letterO.tga o
+Misc/Fonts/Small/letterP.tga p
+Misc/Fonts/Small/letterQ.tga q
+Misc/Fonts/Small/letterR.tga r
+Misc/Fonts/Small/letterS.tga s
+Misc/Fonts/Small/letterT.tga t
+Misc/Fonts/Small/letterU.tga u
+Misc/Fonts/Small/letterV.tga v
+Misc/Fonts/Small/letterW.tga w
+Misc/Fonts/Small/letterX.tga x
+Misc/Fonts/Small/letterY.tga y
+Misc/Fonts/Small/letterZ.tga z
+Misc/Fonts/Small/spacebar.tga `
+Misc/Fonts/Small/number0.tga 0
+Misc/Fonts/Small/number1.tga 1
+Misc/Fonts/Small/number2.tga 2
+Misc/Fonts/Small/number3.tga 3
+Misc/Fonts/Small/number4.tga 4
+Misc/Fonts/Small/number5.tga 5
+Misc/Fonts/Small/number6.tga 6
+Misc/Fonts/Small/number7.tga 7
+Misc/Fonts/Small/number8.tga 8
+Misc/Fonts/Small/number9.tga 9
+
+24 ////// Entities
+Game/Entities/Bolts/Wizard/Wizard_bolt_up_1.tga wizard_bolt_up_1
+Game/Entities/Bolts/Wizard/Wizard_bolt_up_2.tga wizard_bolt_up_2
+Game/Entities/Bolts/Wizard/Wizard_bolt_up_3.tga wizard_bolt_up_3
+Game/Entities/Bolts/Wizard/Wizard_bolt_up_4.tga wizard_bolt_up_4
+Game/Entities/Bolts/Wizard/Wizard_bolt_down_1.tga wizard_bolt_down_1
+Game/Entities/Bolts/Wizard/Wizard_bolt_down_2.tga wizard_bolt_down_2
+Game/Entities/Bolts/Wizard/Wizard_bolt_down_3.tga wizard_bolt_down_3
+Game/Entities/Bolts/Wizard/Wizard_bolt_down_4.tga wizard_bolt_down_4
+Game/Entities/Bolts/Wizard/Wizard_bolt_left_1.tga wizard_bolt_left_1
+Game/Entities/Bolts/Wizard/Wizard_bolt_left_2.tga wizard_bolt_left_2
+Game/Entities/Bolts/Wizard/Wizard_bolt_left_3.tga wizard_bolt_left_3
+Game/Entities/Bolts/Wizard/Wizard_bolt_left_4.tga wizard_bolt_left_4
+Game/Entities/Bolts/Wizard/Wizard_bolt_right_1.tga wizard_bolt_right_1
+Game/Entities/Bolts/Wizard/Wizard_bolt_right_2.tga wizard_bolt_right_2
+Game/Entities/Bolts/Wizard/Wizard_bolt_right_3.tga wizard_bolt_right_3
+Game/Entities/Bolts/Wizard/Wizard_bolt_right_4.tga wizard_bolt_right_4
+
+Game/Entities/Gold/Gold_1.tga gold_1
+Game/Entities/Gold/Gold_2.tga gold_2
+Game/Entities/Gold/Gold_3.tga gold_3
+Game/Entities/Gold/Gold_4.tga gold_4
+Game/Entities/Gold/Gold_5.tga gold_5
+Game/Entities/Gold/Gold_6.tga gold_6
+Game/Entities/Gold/Gold_7.tga gold_7
+
+Game/Entities/Items/Wooden_sword.tga wooden_sword
+
+54 ////// Effects
+Game/Effects/Attack/Attack_chop_up_effect_1.tga attack_chop_up_effect_1
+Game/Effects/Attack/Attack_chop_up_effect_2.tga attack_chop_up_effect_2
+Game/Effects/Attack/Attack_chop_up_effect_3.tga attack_chop_up_effect_3
+Game/Effects/Attack/Attack_chop_up_effect_4.tga attack_chop_up_effect_4
+Game/Effects/Attack/Attack_chop_up_effect_5.tga attack_chop_up_effect_5
+Game/Effects/Attack/Attack_chop_up_effect_6.tga attack_chop_up_effect_6
+Game/Effects/Attack/Attack_chop_up_effect_7.tga attack_chop_up_effect_7
+Game/Effects/Attack/Attack_chop_down_effect_1.tga attack_chop_down_effect_1
+Game/Effects/Attack/Attack_chop_down_effect_2.tga attack_chop_down_effect_2
+Game/Effects/Attack/Attack_chop_down_effect_3.tga attack_chop_down_effect_3
+Game/Effects/Attack/Attack_chop_down_effect_4.tga attack_chop_down_effect_4
+Game/Effects/Attack/Attack_chop_down_effect_5.tga attack_chop_down_effect_5
+Game/Effects/Attack/Attack_chop_down_effect_6.tga attack_chop_down_effect_6
+Game/Effects/Attack/Attack_chop_down_effect_7.tga attack_chop_down_effect_7
+Game/Effects/Attack/Attack_chop_left_effect_1.tga attack_chop_left_effect_1
+Game/Effects/Attack/Attack_chop_left_effect_2.tga attack_chop_left_effect_2
+Game/Effects/Attack/Attack_chop_left_effect_3.tga attack_chop_left_effect_3
+Game/Effects/Attack/Attack_chop_left_effect_4.tga attack_chop_left_effect_4
+Game/Effects/Attack/Attack_chop_left_effect_5.tga attack_chop_left_effect_5
+Game/Effects/Attack/Attack_chop_left_effect_6.tga attack_chop_left_effect_6
+Game/Effects/Attack/Attack_chop_left_effect_7.tga attack_chop_left_effect_7
+Game/Effects/Attack/Attack_chop_right_effect_1.tga attack_chop_right_effect_1
+Game/Effects/Attack/Attack_chop_right_effect_2.tga attack_chop_right_effect_2
+Game/Effects/Attack/Attack_chop_right_effect_3.tga attack_chop_right_effect_3
+Game/Effects/Attack/Attack_chop_right_effect_4.tga attack_chop_right_effect_4
+Game/Effects/Attack/Attack_chop_right_effect_5.tga attack_chop_right_effect_5
+Game/Effects/Attack/Attack_chop_right_effect_6.tga attack_chop_right_effect_6
+Game/Effects/Attack/Attack_chop_right_effect_7.tga attack_chop_right_effect_7
+Game/Effects/Spell/Eruption_windup_effect_1.tga eruption_windup_effect_1
+Game/Effects/Spell/Eruption_windup_effect_2.tga eruption_windup_effect_2
+Game/Effects/Spell/Eruption_windup_effect_3.tga eruption_windup_effect_3
+Game/Effects/Spell/Eruption_windup_effect_4.tga eruption_windup_effect_4
+Game/Effects/Spell/Eruption_windup_effect_5.tga eruption_windup_effect_5
+Game/Effects/Spell/Eruption_windup_effect_6.tga eruption_windup_effect_6
+Game/Effects/Spell/Eruption_windup_effect_7.tga eruption_windup_effect_7
+Game/Effects/Spell/Eruption_windup_effect_8.tga eruption_windup_effect_8
+Game/Effects/Spell/Eruption_effect_1.tga eruption_effect_1
+Game/Effects/Spell/Eruption_effect_2.tga eruption_effect_2
+Game/Effects/Spell/Eruption_effect_3.tga eruption_effect_3
+Game/Effects/Spell/Eruption_effect_4.tga eruption_effect_4
+Game/Effects/Spell/Eruption_effect_5.tga eruption_effect_5
+Game/Effects/Spell/Eruption_effect_6.tga eruption_effect_6
+Game/Effects/Spell/Eruption_effect_7.tga eruption_effect_7
+Game/Effects/Spell/Eruption_effect_8.tga eruption_effect_8
+Game/Effects/Spell/Eruption_effect_9.tga eruption_effect_9
+Game/Effects/Spawn/Zombie_small_spawn_effect_1.tga zombie_small_spawn_effect_1
+Game/Effects/Spawn/Zombie_small_spawn_effect_2.tga zombie_small_spawn_effect_2
+Game/Effects/Spawn/Zombie_small_spawn_effect_3.tga zombie_small_spawn_effect_3
+Game/Effects/Spawn/Zombie_small_spawn_effect_4.tga zombie_small_spawn_effect_4
+Game/Effects/Spawn/Zombie_small_spawn_effect_5.tga zombie_small_spawn_effect_5
+Game/Effects/Spawn/Zombie_small_spawn_effect_6.tga zombie_small_spawn_effect_6
+Game/Effects/Spawn/Zombie_small_spawn_effect_7.tga zombie_small_spawn_effect_7
+Game/Effects/Spawn/Zombie_small_spawn_effect_8.tga zombie_small_spawn_effect_8
+Game/Effects/Spawn/Zombie_small_spawn_effect_9.tga zombie_small_spawn_effect_9

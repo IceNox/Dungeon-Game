@@ -1,0 +1,137 @@
+test
+
+19 19
+
+5 3
+
+9 9
+
+14
+2 8 stone 0 0
+3 8 stone 0 0
+4 8 stone 0 0
+5 8 stone 0 0
+6 8 stone 0 0
+7 8 stone 0 0
+8 8 stone 0 0
+5 2 stone 1 1
+5 1 stone 1 1
+15 1 stone 0 0
+15 4 stone 0 0
+15 5 stone 0 0
+16 5 stone 0 0
+17 5 stone 0 0
+
+1
+13 10
+
+2
+14 10
+2 1
+
+dirt
+0
+
+9
+7 2 red 0 null null
+8 2 red 0 null null
+7 4 red 0 null null
+8 4 red 0 null null
+8 3 null 1 and right
+9 3 red 0 null null
+4 2 red 0 null null
+5 2 red 0 null null
+5 1 red 0 null null
+
+1
+6 3
+
+3
+4 2 wooden
+7 2 wooden
+7 4 steel
+
+1
+9 3 led 0
+
+2
+15 2 right
+15 3 right
+
+1
+1 1 this is a test text/nnewline test/nmultiple newline test
+
+0
+
+1
+17 17 small
+
+1
+16 17 small
+
+1
+15 17 small
+
+1
+14 17 small
+
+1
+13 17 small
+
+1
+12 5 small
+
+/////////////////////////////////// test shit
+49
+11 11 small
+12 11 small
+13 11 small
+14 11 small
+15 11 small
+16 11 small
+17 11 small
+11 12 small
+12 12 small
+13 12 small
+14 12 small
+15 12 small
+16 12 small
+17 12 small
+11 13 small
+12 13 small
+13 13 small
+14 13 small
+15 13 small
+16 13 small
+17 13 small
+11 14 small
+12 14 small
+13 14 small
+14 14 small
+15 14 small
+16 14 small
+17 14 small
+11 15 small
+12 15 small
+13 15 small
+14 15 small
+15 15 small
+16 15 small
+17 15 small
+11 16 small
+12 16 small
+13 16 small
+14 16 small
+15 16 small
+16 16 small
+17 16 small
+11 17 small
+12 17 small
+13 17 small
+14 17 small
+15 17 small
+16 17 small
+17 17 small
+
+
+small 1 5 1000 right 1
