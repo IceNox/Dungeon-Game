@@ -346,8 +346,6 @@ kysnx.txt
 timelul.txt
 json test save.txt
 
-# Engine runtime
+# Shaders
 FramebufferPS.shh
 FramebufferVS.shh
-Engine.vcxproj.filters
-Engine.vcxproj
