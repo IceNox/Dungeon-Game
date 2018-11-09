@@ -500,6 +500,17 @@ void Game::load_menu()
         if (userData.screenWidth >= 2560 && userData.screenHeight >= 1440) selections.push_back("2560x1440");
         if (userData.screenWidth >= 2560 && userData.screenHeight >= 1600) selections.push_back("2560x1600");
 
+        if (selections.size() == 0) {
+            int width  = userData.screenWidth;
+            int height = userData.screenHeight;
+
+            std::ostringstream w, h;
+            w << userData.screenWidth;
+            h << userData.screenHeight;
+
+            selections.push_back(w.str() + "x" + h.str());
+        }
+
         menu.scenes[SCENE_VIDEO].elements.push_back(Element(selections, 164, true, true, SM_LINE, 100, 192));
 
         menu.scenes[SCENE_VIDEO].elements.push_back(Element(0, true, true, SM_LINE, 260, 256));
