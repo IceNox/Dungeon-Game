@@ -339,8 +339,15 @@ License/
 
 # RuntimeDebug
 bbdnx.txt
-"color shit.txt"
+color shit.txt
 Debug.txt
 debugtime.txt
 kysnx.txt
 timelul.txt
+json test save.txt
+
+# Engine runtime
+FramebufferPS.shh
+FramebufferVS.shh
+Engine.vcxproj.filters
+Engine.vcxproj
