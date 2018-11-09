@@ -22,8 +22,8 @@ Level::Level() {}
 
 void Level::load_game(LevelType lType, std::string lName)
 {
-    if        (lType == NEW_GAME) {
-
+    if      (lType == NEW_GAME) {
+        // TODO New game
     }
     else if (lType == SAVE) {
         load_save_file(lName + ".json");
@@ -39,12 +39,9 @@ void Level::load_save_file(std::string saveName)
 
     // Clear all level data
     players.clear();
-
     portals.clear();
-
     tiles.clear();
     wires.clear();
-
     levelObjects.clear();
 
     crates.clear();
@@ -66,7 +63,6 @@ void Level::load_save_file(std::string saveName)
     particles.clear();
 
     commands.clear();
-
     damageMap.clear();
     healMap.clear();
 
@@ -83,10 +79,10 @@ void Level::load_save_file(std::string saveName)
     reachedExit = false;
     playerDied  = false;
 
-    inDeathScreen        = false;
-    startedDeathEffect    = false;
-    inEndScreen            = false;
-    startedEndEffect    = false;
+    inDeathScreen      = false;
+    startedDeathEffect = false;
+    inEndScreen        = false;
+    startedEndEffect   = false;
 
     // Set tile data grid
     levelStateData.set(width, height);
@@ -98,50 +94,54 @@ void Level::load_save_file(std::string saveName)
 
         // Set player stats
         players[i].health = saveData.playerHealth[i];
-        players[i].armor = saveData.playerArmor[i];
-        players[i].gold    = saveData.playerGold[i];
+        players[i].armor  = saveData.playerArmor[i];
+        players[i].gold   = saveData.playerGold[i];
 
-        // Fill player inventory
+        // TODO Fill player inventory
+        /*
         for (int j = 0; j < 5; j++) {
-            //players[i].items[j] = saveData.playerInventory[i].playerItems[j];
+            players[i].items[j] = saveData.playerInventory[i].playerItems[j];
         }
+        */
     }
 
     // Read level data
-    baseFloorVariant = saveData.levelData[sl_index].baseFloorVariant;
+    baseFloorVariant   = saveData.levelData[sl_index].baseFloorVariant;
+    tileCount          = width * height;
+    wireCount          = width * height;
+    portalCount        = saveData.levelData[sl_index].portalCount;
 
-    tileCount            = width * height;
-    wireCount            = width * height;
-    portalCount            = saveData.levelData[sl_index].portalCount;
-    //wireCount            = saveData.levelData[sl_index].wireCount;
-    //crateCount            = saveData.levelData[sl_index].crateCount;
-    //pressurePlateCount    = saveData.levelData[sl_index].pressurePlateCount;
-    //lampCount            = saveData.levelData[sl_index].lampCount;
-    //doorCount            = saveData.levelData[sl_index].doorCount;
-    //signCount            = saveData.levelData[sl_index].signCount;
-    //shooterCount        = saveData.levelData[sl_index].shooterCount;
-    //barbarianCount        = saveData.levelData[sl_index].barbarianCount;
-    //wizardCount            = saveData.levelData[sl_index].wizardCount;
-    //paladinCount        = saveData.levelData[sl_index].paladinCount;
-    //zombieCount            = saveData.levelData[sl_index].zombieCount;
-    //lichCount            = saveData.levelData[sl_index].lichCount;
-    //wraithCount            = saveData.levelData[sl_index].wraithCount;
+    /*
+    wireCount          = saveData.levelData[sl_index].wireCount;
+    crateCount         = saveData.levelData[sl_index].crateCount;
+    pressurePlateCount = saveData.levelData[sl_index].pressurePlateCount;
+    lampCount          = saveData.levelData[sl_index].lampCount;
+    doorCount          = saveData.levelData[sl_index].doorCount;
+    signCount          = saveData.levelData[sl_index].signCount;
+    shooterCount       = saveData.levelData[sl_index].shooterCount;
+    barbarianCount     = saveData.levelData[sl_index].barbarianCount;
+    wizardCount        = saveData.levelData[sl_index].wizardCount;
+    paladinCount       = saveData.levelData[sl_index].paladinCount;
+    zombieCount        = saveData.levelData[sl_index].zombieCount;
+    lichCount          = saveData.levelData[sl_index].lichCount;
+    wraithCount        = saveData.levelData[sl_index].wraithCount;
+    */
 
-    sObjectCount        = saveData.levelData[sl_index].sObjectCount;
-    dObjectCount        = saveData.levelData[sl_index].dObjectCount;
+    sObjectCount       = saveData.levelData[sl_index].sObjectCount;
+    dObjectCount       = saveData.levelData[sl_index].dObjectCount;
 
-    crateCount            = 0;
-    pressurePlateCount    = 0;
-    lampCount            = 0;
-    doorCount            = 0;
-    signCount            = 0;
-    shooterCount        = 0;
-    barbarianCount        = 0;
-    wizardCount            = 0;
-    paladinCount        = 0;
-    zombieCount            = 0;
-    lichCount            = 0;
-    wraithCount            = 0;
+    crateCount         = 0;
+    pressurePlateCount = 0;
+    lampCount          = 0;
+    doorCount          = 0;
+    signCount          = 0;
+    shooterCount       = 0;
+    barbarianCount     = 0;
+    wizardCount        = 0;
+    paladinCount       = 0;
+    zombieCount        = 0;
+    lichCount          = 0;
+    wraithCount        = 0;
 
     // Create minimap
     minimap.create_minimap(width, height);
@@ -160,10 +160,13 @@ void Level::load_save_file(std::string saveName)
     }
 
     // Fill edge walls
-    for (int y = 0; y < _LEVEL_HEIGHT; y++)
-        for (int x = 0; x < _LEVEL_WIDTH; x++)
-            if (y == 0 || y == height - 1 || x == 0 || x == width - 1)
+    for (int y = 0; y < _LEVEL_HEIGHT; y++) {
+        for (int x = 0; x < _LEVEL_WIDTH; x++) {
+            if (y == 0 || y == height - 1 || x == 0 || x == width - 1) {
                 tiles[y * _LEVEL_WIDTH + x].set_tile(Pos2D(x, y), WALL, V_STONE, false, false, true);
+            }
+        }
+    }
 
     // Fill inner tiles
     for (int i = 0; i < saveData.levelData[sl_index].wallCount; i++) {
@@ -179,6 +182,7 @@ void Level::load_save_file(std::string saveName)
             saveData.levelData[sl_index].wallActive[i]
         );
     }
+
     for (int i = 0; i < saveData.levelData[sl_index].floorCount; i++) {
         int index = saveData.levelData[sl_index].wallGridPos[i].index(_LEVEL_WIDTH);
         
@@ -192,6 +196,7 @@ void Level::load_save_file(std::string saveName)
             false
         );
     }
+
     /*
     for (int j = 0; j < levelInfo[i].lavaCount; j++) {
     if (levelInfo[i].lavaX[j] == x && levelInfo[i].lavaY[j] == y) {
@@ -211,10 +216,13 @@ void Level::load_save_file(std::string saveName)
     */
 
     // Fill remaining base floor tiles
-    for (int y = 0; y < _LEVEL_HEIGHT; y++)
-        for (int x = 0; x < _LEVEL_WIDTH; x++)
-            if (!tiles[y * _LEVEL_WIDTH + x].isSet)
+    for (int y = 0; y < _LEVEL_HEIGHT; y++) {
+        for (int x = 0; x < _LEVEL_WIDTH; x++) {
+            if (!tiles[y * _LEVEL_WIDTH + x].isSet) {
                 tiles[y * _LEVEL_WIDTH + x].set_tile(Pos2D(x, y), BASE_FLOOR, saveData.levelData[sl_index].baseFloorVariant, false, false, false);
+            }
+        }
+    }
 
     // Fill damage and heal map arrays
     for (int i = 0; i < tileCount; i++) {
@@ -562,7 +570,7 @@ void Level::update_level(std::vector<GameMessage*> &msg, ScreenAnimations &scree
     if (inFA) {
         //duration<float> elapsed_seconds = system_clock::now() - FAstart;
         //float FAtimeElapsed = elapsed_seconds.count();
-        FAprogress = (maintime::now() - FAstart).get_duration(MILLISECONDS) / FAlength;
+        FAprogress = static_cast<float>((maintime::now() - FAstart).get_duration(MILLISECONDS) / FAlength);
 
         if (FAprogress >= 1.0f) inFA = false;
         if (FAprogress <  0.0f) FAprogress = 0.0f;
@@ -570,11 +578,11 @@ void Level::update_level(std::vector<GameMessage*> &msg, ScreenAnimations &scree
     if (inEDFA) {
         //duration<float> elapsed_seconds = system_clock::now() - EDFAstart;
         //float EDFAtimeElapsed = elapsed_seconds.count();
-        EDFAprogress = (maintime::now() - EDFAstart).get_duration(MILLISECONDS) / EDFAlength;
+        EDFAprogress = static_cast<float>((maintime::now() - EDFAstart).get_duration(MILLISECONDS) / EDFAlength);
 
         if (EDFAprogress < 0.0f) EDFAprogress = 0.0f;
         if (EDFAprogress >= 1.0f) {
-            
+            // TODO End of level fade
         }
     }
 
@@ -585,7 +593,7 @@ void Level::update_level(std::vector<GameMessage*> &msg, ScreenAnimations &scree
     players[0].damageAmount = 0;
 
     _PLAYER_GRID_POS[0] = players[0].gPos;
-
+    
     visionCenterPos = players[0].cPos;
     if (players.size() == 2) {
         // if there are 2 players, set the vision center between them
@@ -611,56 +619,56 @@ void Level::update_level(std::vector<GameMessage*> &msg, ScreenAnimations &scree
     for (int i = 0; i < _LEVEL_WIDTH * _LEVEL_HEIGHT; i++) {
         tiles[i].update_tile(wires, baseFloorVariant, damageMap);
     }
-    for (int i = 0; i < portals.size(); i++) {
+    for (unsigned i = 0; i < portals.size(); i++) {
         portals[i].update_portal();
     }
-    for (int i = 0; i < crates.size(); i++) {
+    for (unsigned i = 0; i < crates.size(); i++) {
         crates[i].update_crate();
     }
     for (auto it : levelObjects) {
         it->update();
     }
-    for (int i = 0; i < pressurePlates.size(); i++) {
+    for (unsigned i = 0; i < pressurePlates.size(); i++) {
         //pressurePlates[i].update_plate(tiles);
     }
-    for (int i = 0; i < lamps.size(); i++) {
+    for (unsigned i = 0; i < lamps.size(); i++) {
         //lamps[i].update_lamp(wires);
     }
-    for (int i = 0; i < signs.size(); i++) {
+    for (unsigned i = 0; i < signs.size(); i++) {
         //signs[i].update_sign(player[0]);
     }
 
     // Mobs
-    for (int i = 0; i < shooters.size(); i++) {
+    for (unsigned i = 0; i < shooters.size(); i++) {
         //shooters[i].update_shooter(entities,entityCount);
     }
-    for (int i = 0; i < barbarians.size(); i++) {
+    for (unsigned i = 0; i < barbarians.size(); i++) {
         //barbarians[i].update_barbarian(player[0], tiles, damageMap, commands);
     }
-    for (int i = 0; i < wizards.size(); i++) {
+    for (unsigned i = 0; i < wizards.size(); i++) {
         //wizards[i].update_wizard(player[0], tiles, damageMap, commands);
     }
-    for (int i = 0; i < paladins.size(); i++) {
+    for (unsigned i = 0; i < paladins.size(); i++) {
         //paladins[i].update_paladin(player[0], tiles, damageMap, commands);
     }
-    for (int i = 0; i < zombies.size(); i++) {
+    for (unsigned i = 0; i < zombies.size(); i++) {
         //zombies[i].update_zombie(player[0], tiles, damageMap, commands, zombies);
     }
-    for (int i = 0; i < liches.size(); i++) {
+    for (unsigned i = 0; i < liches.size(); i++) {
         //liches[i].update_lich(player[0], tiles, damageMap, commands);
     }
-    for (int i = 0; i < wraiths.size(); i++) {
+    for (unsigned i = 0; i < wraiths.size(); i++) {
         //wraiths[i].update_wraith(player[0], tiles, commands);
     }
 
     // Other
-    for (int i = 0; i < animations.size(); i++) {
+    for (unsigned i = 0; i < animations.size(); i++) {
         animations[i].update_animation();
     }
-    for (int i = 0; i < particles.size(); i++) {
+    for (unsigned i = 0; i < particles.size(); i++) {
         particles[i].update_particle();
     }
-    for (int i = 0; i < entities.size(); i++) {
+    for (unsigned i = 0; i < entities.size(); i++) {
         entities[i].update_entity();
     }
 
@@ -688,14 +696,14 @@ void Level::set_game_state_data()
 {
     levelStateData.reset();
 
-    for (int i = 0; i < tiles.size(); i++) {
+    for (unsigned i = 0; i < tiles.size(); i++) {
         // Wire stuff
         levelStateData.tiles[i].pressuredW = tiles[i].pressuredW;
         levelStateData.tiles[i].pressuredS = tiles[i].pressuredS;
         levelStateData.tiles[i].pressuredG = tiles[i].pressuredG;
         levelStateData.tiles[i].pressuredB = tiles[i].pressuredB;
-        levelStateData.tiles[i].pressured     = tiles[i].pressured;
-        levelStateData.tiles[i].powered     = tiles[i].powered;
+        levelStateData.tiles[i].pressured  = tiles[i].pressured;
+        levelStateData.tiles[i].powered    = tiles[i].powered;
 
         // Occupation
         levelStateData.tiles[i].terrain = (tiles[i].type == WALL && tiles[i].active);
@@ -704,7 +712,7 @@ void Level::set_game_state_data()
         levelStateData.tiles[i].directlyLit = tiles[i].directlyLit;
     }
 
-    for (int i = 0; i < levelObjects.size(); i++) {
+    for (unsigned i = 0; i < levelObjects.size(); i++) {
         // Set object occupation
         if (levelObjects[i]->obstructive) {
             int index = levelObjects[i]->gPos.index(_LEVEL_WIDTH);
@@ -720,7 +728,7 @@ void Level::set_game_state_data()
         }
     }
 
-    for (int i = 0; i < players.size(); i++) {
+    for (unsigned i = 0; i < players.size(); i++) {
         // Set players
         int index = players[i].gPos.index(_LEVEL_WIDTH);
 
@@ -1083,7 +1091,7 @@ void Level::deal_damage(ScreenAnimations &screenAnimations)
 
 void Level::remove_destroyed_objects()
 {
-    for (int i = 0; i < levelObjects.size(); i++) {
+    for (unsigned i = 0; i < levelObjects.size(); i++) {
         if (levelObjects[i]->destroyed) {
             levelObjects.erase(levelObjects.begin() + i);
             i--;
@@ -1093,7 +1101,7 @@ void Level::remove_destroyed_objects()
     return;
 
     // Shooters
-    for (int i = 0; i < shooters.size(); i++) {
+    for (unsigned i = 0; i < shooters.size(); i++) {
         if (shooters[i].dead) {
             shooters.erase(shooters.begin() + i);
             i--;
@@ -1101,7 +1109,7 @@ void Level::remove_destroyed_objects()
     }
 
     // Barbarians
-    for (int i = 0; i < barbarians.size(); i++) {
+    for (unsigned i = 0; i < barbarians.size(); i++) {
         if (barbarians[i].dead) {
             barbarians.erase(barbarians.begin() + i);
             i--;
@@ -1109,7 +1117,7 @@ void Level::remove_destroyed_objects()
     }
 
     // Wizards
-    for (int i = 0; i < wizards.size(); i++) {
+    for (unsigned i = 0; i < wizards.size(); i++) {
         if (wizards[i].dead) {
             wizards.erase(wizards.begin() + i);
             i--;
@@ -1117,7 +1125,7 @@ void Level::remove_destroyed_objects()
     }
     
     // Paladins
-    for (int i = 0; i < paladins.size(); i++) {
+    for (unsigned i = 0; i < paladins.size(); i++) {
         if (paladins[i].dead) {
             paladins.erase(paladins.begin() + i);
             i--;
@@ -1125,7 +1133,7 @@ void Level::remove_destroyed_objects()
     }
 
     // Zombies
-    for (int i = 0; i < zombies.size(); i++) {
+    for (unsigned i = 0; i < zombies.size(); i++) {
         if (zombies[i].dead) {
             zombies.erase(zombies.begin() + i);
             i--;
@@ -1133,7 +1141,7 @@ void Level::remove_destroyed_objects()
     }
 
     // Liches
-    for (int i = 0; i < liches.size(); i++) {
+    for (unsigned i = 0; i < liches.size(); i++) {
         if (liches[i].dead) {
             liches.erase(liches.begin() + i);
             i--;
@@ -1141,7 +1149,7 @@ void Level::remove_destroyed_objects()
     }
 
     // Wraiths
-    for (int i = 0; i < wraiths.size(); i++) {
+    for (unsigned i = 0; i < wraiths.size(); i++) {
         if (wraiths[i].dead) {
             wraiths.erase(wraiths.begin() + i);
             i--;
@@ -1151,7 +1159,7 @@ void Level::remove_destroyed_objects()
 
 void Level::remove_finished_animations()
 {
-    for (int i = 0; i < animations.size(); i++) {
+    for (unsigned i = 0; i < animations.size(); i++) {
         if (animations[i].finished) {
             animations.erase(animations.begin() + i);
             i--;
@@ -1161,7 +1169,7 @@ void Level::remove_finished_animations()
 
 void Level::remove_finished_particles()
 {
-    for (int i = 0; i < particles.size(); i++) {
+    for (unsigned i = 0; i < particles.size(); i++) {
         if (particles[i].finished) {
             particles.erase(particles.begin() + i);
             i--;
@@ -1209,7 +1217,7 @@ void Level::merge_gold_on_ground()
 
 void Level::update_minimap(Keys &keys, UserData &userData)
 {
-    for (int i = 0; i < minimap.grid.size(); i++) {
+    for (unsigned i = 0; i < minimap.grid.size(); i++) {
         minimap.grid[i] = 0;
     }
 
@@ -1225,19 +1233,19 @@ void Level::update_minimap(Keys &keys, UserData &userData)
     }
 
     // Pressure plates
-    for (int i = 0; i < pressurePlates.size(); i++) {
+    for (unsigned i = 0; i < pressurePlates.size(); i++) {
         int index = pressurePlates[i].gY * width + pressurePlates[i].gX;
         if (pressurePlates[i].revealed) minimap.grid[index] = 5;
     }
 
     // Lamps
-    for (int i = 0; i < lamps.size(); i++) {
+    for (unsigned i = 0; i < lamps.size(); i++) {
         int index = lamps[i].gY * width + lamps[i].gX;
         if (lamps[i].revealed) minimap.grid[index] = 5;
     }
 
     // Crates
-    for (int i = 0; i < crates.size(); i++) {
+    for (unsigned i = 0; i < crates.size(); i++) {
         int index = crates[i].gY * width + crates[i].gX;
         if (crates[i].revealed) minimap.grid[index] = 6;
     }
@@ -1245,19 +1253,19 @@ void Level::update_minimap(Keys &keys, UserData &userData)
     // Traps
 
     // Doors
-    for (int i = 0; i < doors.size(); i++) {
+    for (unsigned i = 0; i < doors.size(); i++) {
         int index = doors[i].gY * width + doors[i].gX;
         if (doors[i].revealed) minimap.grid[index] = 8;
     }
 
     // Signs
-    for (int i = 0; i < signs.size(); i++) {
+    for (unsigned i = 0; i < signs.size(); i++) {
         int index = signs[i].gY * width + signs[i].gX;
         if (signs[i].revealed) minimap.grid[index] = 9;
     }
 
     // Gold and items
-    for (int i = 0; i < entities.size(); i++) {
+    for (unsigned i = 0; i < entities.size(); i++) {
         if (entities[i].gold) {
             //int index = entities[i].gY * width + entities[i].gX;
             //if (entities[i].revealed) minimap.grid[index] = 10;
@@ -1269,55 +1277,55 @@ void Level::update_minimap(Keys &keys, UserData &userData)
      }
 
     // Shooters
-    for (int i = 0; i < shooters.size(); i++) {
+    for (unsigned i = 0; i < shooters.size(); i++) {
         int index = shooters[i].gY * width + shooters[i].gX;
         if (shooters[i].visible) minimap.grid[index] = 12;
     }
 
     // Barbarians
-    for (int i = 0; i < barbarians.size(); i++) {
+    for (unsigned i = 0; i < barbarians.size(); i++) {
         int index = barbarians[i].gY * width + barbarians[i].gX;
         if (barbarians[i].visible) minimap.grid[index] = 12;
     }
 
     // Wizards
-    for (int i = 0; i < wizards.size(); i++) {
+    for (unsigned i = 0; i < wizards.size(); i++) {
         int index = wizards[i].gY * width + wizards[i].gX;
         if (wizards[i].visible) minimap.grid[index] = 12;
     }
     
     // Paladins
-    for (int i = 0; i < paladins.size(); i++) {
+    for (unsigned i = 0; i < paladins.size(); i++) {
         int index = paladins[i].gY * width + paladins[i].gX;
         if (paladins[i].visible) minimap.grid[index] = 12;
     }
 
     // Zombies
-    for (int i = 0; i < zombies.size(); i++) {
+    for (unsigned i = 0; i < zombies.size(); i++) {
         int index = zombies[i].gY * width + zombies[i].gX;
         if (zombies[i].visible) minimap.grid[index] = 12;
     }
 
     // Liches
-    for (int i = 0; i < liches.size(); i++) {
+    for (unsigned i = 0; i < liches.size(); i++) {
         int index = liches[i].gY * width + liches[i].gX;
         if (liches[i].visible) minimap.grid[index] = 12;
     }
 
     // Wraiths
-    for (int i = 0; i < wraiths.size(); i++) {
+    for (unsigned i = 0; i < wraiths.size(); i++) {
         int index = wraiths[i].gY * width + wraiths[i].gX;
         if (wraiths[i].visible) minimap.grid[index] = 12;
     }
     
     // Portals
-    for (int i = 0; i < portals.size(); i++) {
+    for (unsigned i = 0; i < portals.size(); i++) {
         int index = portals[i].entryPos.index(_LEVEL_WIDTH);
         if (portals[i].revealed) minimap.grid[index] = 13;
     }
 
     // Players
-    for (int i = 0; i < players.size(); i++) {
+    for (unsigned i = 0; i < players.size(); i++) {
         int index = players[i].gPos.index(_LEVEL_WIDTH);
         minimap.grid[index] = 14;
     }
@@ -1352,7 +1360,7 @@ void Level::update_tile_info()
     }
 
     // Crates
-    for (int i = 0; i < crates.size(); i++) {
+    for (unsigned i = 0; i < crates.size(); i++) {
         tiles[crates[i].gY * width + crates[i].gX].occupied = true;
 
         if (crates[i].inMA) {
@@ -1364,22 +1372,22 @@ void Level::update_tile_info()
     }
 
     // Doors
-    for (int i = 0; i < doors.size(); i++) {
+    for (unsigned i = 0; i < doors.size(); i++) {
         tiles[doors[i].gY * width + doors[i].gX].occupied = true;
     }
 
     // Signs
-    for (int i = 0; i < signs.size(); i++) {
+    for (unsigned i = 0; i < signs.size(); i++) {
         tiles[signs[i].gY * width + signs[i].gX].occupied = true;
     }
 
     // Shooters
-    for (int i = 0; i < shooters.size(); i++) {
+    for (unsigned i = 0; i < shooters.size(); i++) {
         tiles[shooters[i].gY * width + shooters[i].gX].occupied = true;
     }
 
     // Barbarians
-    for (int i = 0; i < barbarians.size(); i++) {
+    for (unsigned i = 0; i < barbarians.size(); i++) {
         if (!barbarians[i].hitboxActive) break;
 
         tiles[barbarians[i].gY * width + barbarians[i].gX].occupied = true;
@@ -1393,7 +1401,7 @@ void Level::update_tile_info()
     }
 
     // Wizards
-    for (int i = 0; i < wizards.size(); i++) {
+    for (unsigned i = 0; i < wizards.size(); i++) {
         if (!wizards[i].hitboxActive) break;
 
         tiles[wizards[i].gY * width + wizards[i].gX].occupied = true;
@@ -1407,7 +1415,7 @@ void Level::update_tile_info()
     }
 
     // Paladins
-    for (int i = 0; i < paladins.size(); i++) {
+    for (unsigned i = 0; i < paladins.size(); i++) {
         if (!paladins[i].hitboxActive) break;
 
         tiles[paladins[i].gY * width + paladins[i].gX].occupied = true;
@@ -1421,7 +1429,7 @@ void Level::update_tile_info()
     }
 
     // Zombies
-    for (int i = 0; i < zombies.size(); i++) {
+    for (unsigned i = 0; i < zombies.size(); i++) {
         if (!zombies[i].hitboxActive) break;
 
         tiles[zombies[i].gY * width + zombies[i].gX].occupied = true;
@@ -1435,7 +1443,7 @@ void Level::update_tile_info()
     }
 
     // Liches
-    for (int i = 0; i < liches.size(); i++) {
+    for (unsigned i = 0; i < liches.size(); i++) {
         if (!liches[i].hitboxActive) break;
 
         tiles[liches[i].gY * width + liches[i].gX].occupied = true;
@@ -1449,7 +1457,7 @@ void Level::update_tile_info()
     }
 
     // Wraiths
-    for (int i = 0; i < wraiths.size(); i++) {
+    for (unsigned i = 0; i < wraiths.size(); i++) {
         if (!wraiths[i].hitboxActive) break;
 
         tiles[wraiths[i].gY * width + wraiths[i].gX].occupied = true;
@@ -1474,7 +1482,7 @@ void Level::update_tile_info()
     }
 
     // Gold
-    for (int i = 0; i < entities.size(); i++) {
+    for (unsigned i = 0; i < entities.size(); i++) {
         if (entities[i].gold) {
             //int index = entities[i].gY * width + entities[i].gX;
             //tiles[index].pressured  = true;
@@ -1484,7 +1492,7 @@ void Level::update_tile_info()
     }
 
     // Items
-    for (int i = 0; i < entities.size(); i++) {
+    for (unsigned i = 0; i < entities.size(); i++) {
         if (entities[i].item) {
             //int index = entities[i].gY * width + entities[i].gX;
             //tiles[index].pressured  = true;
@@ -1493,7 +1501,7 @@ void Level::update_tile_info()
     }
 
     // Crates
-    for (int i = 0; i < crates.size(); i++) {
+    for (unsigned i = 0; i < crates.size(); i++) {
         if (crates[i].onGround) {
             int index = crates[i].gY * width + crates[i].gX;
             tiles[index].pressured  = true;
@@ -1503,12 +1511,12 @@ void Level::update_tile_info()
     }
 
     // Shooters
-    for (int i = 0; i < shooters.size(); i++) {
+    for (unsigned i = 0; i < shooters.size(); i++) {
         tiles[shooters[i].gY * width + shooters[i].gX].pressured = true;
     }
 
     // Barbarians
-    for (int i = 0; i < barbarians.size(); i++) {
+    for (unsigned i = 0; i < barbarians.size(); i++) {
         if (barbarians[i].onGround) {
             tiles[barbarians[i].gY * width + barbarians[i].gX].pressured  = true;
             tiles[barbarians[i].gY * width + barbarians[i].gX].pressuredW = true;
@@ -1517,7 +1525,7 @@ void Level::update_tile_info()
     }
 
     // Wizards
-    for (int i = 0; i < wizards.size(); i++) {
+    for (unsigned i = 0; i < wizards.size(); i++) {
         if (wizards[i].onGround) {
             tiles[wizards[i].gY * width + wizards[i].gX].pressured  = true;
             tiles[wizards[i].gY * width + wizards[i].gX].pressuredW = true;
@@ -1526,7 +1534,7 @@ void Level::update_tile_info()
     }
     
     // Paladins
-    for (int i = 0; i < paladins.size(); i++) {
+    for (unsigned i = 0; i < paladins.size(); i++) {
         if (paladins[i].onGround) {
             tiles[paladins[i].gY * width + paladins[i].gX].pressured  = true;
             tiles[paladins[i].gY * width + paladins[i].gX].pressuredW = true;
@@ -1535,7 +1543,7 @@ void Level::update_tile_info()
     }
 
     // Zombies
-    for (int i = 0; i < zombies.size(); i++) {
+    for (unsigned i = 0; i < zombies.size(); i++) {
         if (zombies[i].onGround) {
             tiles[zombies[i].gY * width + zombies[i].gX].pressured  = true;
             tiles[zombies[i].gY * width + zombies[i].gX].pressuredW = true;
@@ -1544,7 +1552,7 @@ void Level::update_tile_info()
     }
 
     // Liches (never on ground)
-    for (int i = 0; i < liches.size(); i++) {
+    for (unsigned i = 0; i < liches.size(); i++) {
         /*
         if (liches[i].onGround) {
             tiles[liches[i].gY * width + liches[i].gX].pressured  = true;
@@ -1555,7 +1563,7 @@ void Level::update_tile_info()
     }
 
     // Wraiths (never on ground)
-    for (int i = 0; i < wraiths.size(); i++) {
+    for (unsigned i = 0; i < wraiths.size(); i++) {
         /*
         if (liches[i].onGround) {
         tiles[liches[i].gY * width + liches[i].gX].pressured  = true;
@@ -1567,7 +1575,7 @@ void Level::update_tile_info()
 
 // Power
     // Pressure plates
-    for (int i = 0; i < pressurePlates.size(); i++) {
+    for (unsigned i = 0; i < pressurePlates.size(); i++) {
         if (pressurePlates[i].pressed) {
             int index = pressurePlates[i].gY * width + pressurePlates[i].gX;
             tiles[index].powered = true;
@@ -1619,12 +1627,12 @@ void Level::update_lighting()
     }
 
     // Set limits for light which has no effect outside of player vision
-    Pos2D limitTopLeft       = (visionCenterPos - Pos2D(cellSize * 25)) / cellSize;
+    Pos2D limitTopLeft     = (visionCenterPos - Pos2D(cellSize * 25)) / cellSize;
     Pos2D limitBottomRight = (visionCenterPos + Pos2D(cellSize * 25)) / cellSize;
 
     // Add level size limits to limits
     RECT bounds = { 0, 0, _LEVEL_WIDTH, _LEVEL_HEIGHT };
-    add_bounds(limitTopLeft       , bounds);
+    add_bounds(limitTopLeft    , bounds);
     add_bounds(limitBottomRight, bounds);
 
     // Structure for light emitting objects
@@ -1641,15 +1649,15 @@ void Level::update_lighting()
     std::vector<LightSource> lightSources;
 
         // Players
-    for (int i = 0; i < players.size(); i++) {
-        lightSources.push_back(LightSource(players[i].cPos                , players[i].lightLevel));
+    for (unsigned i = 0; i < players.size(); i++) {
+        lightSources.push_back(LightSource(players[i].cPos              , players[i].lightLevel));
         lightSources.push_back(LightSource(players[i].cPos - Pos2D(1, 0), players[i].lightLevel));
         lightSources.push_back(LightSource(players[i].cPos - Pos2D(0, 1), players[i].lightLevel));
         lightSources.push_back(LightSource(players[i].cPos - Pos2D(1, 1), players[i].lightLevel));
     }
 
     // Light up all transparent tiles around light sources
-    for (int i = 0; i < lightSources.size(); i++) {
+    for (unsigned i = 0; i < lightSources.size(); i++) {
         // Each light source emits light rays around itself which light up tiles they touch
         const int lightRays = 90;
 
@@ -1659,7 +1667,7 @@ void Level::update_lighting()
 
         Pos2D rsPos = lightSources[i].cPos; // Ray start position
         Pos2D rePos;                        // Ray end position
-        Pos2D pVec;                            // Path vector
+        Pos2D pVec;                         // Path vector
 
         // Store light levels of tiles for calculation before adding them to the total
         int *lightLevels = new int[tiles.size()]{ 0 };
@@ -1674,8 +1682,8 @@ void Level::update_lighting()
             float curRadians = (360 / lightRays) * d * (PI / 180);
 
             // Calculate end coordinates
-            rePos.x = round(radius * cos(curRadians)) + rsPos.x;
-            rePos.y = round(radius * sin(curRadians)) + rsPos.y;
+            rePos.x = static_cast<int>(round(radius * cos(curRadians))) + rsPos.x;
+            rePos.y = static_cast<int>(round(radius * sin(curRadians))) + rsPos.y;
 
             // Calculate path vector
             pVec = rePos - rsPos;
@@ -1685,9 +1693,9 @@ void Level::update_lighting()
             int distTravelled = 0;
 
             // Variables for calculating tile light level
-            int currentTile = (rsPos / cellSize).index(_LEVEL_WIDTH); // Tile index on which the ray is currently on
-            int tileRayHitPoints = 0;                                  // Number of times a tile has been hit by a ray;
-            int tileLightLevel     = 0;                                  // Total light level from ray hits
+            int currentTile      = (rsPos / cellSize).index(_LEVEL_WIDTH); // Tile index on which the ray is currently on
+            int tileRayHitPoints = 0;                                      // Number of times a tile has been hit by a ray;
+            int tileLightLevel   = 0;                                      // Total light level from ray hits
 
             Pos2D pgPos = rsPos / cellSize; // Previous grid position
 
@@ -1706,13 +1714,14 @@ void Level::update_lighting()
                     
                     // Pick brightest ray
                     pindex = pgPos.index(_LEVEL_WIDTH);
-                    if (averageLightLevel > lightLevels[pindex])
+                    if (averageLightLevel > lightLevels[pindex]) {
                         lightLevels[pindex] = averageLightLevel;
+                    }
 
                     // Reset variables
                     tileRayHitPoints = 0;
-                    tileLightLevel     = 0;
-                    currentTile         = cgPos.index(_LEVEL_WIDTH);
+                    tileLightLevel   = 0;
+                    currentTile      = cgPos.index(_LEVEL_WIDTH);
 
                     pgPos = cgPos;
                 }
@@ -1732,7 +1741,7 @@ void Level::update_lighting()
         }
 
         // Add light levels to tiles
-        for (int j = 0; j < tiles.size(); j++) {
+        for (unsigned j = 0; j < tiles.size(); j++) {
             tileLights[j] += lightLevels[j];
         }
 
@@ -1742,7 +1751,7 @@ void Level::update_lighting()
     }
 
     // Set directly lit tiles
-    for (int i = 0; i < tiles.size(); i++)
+    for (unsigned i = 0; i < tiles.size(); i++)
         if (tileLights[i] > 0)
             tiles[i].directlyLit = true;
 
@@ -1813,7 +1822,7 @@ void Level::update_lighting()
     }
 
     // Set tile values
-    for (int i = 0; i < tiles.size(); i++) {
+    for (unsigned i = 0; i < tiles.size(); i++) {
         // Set tile light level
         tiles[i].set_light_level(tileLights[i]);
 
@@ -1878,7 +1887,7 @@ void Level::update_visibility()
     }
 
     // Portals
-    for (int i = 0; i < portals.size(); i++)
+    for (unsigned i = 0; i < portals.size(); i++)
     {
         int arrayPos = portals[i].entryPos.index(_LEVEL_WIDTH);
 
@@ -1891,7 +1900,7 @@ void Level::update_visibility()
     }
 
     // Entities
-    for (int i = 0; i < entities.size(); i++) {
+    for (unsigned i = 0; i < entities.size(); i++) {
         //int arrayPos = entities[i].gY * width + entities[i].gX;
 
         //if (tiles[arrayPos].visible) {
@@ -1903,19 +1912,20 @@ void Level::update_visibility()
     }
 
     // Crates
-    for (int i = 0; i < crates.size(); i++) {
+    for (unsigned i = 0; i < crates.size(); i++) {
         int arrayPos = crates[i].gY * width + crates[i].gX;
 
         if (tiles[arrayPos].visible) {
             crates[i].visible  = true;
             crates[i].revealed = true;
         }
-        else
+        else {
             crates[i].visible = false;
+        }
     }
 
     // Pressure plates
-    for (int i = 0; i < pressurePlates.size(); i++) {
+    for (unsigned i = 0; i < pressurePlates.size(); i++) {
         int arrayPos = pressurePlates[i].gY * width + pressurePlates[i].gX;
 
         if (tiles[arrayPos].visible) {
@@ -1927,7 +1937,7 @@ void Level::update_visibility()
     }
 
     // Lamps
-    for (int i = 0; i < lamps.size(); i++) {
+    for (unsigned i = 0; i < lamps.size(); i++) {
         int arrayPos = lamps[i].gY * width + lamps[i].gX;
 
         if (tiles[arrayPos].visible) {
@@ -1939,7 +1949,7 @@ void Level::update_visibility()
     }
 
     // Doors
-    for (int i = 0; i < doors.size(); i++) {
+    for (unsigned i = 0; i < doors.size(); i++) {
         int arrayPos = doors[i].gY * width + doors[i].gX;
 
         if (tiles[arrayPos].visible) {
@@ -1951,19 +1961,20 @@ void Level::update_visibility()
     }
 
     // Signs
-    for (int i = 0; i < signs.size(); i++) {
+    for (unsigned i = 0; i < signs.size(); i++) {
         int arrayPos = signs[i].gY * width + signs[i].gX;
 
         if (tiles[arrayPos].visible) {
             signs[i].visible  = true;
             signs[i].revealed = true;
         }
-        else
+        else {
             signs[i].visible = false;
+        }
     }
 
     // Shooters
-    for (int i = 0; i < shooters.size(); i++) {
+    for (unsigned i = 0; i < shooters.size(); i++) {
         if (shooters[i].spawning) {
             shooters[i].visible = false;
             continue;
@@ -1976,12 +1987,13 @@ void Level::update_visibility()
             shooters[i].active   = true;
             shooters[i].revealed = true;
         }
-        else
+        else {
             shooters[i].visible = false;
+        }
     }
 
     // Barbarians
-    for (int i = 0; i < barbarians.size(); i++) {
+    for (unsigned i = 0; i < barbarians.size(); i++) {
         if (barbarians[i].spawning) {
             barbarians[i].visible = false;
             continue;
@@ -1994,12 +2006,13 @@ void Level::update_visibility()
             barbarians[i].active   = true;
             barbarians[i].revealed = true;
         }
-        else
+        else {
             barbarians[i].visible = false;
+        }
     }
 
     // Wizards
-    for (int i = 0; i < wizards.size(); i++) {
+    for (unsigned i = 0; i < wizards.size(); i++) {
         if (wizards[i].spawning) {
             wizards[i].visible = false;
             continue;
@@ -2012,12 +2025,13 @@ void Level::update_visibility()
             wizards[i].active   = true;
             wizards[i].revealed = true;
         }
-        else
+        else {
             wizards[i].visible = false;
+        }
     }
     
     // Paladins
-    for (int i = 0; i < paladins.size(); i++) {
+    for (unsigned i = 0; i < paladins.size(); i++) {
         if (paladins[i].spawning) {
             paladins[i].visible = false;
             continue;
@@ -2030,12 +2044,13 @@ void Level::update_visibility()
             paladins[i].active   = true;
             paladins[i].revealed = true;
         }
-        else
+        else {
             paladins[i].visible = false;
+        }
     }
 
     // Zombies
-    for (int i = 0; i < zombies.size(); i++) {
+    for (unsigned i = 0; i < zombies.size(); i++) {
         if (zombies[i].spawning) {
             zombies[i].visible = false;
             continue;
@@ -2043,16 +2058,17 @@ void Level::update_visibility()
         int arrayPos = zombies[i].gY * width + zombies[i].gX;
 
         if (tiles[arrayPos].visible) {
-            zombies[i].visible    = true;
-            zombies[i].active    = true;
+            zombies[i].visible  = true;
+            zombies[i].active   = true;
             zombies[i].revealed = true;
         }
-        else
+        else {
             zombies[i].visible = false;
+        }
     }
 
     // Liches
-    for (int i = 0; i < liches.size(); i++) {
+    for (unsigned i = 0; i < liches.size(); i++) {
         if (liches[i].spawning) {
             liches[i].visible = false;
             continue;
@@ -2061,16 +2077,17 @@ void Level::update_visibility()
         int arrayPos = liches[i].gY * width + liches[i].gX;
 
         if (tiles[arrayPos].visible) {
-            liches[i].visible    = true;
-            liches[i].active    = true;
-            liches[i].revealed    = true;
+            liches[i].visible  = true;
+            liches[i].active   = true;
+            liches[i].revealed = true;
         }
-        else
+        else {
             liches[i].visible = false;
+        }
     }
 
     // Wraiths
-    for (int i = 0; i < wraiths.size(); i++) {
+    for (unsigned i = 0; i < wraiths.size(); i++) {
         if (wraiths[i].spawning) {
             wraiths[i].visible = false;
             continue;
@@ -2079,22 +2096,23 @@ void Level::update_visibility()
         int arrayPos = wraiths[i].gY * width + wraiths[i].gX;
 
         if (tiles[arrayPos].visible) {
-            wraiths[i].visible = true;
-            wraiths[i].active = true;
+            wraiths[i].visible  = true;
+            wraiths[i].active   = true;
             wraiths[i].revealed = true;
         }
-        else
+        else {
             wraiths[i].visible = false;
+        }
     }
 }
 
 void Level::finish_level()
 {
     if (players[0].dead) {
-        playerDied            = true;
-        inDeathScreen        = true;
-        startedDeathEffect    = false;
-        deathScreenStart    = maintime::now();
+        playerDied         = true;
+        inDeathScreen      = true;
+        startedDeathEffect = false;
+        deathScreenStart   = maintime::now();
 
         newMode = "";
 
@@ -2103,7 +2121,7 @@ void Level::finish_level()
         inEDFA = false;
 
         //duration<float> levelSeconds = levelEndTime - levelStartTime;
-        int levelSecInt = (levelEndTime - levelStartTime).get_duration(SECONDS);
+        int levelSecInt = static_cast<int>((levelEndTime - levelStartTime).get_duration(SECONDS));
         int levelS = levelSecInt % 60;
         int levelM = levelSecInt / 60;
 
@@ -2112,13 +2130,12 @@ void Level::finish_level()
         levelTime = ss.str();
     }
 
-    for (int i = 0; i < portals.size(); i++) {
-        for (int j = 0; j < players.size(); j++) {
+    for (unsigned i = 0; i < portals.size(); i++) {
+        for (unsigned j = 0; j < players.size(); j++) {
             if (players[j].gPos == portals[i].entryPos && players[j].inMA == false) {
                 // Set new player locations
                 players[0].gPos = portals[i].exitPos;
-                if (players.size() > 1)
-                    players[1].gPos = portals[i].exitPos;
+                if (players.size() > 1) players[1].gPos = portals[i].exitPos;
 
                 // Set new level and stage
                 saveData.currentLevel = portals[i].newLevel % levelsInStage;
