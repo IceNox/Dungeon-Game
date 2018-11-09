@@ -6,7 +6,8 @@
 #include <fstream>
 #include <stdexcept>
 
-Barbarian::Barbarian(
+Barbarian::Barbarian
+(
     int gX,
     int gY,
     std::string type,
@@ -126,7 +127,9 @@ void Barbarian::attack
             lastAction = system_clock::now();
         }
     }
+
     else if (!inMA && inAA) {
+
         // Update time
         duration<float> elapsed_seconds = system_clock::now() - AAstart;
 
@@ -156,7 +159,7 @@ void Barbarian::attack
             int sprX;
             int sprY = 72;
 
-            if        (AAdirection == "up") {
+            if      (AAdirection == "up") {
                 soX = 36;
                 soY = -48;
 
@@ -210,7 +213,7 @@ void Barbarian::move
             else                direction = "down";
         }
         else {
-            if (facing == "up") {
+            if      (facing == "up") {
                 if (player.gY < gY) direction = "up";
                 else {
                     if (player.gX < gX) direction = "left";
@@ -232,9 +235,10 @@ void Barbarian::move
                 if (player.gX < gX) direction = "left";
                 else                direction = "right";
             }
+            else throw std::invalid_argument("Facing was assigned an invalid value");
         }
 
-        if        (direction == "up") {
+        if      (direction == "up") {
             if (tiles[(gY - 1) * levelWidth + gX].occupied) {
                 if      (player.gX < gX) direction = "left";
                 else if (player.gX > gX) direction = "right";
@@ -262,6 +266,7 @@ void Barbarian::move
                 else                     direction = "right";
             }
         }
+        else throw std::invalid_argument("Facing was assigned an invalid value");
 
         if (direction == "up"    && tiles[(gY - 1) * levelWidth + gX].occupied) return;
         if (direction == "down"  && tiles[(gY + 1) * levelWidth + gX].occupied) return;
@@ -274,14 +279,13 @@ void Barbarian::move
         inMA        = true;
         onGround    = false;
         MAdirection = direction;
-        MAstart        = system_clock::now();
-        sgX            = gX;
-        sgY            = gY;
-
-        c_MAlength = MAlength;
+        MAstart     = system_clock::now();
+        sgX         = gX;
+        sgY         = gY;
+        c_MAlength  = MAlength;
 
         facing = direction;
-        if        (facing == "left")  spriteFacing = "left";
+        if      (facing == "left")  spriteFacing = "left";
         else if (facing == "right") spriteFacing = "right";
 
         actionCooldown = 1.0f;
@@ -334,18 +338,11 @@ void Barbarian::move
 
         // Otherwise, update barbarian position
         else {
-            if        (MAdirection == "up") {
-                cY = sgY * cellHeight + cellHeight / 2 - movedBy;
-            }
-            else if (MAdirection == "down") {
-                cY = sgY * cellHeight + cellHeight / 2 + movedBy;
-            }
-            else if (MAdirection == "left") {
-                cX = sgX * cellWidth + cellWidth / 2 - movedBy;
-            }
-            else if (MAdirection == "right") {
-                cX = sgX * cellWidth + cellWidth / 2 + movedBy;
-            }
+            if      (MAdirection == "up")    cY = sgY * cellHeight + cellHeight / 2 - movedBy;
+            else if (MAdirection == "down")  cY = sgY * cellHeight + cellHeight / 2 + movedBy;
+            else if (MAdirection == "left")  cX = sgX * cellWidth  + cellWidth  / 2 - movedBy;
+            else if (MAdirection == "right") cX = sgX * cellWidth  + cellWidth  / 2 + movedBy;
+            else throw std::invalid_argument("MAdirection was assigned an invalid value");
         }
 
         // Update barbarian sprite position
@@ -361,7 +358,7 @@ void Barbarian::end_MA()
     inMA            = false;
     onGround        = true;
     changedPosition = false;
-    currentAction    = "idle";
+    currentAction   = "idle";
     spriteNumber    = "1";
 
     cX = gX * cellSize + cellSize / 2;
