@@ -8,126 +8,126 @@
 class LevelData
 {
 public:
-	LevelData() {}
-	LevelData(std::string levelFileName);
+    LevelData() {}
+    LevelData(std::string levelFileName);
 
-	// Main data
-	std::string levelName;
+    // Main data
+    std::string levelName;
 
-	int width;
-	int height;
+    int width;
+    int height;
 
-	Pos2D playerStartPos;
+    Pos2D playerStartPos;
 
-	// Portals
-	int portalCount;
-	std::vector<Pos2D> portalPos;
-	std::vector<Pos2D> portalExitPos;
-	std::vector<int> portalNewLevel;
+    // Portals
+    int portalCount;
+    std::vector<Pos2D> portalPos;
+    std::vector<Pos2D> portalExitPos;
+    std::vector<int> portalNewLevel;
 
-	// Walls
-	int wallCount;
-	std::vector<Pos2D> wallGridPos;
-	std::vector<TileVariant> wallVariant;
-	std::vector<bool> wallActivatable;
-	std::vector<bool> wallToggleable;
-	std::vector<bool> wallActive;
+    // Walls
+    int wallCount;
+    std::vector<Pos2D> wallGridPos;
+    std::vector<TileVariant> wallVariant;
+    std::vector<bool> wallActivatable;
+    std::vector<bool> wallToggleable;
+    std::vector<bool> wallActive;
 
-	/*
-	int waterCount;
-	std::vector<int> waterX;
-	std::vector<int> waterY;
+    /*
+    int waterCount;
+    std::vector<int> waterX;
+    std::vector<int> waterY;
 
-	int lavaCount;
-	std::vector<int> lavaX;
-	std::vector<int> lavaY;
-	*/
+    int lavaCount;
+    std::vector<int> lavaX;
+    std::vector<int> lavaY;
+    */
 
-	// Floors
-	TileVariant baseFloorVariant;
-	int floorCount;
-	std::vector<Pos2D> floorGridPos;
-	std::vector<TileVariant> floorVariant;
+    // Floors
+    TileVariant baseFloorVariant;
+    int floorCount;
+    std::vector<Pos2D> floorGridPos;
+    std::vector<TileVariant> floorVariant;
 
-	// Objects
-	int sObjectCount;
-	std::vector< int > sObjectID;
-	std::vector<Pos2D> sObjectPos;
+    // Objects
+    int sObjectCount;
+    std::vector< int > sObjectID;
+    std::vector<Pos2D> sObjectPos;
 
-	int dObjectCount;
-	std::vector< int > dObjectID;
-	std::vector<Pos2D> dObjectPos;
+    int dObjectCount;
+    std::vector< int > dObjectID;
+    std::vector<Pos2D> dObjectPos;
 
-	/*
-	int wireCount;
-	std::vector<int> wireX;
-	std::vector<int> wireY;
-	std::vector<std::string> wireColor;
-	std::vector<bool> wireGate;
-	std::vector<std::string> wireGateType;
-	std::vector<std::string> wireFacing;
+    /*
+    int wireCount;
+    std::vector<int> wireX;
+    std::vector<int> wireY;
+    std::vector<std::string> wireColor;
+    std::vector<bool> wireGate;
+    std::vector<std::string> wireGateType;
+    std::vector<std::string> wireFacing;
 
-	int crateCount;
-	std::vector<int> crateX;
-	std::vector<int> crateY;
+    int crateCount;
+    std::vector<int> crateX;
+    std::vector<int> crateY;
 
-	int pressurePlateCount;
-	std::vector<int> plateX;
-	std::vector<int> plateY;
-	std::vector<std::string> plateType;
+    int pressurePlateCount;
+    std::vector<int> plateX;
+    std::vector<int> plateY;
+    std::vector<std::string> plateType;
 
-	int lampCount;
-	std::vector<int> lampX;
-	std::vector<int> lampY;
-	std::vector<std::string> lampType;
-	std::vector<bool> lampToggleable;
+    int lampCount;
+    std::vector<int> lampX;
+    std::vector<int> lampY;
+    std::vector<std::string> lampType;
+    std::vector<bool> lampToggleable;
 
-	int doorCount;
-	std::vector<int> doorX;
-	std::vector<int> doorY;
-	std::vector<std::string> doorFacing;
+    int doorCount;
+    std::vector<int> doorX;
+    std::vector<int> doorY;
+    std::vector<std::string> doorFacing;
 
-	int signCount;
-	std::vector<int> signX;
-	std::vector<int> signY;
-	std::vector<std::string> signText;
+    int signCount;
+    std::vector<int> signX;
+    std::vector<int> signY;
+    std::vector<std::string> signText;
 
-	int shooterCount;
-	std::vector<std::string> shooterType;
-	std::vector<int> shooterX;
-	std::vector<int> shooterY;
-	std::vector<int> shooterOffset;
-	std::vector<std::string> shooterFacing;
-	std::vector<bool> shooterActive;
+    int shooterCount;
+    std::vector<std::string> shooterType;
+    std::vector<int> shooterX;
+    std::vector<int> shooterY;
+    std::vector<int> shooterOffset;
+    std::vector<std::string> shooterFacing;
+    std::vector<bool> shooterActive;
 
-	int barbarianCount;
-	std::vector<int> barbarianX;
-	std::vector<int> barbarianY;
-	std::vector<std::string> barbarianType;
+    int barbarianCount;
+    std::vector<int> barbarianX;
+    std::vector<int> barbarianY;
+    std::vector<std::string> barbarianType;
 
-	int wizardCount;
-	std::vector<int> wizardX;
-	std::vector<int> wizardY;
-	std::vector<std::string> wizardType;
+    int wizardCount;
+    std::vector<int> wizardX;
+    std::vector<int> wizardY;
+    std::vector<std::string> wizardType;
 
-	int paladinCount;
-	std::vector<int> paladinX;
-	std::vector<int> paladinY;
-	std::vector<std::string> paladinType;
+    int paladinCount;
+    std::vector<int> paladinX;
+    std::vector<int> paladinY;
+    std::vector<std::string> paladinType;
 
-	int zombieCount;
-	std::vector<int> zombieX;
-	std::vector<int> zombieY;
-	std::vector<std::string> zombieType;
+    int zombieCount;
+    std::vector<int> zombieX;
+    std::vector<int> zombieY;
+    std::vector<std::string> zombieType;
 
-	int lichCount;
-	std::vector<int> lichX;
-	std::vector<int> lichY;
-	std::vector<std::string> lichType;
+    int lichCount;
+    std::vector<int> lichX;
+    std::vector<int> lichY;
+    std::vector<std::string> lichType;
 
-	int wraithCount;
-	std::vector<int> wraithX;
-	std::vector<int> wraithY;
-	std::vector<std::string> wraithType;
-	*/
+    int wraithCount;
+    std::vector<int> wraithX;
+    std::vector<int> wraithY;
+    std::vector<std::string> wraithType;
+    */
 };

@@ -6,12 +6,12 @@
 class Pixel
 {
 public:
-	Pixel(int r, int g, int b, bool transparent);
+    Pixel(int r, int g, int b, bool transparent);
 
-	int r;
-	int g;
-	int b;
-	bool transparent;
+    int r;
+    int g;
+    int b;
+    bool transparent;
 };
 
 #endif // PIXEL_H

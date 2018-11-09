@@ -9,40 +9,40 @@
 
 struct GameStateData
 {
-	// Variables for starting a game
-	bool inLevel	 = false;
-	bool levelLoaded = false;
-	bool enterLevel	 = false;
-	LevelType	lType;
-	std::string	lName;
+    // Variables for starting a game
+    bool inLevel     = false;
+    bool levelLoaded = false;
+    bool enterLevel     = false;
+    LevelType    lType;
+    std::string    lName;
 
-	// Variables for loading the editor
-	bool inEditor	  = false;
-	bool editorLoaded = false;
-	bool enterEditor  = false;
+    // Variables for loading the editor
+    bool inEditor      = false;
+    bool editorLoaded = false;
+    bool enterEditor  = false;
 
-	// Variables for entering menu
-	bool enterMenu = false;
+    // Variables for entering menu
+    bool enterMenu = false;
 };
 
 struct ActionState
 {
-	bool ongoing;
-	
-	int	  duration;
-	float progress;
+    bool ongoing;
+    
+    int      duration;
+    float progress;
 
-	TimePoint start;
+    TimePoint start;
 };
 
 struct Hitbox
 {
-	int type = 0; // 0 - circle, 1 - rectangle
+    int type = 0; // 0 - circle, 1 - rectangle
 
-	Pos2D cPos;
-	int	width  = 0;
-	int height = 0;
-	int radius = 0;
+    Pos2D cPos;
+    int    width  = 0;
+    int height = 0;
+    int radius = 0;
 
-	bool active = true;
+    bool active = true;
 };

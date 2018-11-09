@@ -5,66 +5,66 @@
 
 struct TileData
 {
-	// Wire stuff
-	bool pressuredW;
-	bool pressuredS;
-	bool pressuredG;
-	bool pressuredB;
-	bool pressured;
-	bool powered;
-	
-	// Occupation
-	bool terrain;
-	bool object;
+    // Wire stuff
+    bool pressuredW;
+    bool pressuredS;
+    bool pressuredG;
+    bool pressuredB;
+    bool pressured;
+    bool powered;
+    
+    // Occupation
+    bool terrain;
+    bool object;
 
-	//
-	bool player;
-	bool enemy;
+    //
+    bool player;
+    bool enemy;
 
-	bool directlyLit;
+    bool directlyLit;
 };
 
 class LevelStateData
 {
 public:
-	int width;
-	int height;
+    int width;
+    int height;
 
-	std::vector<TileData> tiles;
+    std::vector<TileData> tiles;
 
 
 
-	LevelStateData() {};
+    LevelStateData() {};
 
-	void set(int w, int h)
-	{
-		width  = w;
-		height = h;
+    void set(int w, int h)
+    {
+        width  = w;
+        height = h;
 
-		tiles.clear();
-		for (int i = 0; i < w * h; i++) {
-			tiles.push_back(TileData());
-		}
+        tiles.clear();
+        for (int i = 0; i < w * h; i++) {
+            tiles.push_back(TileData());
+        }
 
-		reset();
-	};
+        reset();
+    };
 
-	void reset()
-	{
-		for (int i = 0; i < tiles.size(); i++) {
-			tiles[i].pressuredW = false;
-			tiles[i].pressuredS = false;
-			tiles[i].pressuredG = false;
-			tiles[i].pressuredB = false;
-			tiles[i].powered = false;
+    void reset()
+    {
+        for (int i = 0; i < tiles.size(); i++) {
+            tiles[i].pressuredW = false;
+            tiles[i].pressuredS = false;
+            tiles[i].pressuredG = false;
+            tiles[i].pressuredB = false;
+            tiles[i].powered = false;
 
-			tiles[i].terrain = false;
-			tiles[i].object	 = false;
+            tiles[i].terrain = false;
+            tiles[i].object     = false;
 
-			tiles[i].player = false;
-			tiles[i].enemy	= false;
+            tiles[i].player = false;
+            tiles[i].enemy    = false;
 
-			tiles[i].directlyLit = false;
-		}
-	}
+            tiles[i].directlyLit = false;
+        }
+    }
 };

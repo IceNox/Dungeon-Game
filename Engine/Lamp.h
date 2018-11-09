@@ -9,22 +9,22 @@
 class Lamp
 {
 public:
-	int gX;
-	int gY;
+    int gX;
+    int gY;
 
-	int sX;
-	int sY;
+    int sX;
+    int sY;
 
-	std::string type;
+    std::string type;
 
-	bool powered;
-	bool toggleable;
-	bool wasPoweredOff;
-	bool wasPoweredOn;
+    bool powered;
+    bool toggleable;
+    bool wasPoweredOff;
+    bool wasPoweredOn;
 
-	bool revealed;
-	bool visible;
+    bool revealed;
+    bool visible;
 
-	Lamp(int gX, int gY, std::string type, bool toggleable);
-	void update_lamp(std::vector<Wire> &wires);
+    Lamp(int gX, int gY, std::string type, bool toggleable);
+    void update_lamp(std::vector<Wire> &wires);
 };

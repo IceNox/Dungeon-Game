@@ -14,89 +14,89 @@
 class Tile
 {
 public:
-	bool isSet;
+    bool isSet;
 
-	Pos2D gridPos;
-	Pos2D centerPos;
+    Pos2D gridPos;
+    Pos2D centerPos;
 
-	TileType type;
-	TileVariant variant;
-	bool elevated;
-	bool pressuredW;
-	bool pressuredS;
-	bool pressuredG;
-	bool pressuredB;
-	bool pressured;
-	bool occupied;
-	bool powered;
+    TileType type;
+    TileVariant variant;
+    bool elevated;
+    bool pressuredW;
+    bool pressuredS;
+    bool pressuredG;
+    bool pressuredB;
+    bool pressured;
+    bool occupied;
+    bool powered;
 
-	bool hasDoor;
-	bool burning;
+    bool hasDoor;
+    bool burning;
 
-	bool activatable;
-	bool toggleable;
-	bool active;
+    bool activatable;
+    bool toggleable;
+    bool active;
 
-	bool wasPoweredOff;
+    bool wasPoweredOff;
 
-	bool transparent;
+    bool transparent;
 
-	bool directlyLit;
+    bool directlyLit;
 
-	int	  lightLevel;
-	float brightness;
-	bool  visible;
-	bool  revealed;
+    int      lightLevel;
+    float brightness;
+    bool  visible;
+    bool  revealed;
 
-	int		  targetLightLevel;
-	int		  startLightLevel;
-	TimePoint lastLightLevelChange;
-	float	  lightLevelChangeProgress;
+    int          targetLightLevel;
+    int          startLightLevel;
+    TimePoint lastLightLevelChange;
+    float      lightLevelChangeProgress;
 
-	float sideBrightness;
-	bool  sideVisible;
-	bool  sideRevealed;
+    float sideBrightness;
+    bool  sideVisible;
+    bool  sideRevealed;
 
-	bool					animated;
-	int						frameCount;
-	std::vector<SpriteName> spriteNames;
-	int						currentFrame;
-	int						frameHoldTime;
-	TimePoint				lastFrameChange;
+    bool                    animated;
+    int                        frameCount;
+    std::vector<SpriteName> spriteNames;
+    int                        currentFrame;
+    int                        frameHoldTime;
+    TimePoint                lastFrameChange;
 
-	Tile()
-	{
-		isSet = false;
-	}
-	void set_tile
-	(
-		Pos2D		gridPos,
-		TileType	type,
-		TileVariant variant,
-		bool		activatable,
-		bool		toggleable,
-		bool		active,
-		int			frameCount,
-		SpriteName	spriteNames[],
-		int			frameHoldTime
-	);
-	void set_tile
-	(
-		Pos2D		gridPos,
-		TileType	type,
-		TileVariant variant,
-		bool		activatable,
-		bool		toggleable,
-		bool		active
-	);
-	void set_light_level
-	(
-		int lightLevel
-	);
-	void update_tile
-	(
-		std::vector<Wire> wires,
-		TileVariant baseFloorVariant,
-		std::vector<DamageMap> &damageMap
-	);
+    Tile()
+    {
+        isSet = false;
+    }
+    void set_tile
+    (
+        Pos2D        gridPos,
+        TileType    type,
+        TileVariant variant,
+        bool        activatable,
+        bool        toggleable,
+        bool        active,
+        int            frameCount,
+        SpriteName    spriteNames[],
+        int            frameHoldTime
+    );
+    void set_tile
+    (
+        Pos2D        gridPos,
+        TileType    type,
+        TileVariant variant,
+        bool        activatable,
+        bool        toggleable,
+        bool        active
+    );
+    void set_light_level
+    (
+        int lightLevel
+    );
+    void update_tile
+    (
+        std::vector<Wire> wires,
+        TileVariant baseFloorVariant,
+        std::vector<DamageMap> &damageMap
+    );
 };

@@ -8,21 +8,21 @@
 class Sign
 {
 public:
-	int gX;
-	int gY;
+    int gX;
+    int gY;
 
-	int sX;
-	int sY;
+    int sX;
+    int sY;
 
-	std::string rawText;
+    std::string rawText;
 
-	std::vector<std::string> textLine;
+    std::vector<std::string> textLine;
 
-	bool playerNearby;
-	bool revealed;
-	bool visible;
+    bool playerNearby;
+    bool revealed;
+    bool visible;
 
-	Sign(int gX, int gY, std::string text);
+    Sign(int gX, int gY, std::string text);
 
-	void update_sign(Player player);
+    void update_sign(Player player);
 };

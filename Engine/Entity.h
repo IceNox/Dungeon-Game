@@ -12,75 +12,75 @@
 class Entity
 {
 public:
-	bool collidesWithPlayer;
-	bool collidesWithAI;
+    bool collidesWithPlayer;
+    bool collidesWithAI;
 
-	Pos2D gPos;
-	Pos2D cPos;
-	Pos2D sPos;
+    Pos2D gPos;
+    Pos2D cPos;
+    Pos2D sPos;
 
-	Pos2D vVec;
-	Pos2D scPos;
-	Pos2D rangeVec;
+    Pos2D vVec;
+    Pos2D scPos;
+    Pos2D rangeVec;
 
-	Pos2D sOffset;
+    Pos2D sOffset;
 
-	bool item;
-	bool gold;
+    bool item;
+    bool gold;
 
-	std::string itemName;
-	int goldAmount;
-	int damage;
-	int heal;
+    std::string itemName;
+    int goldAmount;
+    int damage;
+    int heal;
 
-	int hitboxRadius;
+    int hitboxRadius;
 
-	bool revealed;
-	bool visible;
+    bool revealed;
+    bool visible;
 
-	bool animated;
+    bool animated;
 
-	TimePoint creationTime;
-	TimePoint lastMove;
-	TimePoint lastFrameChange;
+    TimePoint creationTime;
+    TimePoint lastMove;
+    TimePoint lastFrameChange;
 
-	int sHeight;
-	int sWidth;
+    int sHeight;
+    int sWidth;
 
-	int frameCount;
-	int frameHoldTime;
-	int currentFrame;
+    int frameCount;
+    int frameHoldTime;
+    int currentFrame;
 
-	SpriteName spriteName;
-	RECT	   spriteRegion;
+    SpriteName spriteName;
+    RECT       spriteRegion;
 
-	Entity // Constructor for a regular entity
-	(
-		Pos2D cPos,
-		Pos2D vVec,
-		Pos2D sOffset,
-		Pos2D rangeVec,
-		int			damage,
-		int			heal,
-		int			hitboxRadius,
-		bool		cwp,
-		bool		cwa,
-		bool		animated,
-		SpriteName	spriteName,
-		int			sW,
-		int			sH,
-		int			frameCount,
-		int			frameHoldTime
-	);
-	Entity // Constructor for gold entity
-	(
-		Pos2D gPos,
-		int	goldAmount
-	);
-	Entity::Entity // Constructor for item entity
-	(
-		Pos2D gPos,
-		SpriteName itemName
-	);
-	void update_entity();
+    Entity // Constructor for a regular entity
+    (
+        Pos2D cPos,
+        Pos2D vVec,
+        Pos2D sOffset,
+        Pos2D rangeVec,
+        int            damage,
+        int            heal,
+        int            hitboxRadius,
+        bool        cwp,
+        bool        cwa,
+        bool        animated,
+        SpriteName    spriteName,
+        int            sW,
+        int            sH,
+        int            frameCount,
+        int            frameHoldTime
+    );
+    Entity // Constructor for gold entity
+    (
+        Pos2D gPos,
+        int    goldAmount
+    );
+    Entity::Entity // Constructor for item entity
+    (
+        Pos2D gPos,
+        SpriteName itemName
+    );
+    void update_entity();
 };

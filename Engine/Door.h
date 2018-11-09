@@ -11,30 +11,30 @@
 class Door
 {
 public:
-	int gX;
-	int gY;
+    int gX;
+    int gY;
 
-	int cX;
-	int cY;
+    int cX;
+    int cY;
 
-	int sX;
-	int sY;
+    int sX;
+    int sY;
 
-	std::string facing;
+    std::string facing;
 
-	bool revealed;
-	bool visible;
+    bool revealed;
+    bool visible;
 
-	Door
-	(
-		int gX,
-		int gY,
-		std::string facing
-	);
+    Door
+    (
+        int gX,
+        int gY,
+        std::string facing
+    );
 
-	void damage
-	(
-		DamageMap damageMap,
-		std::vector<Command> &commands
-	);
+    void damage
+    (
+        DamageMap damageMap,
+        std::vector<Command> &commands
+    );
 };

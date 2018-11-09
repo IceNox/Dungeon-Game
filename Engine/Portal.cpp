@@ -2,36 +2,36 @@
 
 Portal::Portal
 (
-	Pos2D entryP,
-	Pos2D exitP,
-	int nl
+    Pos2D entryP,
+    Pos2D exitP,
+    int nl
 ) : 
-	entryPos(entryP),
-	exitPos(exitP),
-	newLevel(nl)
+    entryPos(entryP),
+    exitPos(exitP),
+    newLevel(nl)
 {
-	if (nl < 0) {
-		exit = true;
-	}
+    if (nl < 0) {
+        exit = true;
+    }
 
-	spriteRegion = { 0, 0, cellSize, cellSize / 2 };
+    spriteRegion = { 0, 0, cellSize, cellSize / 2 };
 
-	lastFrameChange = maintime::now();
-	currentFrame	= 0;
+    lastFrameChange = maintime::now();
+    currentFrame    = 0;
 }
 
 void Portal::update_portal()
 {
-	int microsecondsElapsed = (maintime::now() - lastFrameChange).get_duration();
-	int holdTimeInMicroseconds = frameHoldTime * 1000;
+    int microsecondsElapsed = (maintime::now() - lastFrameChange).get_duration();
+    int holdTimeInMicroseconds = frameHoldTime * 1000;
 
-	while (microsecondsElapsed > holdTimeInMicroseconds) {
-		currentFrame = (currentFrame + 1) % frameCount;
+    while (microsecondsElapsed > holdTimeInMicroseconds) {
+        currentFrame = (currentFrame + 1) % frameCount;
 
-		spriteRegion.left  =  currentFrame		* cellSize;
-		spriteRegion.right = (currentFrame + 1) * cellSize;
+        spriteRegion.left  =  currentFrame        * cellSize;
+        spriteRegion.right = (currentFrame + 1) * cellSize;
 
-		lastFrameChange		+= Duration(holdTimeInMicroseconds);
-		microsecondsElapsed -= holdTimeInMicroseconds;
-	}
+        lastFrameChange        += Duration(holdTimeInMicroseconds);
+        microsecondsElapsed -= holdTimeInMicroseconds;
+    }
 }

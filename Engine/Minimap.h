@@ -6,17 +6,17 @@
 
 class Minimap
 {
-	int width;
-	int height;
+    int width;
+    int height;
 
-	int size;
+    int size;
 public:
-	std::vector<int> grid;
+    std::vector<int> grid;
 
-	std::vector<Sprite> cells;
+    std::vector<Sprite> cells;
 
-	Minimap() {};
-	void create_minimap(int height, int width);
-	void change_size();
-	int get_size();
+    Minimap() {};
+    void create_minimap(int height, int width);
+    void change_size();
+    int get_size();
 };

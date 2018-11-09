@@ -8,27 +8,27 @@
 class Portal
 {
 public:
-	Pos2D entryPos;
-	Pos2D exitPos;
-	int newLevel;
+    Pos2D entryPos;
+    Pos2D exitPos;
+    int newLevel;
 
-	bool exit;
+    bool exit;
 
-	bool revealed = false;
-	bool visible;
+    bool revealed = false;
+    bool visible;
 
-	// Animation variables
-	const int frameCount	= 3;
-	const int frameHoldTime = 150;
-	int	currentFrame;
+    // Animation variables
+    const int frameCount    = 3;
+    const int frameHoldTime = 150;
+    int    currentFrame;
 
-	TimePoint lastFrameChange;
+    TimePoint lastFrameChange;
 
-	RECT spriteRegion;
+    RECT spriteRegion;
 
-	// Functions
-	Portal() {}
-	Portal(Pos2D entryP, Pos2D exitP, int nl);
+    // Functions
+    Portal() {}
+    Portal(Pos2D entryP, Pos2D exitP, int nl);
 
-	void update_portal();
+    void update_portal();
 };

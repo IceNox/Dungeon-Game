@@ -108,7 +108,7 @@ Misc/Fonts/Large/Hashtag.tga Hashtag
 Misc/Fonts/Large/Dollar_sign.tga DSign
 Misc/Fonts/Large/Percent.tga Percent
 Misc/Fonts/Large/Ampersand.tga Ampersand
-Misc/Fonts/Large/Apostrophe.tga	Apostrophe
+Misc/Fonts/Large/Apostrophe.tga    Apostrophe
 Misc/Fonts/Large/Open_parenthesis.tga OParentheses
 Misc/Fonts/Large/Close_parenthesis.tga CParenthesis
 Misc/Fonts/Large/Asterisk.tga Asterisk
@@ -206,7 +206,7 @@ Misc/Fonts/Small/Hashtag.tga Hashtag
 Misc/Fonts/Small/Dollar_sign.tga DSign
 Misc/Fonts/Small/Percent.tga Percent
 Misc/Fonts/Small/Ampersand.tga Ampersand
-Misc/Fonts/Small/Apostrophe.tga	Apostrophe
+Misc/Fonts/Small/Apostrophe.tga    Apostrophe
 Misc/Fonts/Small/Open_parenthesis.tga OParentheses
 Misc/Fonts/Small/Close_parenthesis.tga CParenthesis
 Misc/Fonts/Small/Asterisk.tga Asterisk

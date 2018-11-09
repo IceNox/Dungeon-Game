@@ -15,45 +15,45 @@ using namespace std::chrono;
 class StatusEffects
 {
 public:
-	bool slowed;
-	bool snared;
-	bool stunned;
-	bool burning;
-	bool cursed;
+    bool slowed;
+    bool snared;
+    bool stunned;
+    bool burning;
+    bool cursed;
 
-	int  slowDuration;
-	int  stunDuration;
-	int snareDuration;
-	int  burnDuration; // In ticks
-	int curseDuration;
+    int  slowDuration;
+    int  stunDuration;
+    int snareDuration;
+    int  burnDuration; // In ticks
+    int curseDuration;
 
-	float  slowStrength;
-	int    burnStrength;
-	int	  curseStrength;
+    float  slowStrength;
+    int    burnStrength;
+    int      curseStrength;
 
-	TimePoint  slowStart;
-	TimePoint snareStart;
-	TimePoint  stunStart;
-	TimePoint curseStart;
+    TimePoint  slowStart;
+    TimePoint snareStart;
+    TimePoint  stunStart;
+    TimePoint curseStart;
 
-	TimePoint burnLastTick;
-	int		  burnTicksRem;
-	int		  fireDamage;
+    TimePoint burnLastTick;
+    int          burnTicksRem;
+    int          fireDamage;
 
-	StatusEffects();
+    StatusEffects();
 
-	void update_effects();
+    void update_effects();
 
-	void slow (int duration, float strength);
-	void snare(int duration				   );
-	void stun (int duration				   );
-	void burn (int duration, int   strength);
-	void curse(int duration, int   strength);
+    void slow (int duration, float strength);
+    void snare(int duration                   );
+    void stun (int duration                   );
+    void burn (int duration, int   strength);
+    void curse(int duration, int   strength);
 
-	void stop_slow ();
-	void stop_snare();
-	void stop_stun ();
-	void stop_burn ();
-	void stop_curse();
-	void stop_effects();
+    void stop_slow ();
+    void stop_snare();
+    void stop_stun ();
+    void stop_burn ();
+    void stop_curse();
+    void stop_effects();
 };

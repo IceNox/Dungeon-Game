@@ -9,46 +9,46 @@
 class GameMessage
 {
 public:
-	virtual ~GameMessage() = default;
+    virtual ~GameMessage() = default;
 
-	virtual void handle_msg
-	(
-		GameStateData &gsd
-	)
-	{
-		
-	}
+    virtual void handle_msg
+    (
+        GameStateData &gsd
+    )
+    {
+        
+    }
 };
 
 class MsgEnterLevel : public GameMessage
 {
-	LevelType	lType;
-	std::string lName;
+    LevelType    lType;
+    std::string lName;
 public:
-	MsgEnterLevel(LevelType lt, std::string ln) : lType(lt), lName(ln) {}
+    MsgEnterLevel(LevelType lt, std::string ln) : lType(lt), lName(ln) {}
 
-	virtual void handle_msg
-	(
-		GameStateData &gsd
-	)
-	{
-		gsd.inLevel	   = true;
-		gsd.enterLevel = true;
-		gsd.lType = lType;
-		gsd.lName = lName;
-	}
+    virtual void handle_msg
+    (
+        GameStateData &gsd
+    )
+    {
+        gsd.inLevel       = true;
+        gsd.enterLevel = true;
+        gsd.lType = lType;
+        gsd.lName = lName;
+    }
 };
 
 class MsgEnterMenu : public GameMessage
 {
 public:
-	MsgEnterMenu() {}
+    MsgEnterMenu() {}
 
-	virtual void handle_msg
-	(
-		GameStateData &gsd
-	)
-	{
-		gsd.enterMenu = true;
-	}
+    virtual void handle_msg
+    (
+        GameStateData &gsd
+    )
+    {
+        gsd.enterMenu = true;
+    }
 };

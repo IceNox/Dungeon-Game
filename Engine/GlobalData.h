@@ -9,11 +9,11 @@
 
 struct ScriptLoadData
 {
-	int id;
-	std::string filePath;
-	std::vector<int> spriteIndexes;
+    int id;
+    std::string filePath;
+    std::vector<int> spriteIndexes;
 
-	ScriptLoadData() {};
+    ScriptLoadData() {};
 };
 
 extern int _LEVEL_WIDTH;

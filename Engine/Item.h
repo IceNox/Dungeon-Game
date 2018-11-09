@@ -16,23 +16,23 @@
 class Item
 {
 public:
-	std::string name;
-	std::string type;
-	std::string spriteName;
+    std::string name;
+    std::string type;
+    std::string spriteName;
 
-	int cooldown;
-	std::chrono::time_point<std::chrono::system_clock> lastUsed;
+    int cooldown;
+    std::chrono::time_point<std::chrono::system_clock> lastUsed;
 
-	bool activatable;
+    bool activatable;
 
-	Item() {}
-	Item(std::string itemName);
-	void use_item
-	(
-		std::vector<DamageMap> &damageMap,
-		std::vector<Command> &commands,
-		ScreenAnimations &screenAnimations,
-		Pos2D gPos,
-		Direction facing
-	);
+    Item() {}
+    Item(std::string itemName);
+    void use_item
+    (
+        std::vector<DamageMap> &damageMap,
+        std::vector<Command> &commands,
+        ScreenAnimations &screenAnimations,
+        Pos2D gPos,
+        Direction facing
+    );
 };

@@ -11,44 +11,44 @@
 class Particle
 {
 public:
-	Pos2D cPos;	 // Position
-	Pos2D rcPos; // High precision position
+    Pos2D cPos;     // Position
+    Pos2D rcPos; // High precision position
 
-	Sprite s;
+    Sprite s;
 
-	bool isText = false;
-	std::string text;
+    bool isText = false;
+    std::string text;
 
-	Pos2D vVec;	 // Initial velocity vector
-	Pos2D rvVec; // High precision initial velocity vector
+    Pos2D vVec;     // Initial velocity vector
+    Pos2D rvVec; // High precision initial velocity vector
 
-	Pos2D aVec;  // Acceleration vector
+    Pos2D aVec;  // Acceleration vector
 
-	TimePoint creationTime;
-	TimePoint lastUpdated;
+    TimePoint creationTime;
+    TimePoint lastUpdated;
 
-	int existenceLength;
-	int fadeLength;
+    int existenceLength;
+    int fadeLength;
 
-	float transparency;
+    float transparency;
 
-	bool finished;
+    bool finished;
 
-	Particle
-	(
-		Pos2D cPos,
-		Pos2D vVec,
-		Pos2D aVec,
-		Sprite s,
-		int eLength,
-		int fLength
-	);
+    Particle
+    (
+        Pos2D cPos,
+        Pos2D vVec,
+        Pos2D aVec,
+        Sprite s,
+        int eLength,
+        int fLength
+    );
 
-	Particle
-	(
-		Pos2D cpos,
-		std::string text
-	);
+    Particle
+    (
+        Pos2D cpos,
+        std::string text
+    );
 
-	void update_particle();
+    void update_particle();
 };

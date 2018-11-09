@@ -3,12 +3,12 @@
 class Settings
 {
 public:
-	/// Video
-	bool fullscreen = false;
-	bool native = true;
-	bool mode4k = false;
+    /// Video
+    bool fullscreen = false;
+    bool native = true;
+    bool mode4k = false;
 
-	// Resolution
-	int window_width = 1280;
-	int window_height = 720;
+    // Resolution
+    int window_width = 1280;
+    int window_height = 720;
 };
