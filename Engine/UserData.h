@@ -37,7 +37,7 @@ public:
     void save_data()
     {
         // TODO Change saving to a different config file
-        std::ofstream out("Content/Player/config.txt");
+        std::ofstream out("Content/User/config.txt");
 
         out << "SETTINGS"     << std::endl;
         out << "fullscreen: " << settings.fullscreen << std::endl;
