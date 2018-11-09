@@ -450,47 +450,55 @@ void Game::load_menu()
 {
     menu.scenes.clear();
 
+    // Add main menu scene and elements
     menu.scenes.push_back(MenuScene("main menu", "main_menu_background", 3, 3));
     {
-        menu.scenes[SCENE_MAIN_MENU].elements.push_back(Element(ME_BUTTON, true, "play", true, true, SM_LINE, 0, 128));
-        menu.scenes[SCENE_MAIN_MENU].elements.push_back(Element(ME_BUTTON, true, "options", true, true, SM_LINE, 0, 192));
-        menu.scenes[SCENE_MAIN_MENU].elements.push_back(Element(ME_BUTTON, true, "exit", true, true, SM_LINE, 0, 256));
-    }
-    
-    menu.scenes.push_back(MenuScene("play", "", 3, 3));
-    {
-        menu.scenes[SCENE_PLAY].elements.push_back(Element(ME_BUTTON, false, "new game", true, true, SM_LINE, 0, 128));
-        menu.scenes[SCENE_PLAY].elements.push_back(Element(ME_BUTTON, false, "load save", true, true, SM_LINE, 0, 192));
-        menu.scenes[SCENE_PLAY].elements.push_back(Element(ME_BUTTON, false, "user levels", true, true, SM_LINE, 0, 320));
+        menu.scenes[SCENE_MAIN_MENU].elements.push_back(Element(ME_BUTTON, "play", true, true, SM_LINE, 0, 128));
+        menu.scenes[SCENE_MAIN_MENU].elements.push_back(Element(ME_BUTTON, "options", true, true, SM_LINE, 0, 192));
+        menu.scenes[SCENE_MAIN_MENU].elements.push_back(Element(ME_BUTTON, "exit", true, true, SM_LINE, 0, 256));
     }
 
+    // Add play scene and elements
+    menu.scenes.push_back(MenuScene("play", "", 3, 3));
+    {
+        menu.scenes[SCENE_PLAY].elements.push_back(Element(ME_BUTTON, "new game", true, true, SM_LINE, 0, 128, false));
+        menu.scenes[SCENE_PLAY].elements.push_back(Element(ME_BUTTON, "load save", true, true, SM_LINE, 0, 192, false));
+        menu.scenes[SCENE_PLAY].elements.push_back(Element(ME_BUTTON, "user levels", true, true, SM_LINE, 0, 320, false));
+    }
+
+    // Add saves scene and elements
     menu.scenes.push_back(MenuScene("saves", "", _SAVE_FILE_NAMES.size(), _SAVE_FILE_NAMES.size()));
     {
         for (int i = 0; i < _SAVE_FILE_NAMES.size(); i++) {
             menu.scenes[SCENE_PLAY].elements[1].active = true;
-            menu.scenes[SCENE_SAVES].elements.push_back(Element(ME_BUTTON, true, _SAVE_FILE_NAMES[i], true, true, SM_LINE, 0, 128 + 64 * i));
+            menu.scenes[SCENE_SAVES].elements.push_back(Element(ME_BUTTON, _SAVE_FILE_NAMES[i], true, true, SM_LINE, 0, 128 + 64 * i));
         }
     }
 
+    // Add user levels scene and elements
     menu.scenes.push_back(MenuScene("user levels", "", _USER_LEVEL_FILE_NAMES.size(), _USER_LEVEL_FILE_NAMES.size()));
     {
         for (int i = 0; i < _USER_LEVEL_FILE_NAMES.size(); i++) {
             menu.scenes[SCENE_PLAY].elements[2].active = true;
-            menu.scenes[SCENE_USER_LEVELS].elements.push_back(Element(ME_BUTTON, true, _USER_LEVEL_FILE_NAMES[i], true, true, SM_LINE, 0, 128 + 64 * i));
+            menu.scenes[SCENE_USER_LEVELS].elements.push_back(Element(ME_BUTTON, _USER_LEVEL_FILE_NAMES[i], true, true, SM_LINE, 0, 128 + 64 * i));
         }
     }
-    
+
+    // Add options scene and elements
     menu.scenes.push_back(MenuScene("options", "options_background", 2, 2));
     {
-        menu.scenes[SCENE_OPTIONS].elements.push_back(Element(ME_BUTTON, true, "video", true, true, SM_LINE, 0, 128));
-        menu.scenes[SCENE_OPTIONS].elements.push_back(Element(ME_BUTTON, true, "controls", true, true, SM_LINE, 0, 192));
+        menu.scenes[SCENE_OPTIONS].elements.push_back(Element(ME_BUTTON, "video", true, true, SM_LINE, 0, 128));
+        menu.scenes[SCENE_OPTIONS].elements.push_back(Element(ME_BUTTON, "controls", true, true, SM_LINE, 0, 192));
     }
 
+    // Add video options scene and elements
     menu.scenes.push_back(MenuScene("video", "options_background", 9, 4));
     {
+        // Fullscreen switch
         menu.scenes[SCENE_VIDEO].elements.push_back(Element(0, true, true, SM_LINE, 100, 128));
         menu.scenes[SCENE_VIDEO].elements[0].on = userData.settings.fullscreen;
 
+        // Available windowed (sometimes fullscreen) resolution value determination
         std::vector<std::string> selections;
         if (userData.screenWidth >= 1280 && userData.screenHeight >= 720) selections.push_back("1280x720");
         if (userData.screenWidth >= 1280 && userData.screenHeight >= 1024) selections.push_back("1280x1024");
@@ -500,28 +508,38 @@ void Game::load_menu()
         if (userData.screenWidth >= 2560 && userData.screenHeight >= 1440) selections.push_back("2560x1440");
         if (userData.screenWidth >= 2560 && userData.screenHeight >= 1600) selections.push_back("2560x1600");
 
+        // If no possible common resolution is found, create one slightly smaller than the entire screen
         if (selections.size() == 0) {
-            int width  = userData.screenWidth;
-            int height = userData.screenHeight;
-
             std::ostringstream w, h;
-            w << userData.screenWidth;
-            h << userData.screenHeight;
+            w << userData.screenWidth  - 25;
+            h << userData.screenHeight - 50;
 
             selections.push_back(w.str() + "x" + h.str());
         }
 
-        menu.scenes[SCENE_VIDEO].elements.push_back(Element(selections, 164, true, true, SM_LINE, 100, 192));
-
-        menu.scenes[SCENE_VIDEO].elements.push_back(Element(0, true, true, SM_LINE, 260, 256));
-        menu.scenes[SCENE_VIDEO].elements[2].on = userData.settings.native;
-
+        // Evaluate current resolution string
         std::string rs = "";
         std::ostringstream w, h;
         w << userData.settings.window_width;
         h << userData.settings.window_height;
         rs += w.str() + "x" + h.str();
 
+        // Determine if the user is using a custom resolution
+        bool customRes = true;
+        for (int i = 0; i < selections.size(); i++) {
+            if (rs == selections[i]) {
+                customRes = false;
+                break;
+            }
+        }
+
+        // If a custom resolution is used, add it to available selections
+        if (customRes) selections.push_back(rs);
+
+        // Create resolution selector
+        menu.scenes[SCENE_VIDEO].elements.push_back(Element(selections, 164, true, true, SM_LINE, 100, 192));
+
+        // Select current resolution
         for (int i = 0; i < menu.scenes[SCENE_VIDEO].elements[1].selections.size(); i++) {
             if (menu.scenes[SCENE_VIDEO].elements[1].selections[i] == rs) {
                 menu.scenes[SCENE_VIDEO].elements[1].cSelection = i;
@@ -529,64 +547,75 @@ void Game::load_menu()
             }
         }
 
-        menu.scenes[SCENE_VIDEO].elements.push_back(Element(ME_BUTTON, true, "save", true, true, SM_LINE, 0, 320));
+        // Add native resolution on fulscreen switch
+        menu.scenes[SCENE_VIDEO].elements.push_back(Element(0, true, true, SM_LINE, 260, 256));
+        menu.scenes[SCENE_VIDEO].elements[2].on = userData.settings.native;
 
-        menu.scenes[SCENE_VIDEO].elements.push_back(Element(ME_TEXT, true, "fullscreen:", true, false, SM_LINE, -200, 128));
-        menu.scenes[SCENE_VIDEO].elements.push_back(Element(ME_TEXT, true, "resolution:", true, false, SM_LINE, -200, 192));
-        menu.scenes[SCENE_VIDEO].elements.push_back(Element(ME_TEXT, true, "native resolution in fullscreen:", true, false, SM_LINE, -340, 256));
-        menu.scenes[SCENE_VIDEO].elements.push_back(Element(ME_TEXT, true, "saved", true, true, SM_LINE, 0, userData.cWindowHeight - 100));
+        // Add save button
+        menu.scenes[SCENE_VIDEO].elements.push_back(Element(ME_BUTTON, "save", true, true, SM_LINE, 0, 320));
+
+        // Add element descriptions in menu
+        menu.scenes[SCENE_VIDEO].elements.push_back(Element(ME_TEXT, "fullscreen:", true, false, SM_LINE, -200, 128));
+        menu.scenes[SCENE_VIDEO].elements.push_back(Element(ME_TEXT, "resolution:", true, false, SM_LINE, -200, 192));
+        menu.scenes[SCENE_VIDEO].elements.push_back(Element(ME_TEXT, "native resolution in fullscreen:", true, false, SM_LINE, -340, 256));
+
+        // Add save text
+        menu.scenes[SCENE_VIDEO].elements.push_back(Element(ME_TEXT, "saved", true, true, SM_LINE, 0, userData.cWindowHeight - 100));
         menu.scenes[SCENE_VIDEO].elements[7].visible = false;
-        menu.scenes[SCENE_VIDEO].elements.push_back(Element(ME_TEXT, true, "changes will apply after restart", true, true, SM_LINE, 0, userData.cWindowHeight - 60));
+        menu.scenes[SCENE_VIDEO].elements.push_back(Element(ME_TEXT, "changes will apply after restart", true, true, SM_LINE, 0, userData.cWindowHeight - 60));
         menu.scenes[SCENE_VIDEO].elements[8].visible = false;
     }
 
+    // Add control options scene
     menu.scenes.push_back(MenuScene("controls", "options_background", 28, 14));
     {
         std::string kName;
 
+        // Buttons
         kName = keys.key_name(userData.keyBindings.MOVE_UP);
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, true, kName, true, true, SM_LINE, -350 + 150, 128));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, kName, true, true, SM_LINE, -350 + 150, 128));
         kName = keys.key_name(userData.keyBindings.MOVE_DOWN);
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, true, kName, true, true, SM_LINE, -350 + 150, 192));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, kName, true, true, SM_LINE, -350 + 150, 192));
         kName = keys.key_name(userData.keyBindings.MOVE_LEFT);
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, true, kName, true, true, SM_LINE, -350 + 150, 256));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, kName, true, true, SM_LINE, -350 + 150, 256));
         kName = keys.key_name(userData.keyBindings.MOVE_RIGHT);
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, true, kName, true, true, SM_LINE, -350 + 150, 320));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, kName, true, true, SM_LINE, -350 + 150, 320));
         kName = keys.key_name(userData.keyBindings.CHANGE_DIRECTION);
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, true, kName, true, true, SM_LINE, -350 + 150, 384));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, kName, true, true, SM_LINE, -350 + 150, 384));
         kName = keys.key_name(userData.keyBindings.CHANGE_MAP_SIZE);
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, true, kName, true, true, SM_LINE, -350 + 150, 448));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, kName, true, true, SM_LINE, -350 + 150, 448));
         kName = keys.key_name(userData.keyBindings.PAUSE);
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, true, kName, true, true, SM_LINE, -350 + 150, 512));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, kName, true, true, SM_LINE, -350 + 150, 512));
         kName = keys.key_name(userData.keyBindings.USE_ITEM);
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, true, kName, true, true, SM_LINE, 250 + 150, 128));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, kName, true, true, SM_LINE, 250 + 150, 128));
         kName = keys.key_name(userData.keyBindings.DROP_ITEM);
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, true, kName, true, true, SM_LINE, 250 + 150, 192));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, kName, true, true, SM_LINE, 250 + 150, 192));
         kName = keys.key_name(userData.keyBindings.ITEM_1);
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, true, kName, true, true, SM_LINE, 250 + 150, 256));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, kName, true, true, SM_LINE, 250 + 150, 256));
         kName = keys.key_name(userData.keyBindings.ITEM_2);
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, true, kName, true, true, SM_LINE, 250 + 150, 320));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, kName, true, true, SM_LINE, 250 + 150, 320));
         kName = keys.key_name(userData.keyBindings.ITEM_3);
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, true, kName, true, true, SM_LINE, 250 + 150, 384));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, kName, true, true, SM_LINE, 250 + 150, 384));
         kName = keys.key_name(userData.keyBindings.ITEM_4);
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, true, kName, true, true, SM_LINE, 250 + 150, 448));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, kName, true, true, SM_LINE, 250 + 150, 448));
         kName = keys.key_name(userData.keyBindings.ITEM_5);
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, true, kName, true, true, SM_LINE, 250 + 150, 512));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, kName, true, true, SM_LINE, 250 + 150, 512));
 
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_TEXT, true, "move up:", true, false, SM_LINE, -350 - 150, 128));
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_TEXT, true, "move down:", true, false, SM_LINE, -350 - 150, 192));
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_TEXT, true, "move left:", true, false, SM_LINE, -350 - 150, 256));
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_TEXT, true, "move right:", true, false, SM_LINE, -350 - 150, 320));
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_TEXT, true, "direction:", true, false, SM_LINE, -350 - 150, 384));
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_TEXT, true, "map size:", true, false, SM_LINE, -350 - 150, 448));
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_TEXT, true, "pause:", true, false, SM_LINE, -350 - 150, 512));
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_TEXT, true, "use item:", true, false, SM_LINE, 250 - 150, 128));
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_TEXT, true, "drop item:", true, false, SM_LINE, 250 - 150, 192));
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_TEXT, true, "item 1:", true, false, SM_LINE, 250 - 150, 256));
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_TEXT, true, "item 2:", true, false, SM_LINE, 250 - 150, 320));
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_TEXT, true, "item 3:", true, false, SM_LINE, 250 - 150, 384));
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_TEXT, true, "item 4:", true, false, SM_LINE, 250 - 150, 448));
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_TEXT, true, "item 5:", true, false, SM_LINE, 250 - 150, 512));
+        // Descriptions
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_TEXT, "move up:", true, false, SM_LINE, -350 - 150, 128));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_TEXT, "move down:", true, false, SM_LINE, -350 - 150, 192));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_TEXT, "move left:", true, false, SM_LINE, -350 - 150, 256));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_TEXT, "move right:", true, false, SM_LINE, -350 - 150, 320));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_TEXT, "direction:", true, false, SM_LINE, -350 - 150, 384));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_TEXT, "map size:", true, false, SM_LINE, -350 - 150, 448));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_TEXT, "pause:", true, false, SM_LINE, -350 - 150, 512));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_TEXT, "use item:", true, false, SM_LINE, 250 - 150, 128));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_TEXT, "drop item:", true, false, SM_LINE, 250 - 150, 192));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_TEXT, "item 1:", true, false, SM_LINE, 250 - 150, 256));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_TEXT, "item 2:", true, false, SM_LINE, 250 - 150, 320));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_TEXT, "item 3:", true, false, SM_LINE, 250 - 150, 384));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_TEXT, "item 4:", true, false, SM_LINE, 250 - 150, 448));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_TEXT, "item 5:", true, false, SM_LINE, 250 - 150, 512));
     }
 }
 

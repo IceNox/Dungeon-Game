@@ -3,22 +3,22 @@
 Element::Element // Text and button constructor
 (
     MenuElementType type,
-    bool active,
     std::string text,
     bool screenCentered,
     bool coordCentered,
     MenuSelectionMarkerType smtype,
     int cX,
-    int cY
+    int cY,
+    bool active
 )    :
     type(type),
-    active(active),
     text(text),
     screenCentered(screenCentered),
     coordCentered(coordCentered),
     smtype(smtype),
     cX(cX),
     cY(cY),
+    active(active),
     visible(true)
 {}
 
@@ -29,7 +29,8 @@ Element::Element // Picture constructor
     bool coordCentered,
     MenuSelectionMarkerType smtype,
     int cX,
-    int cY
+    int cY,
+    bool active
 ) :
     type(ME_PICTURE),
     spriteName(spriteName),
@@ -38,6 +39,7 @@ Element::Element // Picture constructor
     smtype(smtype),
     cX(cX),
     cY(cY),
+    active(active),
     visible(true)
 {}
 
@@ -47,7 +49,8 @@ Element::Element // Slider constructor
     bool coordCentered,
     MenuSelectionMarkerType smtype,
     int cX,
-    int cY
+    int cY,
+    bool active
 )    :
     type(ME_SLIDER),
     screenCentered(screenCentered),
@@ -55,6 +58,7 @@ Element::Element // Slider constructor
     smtype(smtype),
     cX(cX),
     cY(cY),
+    active(active),
     visible(true)
 {
     value = 0;
@@ -68,7 +72,8 @@ Element::Element // Selection constructor
     bool coordCentered,
     MenuSelectionMarkerType smtype,
     int cX,
-    int cY
+    int cY,
+    bool active
 ) :
     type(ME_SELECTION),
     selections(selections),
@@ -78,6 +83,7 @@ Element::Element // Selection constructor
     smtype(smtype),
     cX(cX),
     cY(cY),
+    active(active),
     visible(true)
 {
     cSelection = 0;
@@ -90,7 +96,8 @@ Element::Element // Switch constructor
     bool coordCentered,
     MenuSelectionMarkerType smtype,
     int cX,
-    int cY
+    int cY,
+    bool active
 )    :
     type(ME_SWITCH),
     variant(variant),
@@ -99,6 +106,7 @@ Element::Element // Switch constructor
     smtype(smtype),
     cX(cX),
     cY(cY),
+    active(active),
     visible(true)
 {
     on = true;

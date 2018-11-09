@@ -52,13 +52,13 @@ public:
     Element // Text and button constructor
     (
         MenuElementType type,
-        bool active,
         std::string text,
         bool screenCentered,
         bool coordCentered,
         MenuSelectionMarkerType smtype,
         int cX,
-        int cY
+        int cY,
+        bool active = true
     );
 
     Element // Picture constructor
@@ -68,7 +68,8 @@ public:
         bool coordCentered,
         MenuSelectionMarkerType smtype,
         int cX,
-        int cY
+        int cY,
+        bool active = true
     );
 
     Element // Slider constructor
@@ -77,7 +78,8 @@ public:
         bool coordCentered,
         MenuSelectionMarkerType smtype,
         int cX,
-        int cY
+        int cY,
+        bool active = true
     );
 
     Element // Selection constructor
@@ -88,7 +90,8 @@ public:
         bool coordCentered,
         MenuSelectionMarkerType smtype,
         int cX,
-        int cY
+        int cY,
+        bool active = true
     );
 
     Element // Switch constructor
@@ -98,6 +101,7 @@ public:
         bool coordCentered,
         MenuSelectionMarkerType smtype,
         int cX,
-        int cY
+        int cY,
+        bool active = true
     );
 };
