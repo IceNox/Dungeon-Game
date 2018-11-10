@@ -5,8 +5,12 @@
 #include "KeyBindings.h"
 #include "Settings.h"
 
+#include "json.hpp"
+
 #include <fstream>
 #include <string>
+
+using json = nlohmann::json;
 
 class UserData
 {
