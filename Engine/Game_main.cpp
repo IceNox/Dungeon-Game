@@ -281,9 +281,27 @@ void Game::draw_text(Pos2D pos, std::string text, bool centered, bool large, flo
 
 void Game::load_config()
 {
+    /*
+    // Open file from directory and parse it into json state
+    std::ifstream in(CONFIG_PATH);
+
+    // Get raw text
+    in.seekg(0, std::ios::end);
+    int length = in.tellg();
+    in.seekg(0, std::ios::beg);
+    char *buffer = new char[length];
+    in.read(buffer, length);
+    in.close();
+
+    // Parse it into a json state and release buffer memory
+    json config = json::parse(buffer);
+    buffer = nullptr;
+    delete buffer;
+    */
+
     json config;
     std::ifstream in(CONFIG_PATH);
-    config << in;
+    in >> config;
 
     // Settings
     userData.settings.fullscreen    = config["settings"]["fullscreen"];

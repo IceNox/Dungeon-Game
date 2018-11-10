@@ -20,22 +20,10 @@ void SaveData::read_from_file(std::string fileName)
     playerGold.clear();
     levelData.clear();
 
-    // Open file from directory and parse it into json state
-    std::string path = "Content/Saves/" + fileName;
-    std::ifstream in(path);
-
-    // Gat raw data
-    in.seekg(0, std::ios::end);
-    int length = in.tellg();
-    in.seekg(0, std::ios::beg);
-    char *buffer = new char[length];
-    in.read(buffer, length);
-    in.close();
-
-    // Parse it into a json state and release buffer memory
-    json save = json::parse(buffer);
-    buffer = nullptr;
-    delete buffer;
+    // Parse file from directory into json state
+    json save;
+    std::ifstream in(SAVE_PATH + fileName);
+    in >> save;
 
     // Read main info
     saveName = save["saveName"].get<std::string>();

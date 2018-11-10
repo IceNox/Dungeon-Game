@@ -35,10 +35,10 @@ int WINAPI wWinMain( HINSTANCE hInst,HINSTANCE,LPWSTR pArgs,INT )
     {
         int sw, sh;
 
-        // Open config file
+        // Open config
         json config;
         std::ifstream in(CONFIG_PATH);
-        config << in;
+        in >> config;
 
         // Get window parameters
         sw = config["settings"]["resolution"]["width"];

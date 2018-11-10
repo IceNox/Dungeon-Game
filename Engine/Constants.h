@@ -5,6 +5,7 @@
 
 // Path data
 const std::string CONFIG_PATH = "Content/User/Config.json";
+const std::string SAVE_PATH = "Content/Saves/";
 
 // Cell data
 const int cellWidth = 96;
