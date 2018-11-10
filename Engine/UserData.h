@@ -5,8 +5,12 @@
 #include "KeyBindings.h"
 #include "Settings.h"
 
+#include "json.hpp"
+
 #include <fstream>
 #include <string>
+
+using json = nlohmann::json;
 
 class UserData
 {
@@ -36,28 +40,31 @@ public:
 
     void save_data()
     {
-        // TODO Change saving to a different config file
-        std::ofstream out("Content/User/config.txt");
+        std::ofstream out("Content/User/config.json");
+        json json_output;
 
-        out << "SETTINGS"     << std::endl;
-        out << "fullscreen: " << settings.fullscreen << std::endl;
-        out << "resolution: " << settings.window_width << " " << settings.window_height << std::endl;
-        out << "native: "     << settings.native << std::endl << std::endl;
+        json_output["settings"]["fullscreen"] = settings.fullscreen;
+        json_output["settings"]["native"]     = settings.native;
+        json_output["settings"]["mode4k"]     = settings.mode4k;
 
-        out << "KEYBINDINGS"       << std::endl;
-        out << "moveup:          " << keyBindings.MOVE_UP           << std::endl;
-        out << "movedown:        " << keyBindings.MOVE_DOWN         << std::endl;
-        out << "moveleft:        " << keyBindings.MOVE_LEFT         << std::endl;
-        out << "moveright:       " << keyBindings.MOVE_RIGHT        << std::endl;
-        out << "changedirection: " << keyBindings.CHANGE_DIRECTION  << std::endl;
-        out << "changemapsize:   " << keyBindings.CHANGE_MAP_SIZE   << std::endl;
-        out << "useitem:         " << keyBindings.USE_ITEM          << std::endl;
-        out << "dropitem:        " << keyBindings.DROP_ITEM         << std::endl;
-        out << "item1:           " << keyBindings.ITEM_1            << std::endl;
-        out << "item2:           " << keyBindings.ITEM_2            << std::endl;
-        out << "item3:           " << keyBindings.ITEM_3            << std::endl;
-        out << "item4:           " << keyBindings.ITEM_4            << std::endl;
-        out << "item5:           " << keyBindings.ITEM_5            << std::endl;
-        out << "pause:           " << keyBindings.PAUSE             << std::endl << std::endl;
+        json_output["settings"]["resolution"]["width"]  = settings.window_width;
+        json_output["settings"]["resolution"]["height"] = settings.window_height;
+
+        json_output["keybindings"]["moveup"]    = keyBindings.MOVE_UP;
+        json_output["keybindings"]["movedown"]  = keyBindings.MOVE_DOWN;
+        json_output["keybindings"]["moveleft"]  = keyBindings.MOVE_LEFT;
+        json_output["keybindings"]["moveright"] = keyBindings.MOVE_RIGHT;
+        json_output["keybindings"]["changedir"] = keyBindings.CHANGE_DIRECTION;
+        json_output["keybindings"]["changemap"] = keyBindings.CHANGE_MAP_SIZE;
+        json_output["keybindings"]["useitem"]   = keyBindings.USE_ITEM;
+        json_output["keybindings"]["dropitem"]  = keyBindings.DROP_ITEM;
+        json_output["keybindings"]["item1"]     = keyBindings.ITEM_1;
+        json_output["keybindings"]["item2"]     = keyBindings.ITEM_2;
+        json_output["keybindings"]["item3"]     = keyBindings.ITEM_3;
+        json_output["keybindings"]["item4"]     = keyBindings.ITEM_4;
+        json_output["keybindings"]["item5"]     = keyBindings.ITEM_5;
+        json_output["keybindings"]["pause"]     = keyBindings.PAUSE;
+
+        out << json_output;
     }
 };
