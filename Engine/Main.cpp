@@ -35,7 +35,7 @@ int WINAPI wWinMain( HINSTANCE hInst,HINSTANCE,LPWSTR pArgs,INT )
     {
         int sw, sh;
 
-        // Open config
+        // Open config file
         json config;
         std::ifstream in(CONFIG_PATH);
         in >> config;
