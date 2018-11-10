@@ -569,4 +569,7 @@
       <Filter>Content</Filter>
     </Text>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\User\config.json" />
+  </ItemGroup>
 </Project>
