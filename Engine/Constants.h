@@ -3,6 +3,10 @@
 #include <string>
 #include <unordered_map>
 
+// Path data
+const std::string CONFIG_PATH = "Content/User/Config.json";
+
+// Cell data
 const int cellWidth = 96;
 const int cellHeight = 96;
 const int cellSize = 96;

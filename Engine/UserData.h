@@ -44,9 +44,11 @@ public:
         json json_output;
 
         json_output["settings"]["fullscreen"] = settings.fullscreen;
-        json_output["settings"]["width"]      = settings.window_width;
-        json_output["settings"]["height"]     = settings.window_height;
         json_output["settings"]["native"]     = settings.native;
+        json_output["settings"]["mode4k"]     = settings.mode4k;
+
+        json_output["settings"]["resolution"]["width"]  = settings.window_width;
+        json_output["settings"]["resolution"]["height"] = settings.window_height;
 
         json_output["keybindings"]["moveup"]    = keyBindings.MOVE_UP;
         json_output["keybindings"]["movedown"]  = keyBindings.MOVE_DOWN;

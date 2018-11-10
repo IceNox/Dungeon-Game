@@ -6,6 +6,7 @@
 #include "GameTime.h"
 
 #include "Sol.hpp"
+#include "json.hpp"
 
 #include "MainWindow.h"
 
@@ -15,6 +16,7 @@
 #include <cstdlib>
 
 using namespace std::chrono;
+using json = nlohmann::json;
 
 int PXL_RATIO = 1;
 
@@ -279,17 +281,18 @@ void Game::draw_text(Pos2D pos, std::string text, bool centered, bool large, flo
 
 void Game::load_config()
 {
-    sol::state config;
-    config.script_file("Content/User/config2.lua");
+    json config;
+    std::ifstream in(CONFIG_PATH);
+    config << in;
 
-    /// Settings
-    sol::table settings = config["settings"];
-    userData.settings.fullscreen    = false;//settings["fullscreen"];
-    userData.settings.window_width    = settings["resolution"]["width"];
-    userData.settings.window_height = settings["resolution"]["height"];
-    userData.settings.native        = settings["native"];
-    userData.settings.mode4k        = settings["mode4k"];
-    
+    // Settings
+    userData.settings.fullscreen    = config["settings"]["fullscreen"];
+    userData.settings.native        = config["settings"]["native"];
+    userData.settings.mode4k        = config["settings"]["mode4k"];
+
+    userData.settings.window_width  = config["settings"]["resolution"]["width"];
+    userData.settings.window_height = config["settings"]["resolution"]["height"];
+
     if (userData.settings.fullscreen && userData.settings.native) {
         userData.cWindowWidth  = userData.screenWidth;
         userData.cWindowHeight = userData.screenHeight;
@@ -299,151 +302,21 @@ void Game::load_config()
         userData.cWindowHeight = userData.settings.window_height;
     }
 
-    /// Keybinds
-    sol::table keybinds = config["keybinds"];
-    userData.keyBindings.MOVE_UP            = keybinds.get<int>("moveup");
-    userData.keyBindings.MOVE_DOWN            = keybinds.get<int>("movedown");
-    userData.keyBindings.MOVE_LEFT            = keybinds.get<int>("moveleft");
-    userData.keyBindings.MOVE_RIGHT            = keybinds.get<int>("moveright");
-    userData.keyBindings.CHANGE_DIRECTION    = keybinds.get<int>("changedirection");
-    userData.keyBindings.CHANGE_MAP_SIZE    = keybinds.get<int>("changemapsize");
-    userData.keyBindings.USE_ITEM            = keybinds.get<int>("useitem");
-    userData.keyBindings.DROP_ITEM            = keybinds.get<int>("dropitem");
-    userData.keyBindings.ITEM_1                = keybinds.get<int>("item1");
-    userData.keyBindings.ITEM_2                = keybinds.get<int>("item2");
-    userData.keyBindings.ITEM_3                = keybinds.get<int>("item3");
-    userData.keyBindings.ITEM_4                = keybinds.get<int>("item4");
-    userData.keyBindings.ITEM_5                = keybinds.get<int>("item5");
-    userData.keyBindings.PAUSE                = keybinds.get<int>("pause");
-
-    return;
-
-    std::ifstream in;
-    in.open("Content/User/config.txt");
-
-    std::string typeName;
-    std::string t;
-    int code;
-
-    readFailed = false;
-
-    /// Settings
-    in >> typeName;
-
-    // Screen
-    in >> t;
-    bool f; in >> f;
-    if (!in.fail()) userData.settings.fullscreen = f;
-    else readFailed = true;
-
-    in >> t;
-    int w; in >> w;
-    if (!in.fail()) userData.settings.window_width = w;
-    else readFailed = true;
-
-    int h; in >> h;
-    if (!in.fail()) userData.settings.window_height = h;
-    else readFailed = true;
-
-    in >> t;
-    bool n; in >> n;
-    if (!in.fail()) userData.settings.native = n;
-    else readFailed = true;
-
-    in >> t;
-    bool k4; in >> k4;
-    if (!in.fail()) userData.settings.mode4k = k4;
-    else readFailed = true;
-
-
-    if (f && n) {
-        userData.cWindowWidth = userData.screenWidth;
-        userData.cWindowHeight = userData.screenHeight;
-    }
-    else {
-        userData.cWindowWidth = userData.settings.window_width;
-        userData.cWindowHeight = userData.settings.window_height;
-    }
-
-    /// Key bindings
-    in >> typeName;
-
-    // Movement
-    in >> t;
-    in >> code;
-    if (!in.fail()) userData.keyBindings.MOVE_UP = code;
-    else readFailed = true;
-
-    in >> t;
-    in >> code;
-    if (!in.fail()) userData.keyBindings.MOVE_DOWN = code;
-    else readFailed = true;
-
-    in >> t;
-    in >> code;
-    if (!in.fail()) userData.keyBindings.MOVE_LEFT = code;
-    else readFailed = true;
-
-    in >> t;
-    in >> code;
-    if (!in.fail()) userData.keyBindings.MOVE_RIGHT = code;
-    else readFailed = true;
-
-    // Change direction
-    in >> t;
-    in >> code;
-    if (!in.fail()) userData.keyBindings.CHANGE_DIRECTION = code;
-    else readFailed = true;
-
-    // Change map size
-    in >> t;
-    in >> code;
-    if (!in.fail()) userData.keyBindings.CHANGE_MAP_SIZE = code;
-    else readFailed = true;
-
-    // Inventory control
-    in >> t;
-    in >> code;
-    if (!in.fail()) userData.keyBindings.USE_ITEM = code;
-    else readFailed = true;
-
-    in >> t;
-    in >> code;
-    if (!in.fail()) userData.keyBindings.DROP_ITEM = code;
-    else readFailed = true;
-
-    in >> t;
-    in >> code;
-    if (!in.fail()) userData.keyBindings.ITEM_1 = code;
-    else readFailed = true;
-
-    in >> t;
-    in >> code;
-    if (!in.fail()) userData.keyBindings.ITEM_2 = code;
-    else readFailed = true;
-
-    in >> t;
-    in >> code;
-    if (!in.fail()) userData.keyBindings.ITEM_3 = code;
-    else readFailed = true;
-
-    in >> t;
-    in >> code;
-    if (!in.fail()) userData.keyBindings.ITEM_4 = code;
-    else readFailed = true;
-
-    in >> t;
-    in >> code;
-    if (!in.fail()) userData.keyBindings.ITEM_5 = code;
-    else readFailed = true;
-
-    // Pause
-    in >> t;
-    in >> code;
-    if (!in.fail()) userData.keyBindings.PAUSE = code;
-    else readFailed = true;
-
-    in.close();
+    // Keybinds
+    userData.keyBindings.MOVE_UP          = config["keybindings"]["moveup"];
+    userData.keyBindings.MOVE_DOWN        = config["keybindings"]["movedown"];
+    userData.keyBindings.MOVE_LEFT        = config["keybindings"]["moveleft"];
+    userData.keyBindings.MOVE_RIGHT       = config["keybindings"]["moveright"];
+    userData.keyBindings.CHANGE_DIRECTION = config["keybindings"]["changedir"];
+    userData.keyBindings.CHANGE_MAP_SIZE  = config["keybindings"]["changemap"];
+    userData.keyBindings.USE_ITEM         = config["keybindings"]["useitem"];
+    userData.keyBindings.DROP_ITEM        = config["keybindings"]["dropitem"];
+    userData.keyBindings.ITEM_1           = config["keybindings"]["item1"];
+    userData.keyBindings.ITEM_2           = config["keybindings"]["item2"];
+    userData.keyBindings.ITEM_3           = config["keybindings"]["item3"];
+    userData.keyBindings.ITEM_4           = config["keybindings"]["item4"];
+    userData.keyBindings.ITEM_5           = config["keybindings"]["item5"];
+    userData.keyBindings.PAUSE            = config["keybindings"]["pause"];
 }
 
 void Game::load_menu()
