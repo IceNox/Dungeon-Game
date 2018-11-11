@@ -10,35 +10,19 @@ Sprite::Sprite(const std::string& filename, std::string spriteName)
 {
     // Clear pixels
     pPixels = nullptr;
-    /*
-    // DEBUG STUFF
-    if (filename == "Content/Game/Blocks/Dirt.tga") {
-        std::ofstream out("bbdnx.txt");
-        out << "KYS";
-        out.close();
-
-        std::ifstream in("bbdxn.txt");
-        in.close();
-
-        TCHAR pwd[MAX_PATH];
-        GetCurrentDirectory(MAX_PATH, pwd);
-
-        width = 0;
-        height = 0;
-        //return;
-    }
-    */
+    
     // Open file
     std::ifstream file;
-    file.open(filename, std::ios::binary | std::ios::in);
+    file.open(filename, std::ios::binary);
     assert(file);
 
     // Read the header info
     file.seekg(2);
-    assert(file.get() == 2);
+    int tgaType = file.get();
+    assert(tgaType == 2);
 
     // Get image dimensions
-    file.seekg(10, std::ios::cur);
+    file.seekg(9, std::ios::cur);
     int w1 = file.get();
     int w2 = file.get();
     int h1 = file.get();
