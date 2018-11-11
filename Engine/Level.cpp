@@ -85,7 +85,7 @@ void Level::load_save_file(std::string saveName)
     startedEndEffect   = false;
 
     // Set tile data grid
-    levelStateData.set(width, height);
+    lsd::set(levelStateData, width, height);
 
     // Spawn players
     for (int i = 0; i < saveData.playerCount; i++) {
@@ -694,7 +694,7 @@ void Level::update_level(std::vector<GameMessage*> &msg, ScreenAnimations &scree
 
 void Level::set_game_state_data()
 {
-    levelStateData.reset();
+    lsd::reset(levelStateData);
 
     for (unsigned i = 0; i < tiles.size(); i++) {
         // Wire stuff

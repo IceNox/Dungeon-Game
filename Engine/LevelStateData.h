@@ -5,66 +5,67 @@
 
 struct TileData
 {
+    // Lua doesn't work as intended with bools
+    // Just assume that all ints here are bools
+
     // Wire stuff
-    bool pressuredW;
-    bool pressuredS;
-    bool pressuredG;
-    bool pressuredB;
-    bool pressured;
-    bool powered;
+    int pressuredW;
+    int pressuredS;
+    int pressuredG;
+    int pressuredB;
+    int pressured;
+    int powered;
     
     // Occupation
-    bool terrain;
-    bool object;
+    int terrain;
+    int object;
 
     //
-    bool player;
-    bool enemy;
+    int player;
+    int enemy;
 
-    bool directlyLit;
+    int directlyLit;
 };
 
-class LevelStateData
+struct LevelStateData
 {
-public:
     int width;
     int height;
 
     std::vector<TileData> tiles;
+};
 
-
-
-    LevelStateData() {};
-
-    void set(int w, int h)
+namespace lsd
+{
+    void set(LevelStateData &ld, int w, int h)
     {
-        width  = w;
-        height = h;
+        ld.width  = w;
+        ld.height = h;
 
-        tiles.clear();
+        ld.tiles.clear();
         for (int i = 0; i < w * h; i++) {
-            tiles.push_back(TileData());
+            ld.tiles.push_back(TileData());
         }
 
-        reset();
+        reset(ld);
     };
 
-    void reset()
+    void reset(LevelStateData &ld)
     {
-        for (int i = 0; i < tiles.size(); i++) {
-            tiles[i].pressuredW = false;
-            tiles[i].pressuredS = false;
-            tiles[i].pressuredG = false;
-            tiles[i].pressuredB = false;
-            tiles[i].powered = false;
+        for (int i = 0; i < ld.tiles.size(); i++) {
+            ld.tiles[i].pressuredW = false;
+            ld.tiles[i].pressuredS = false;
+            ld.tiles[i].pressuredG = false;
+            ld.tiles[i].pressuredB = false;
+            ld.tiles[i].powered    = false;
 
-            tiles[i].terrain = false;
-            tiles[i].object     = false;
+            ld.tiles[i].terrain = false;
+            ld.tiles[i].object  = false;
 
-            tiles[i].player = false;
-            tiles[i].enemy    = false;
+            ld.tiles[i].player = false;
+            ld.tiles[i].enemy  = false;
 
-            tiles[i].directlyLit = false;
+            ld.tiles[i].directlyLit = false;
         }
     }
-};
+}
