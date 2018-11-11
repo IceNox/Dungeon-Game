@@ -141,6 +141,9 @@ enum LevelType
 
 enum SpriteName
 {
+    // Blank sprite
+    EMPTY_SPRITE,
+
     // Blocks
     DIRT,
     STONE,
