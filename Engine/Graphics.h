@@ -24,7 +24,7 @@
 #include "ChiliException.h"
 #include "Colors.h"
 
-#include "Location.h"
+#include "Navigation.h"
 
 #include "Sprite.h"
 

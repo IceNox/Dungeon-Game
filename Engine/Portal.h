@@ -1,7 +1,7 @@
 #pragma once
 
 #include "GameTime.h"
-#include "Location.h"
+#include "Navigation.h"
 #include "Constants.h"
 
 #include <Windows.h>

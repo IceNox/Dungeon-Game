@@ -2,7 +2,7 @@
 
 #include "HelperStructs.h"
 #include "LevelStateData.h"
-#include "Location.h"
+#include "Navigation.h"
 #include "Constants.h"
 
 #include "Sol.hpp"

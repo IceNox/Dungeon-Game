@@ -1,4 +1,4 @@
-#include "Location.h"
+#include "Navigation.h"
 
 void rotate_direction(Direction &dir, int t)
 {

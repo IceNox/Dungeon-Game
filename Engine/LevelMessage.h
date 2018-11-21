@@ -2,7 +2,7 @@
 
 #include "Constants.h"
 
-#include "Location.h"
+#include "Navigation.h"
 #include "Sprite.h"
 
 #include "Particle.h"

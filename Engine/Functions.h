@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Location.h"
+#include "Navigation.h"
 
 #include <Windows.h>
 

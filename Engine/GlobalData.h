@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Location.h"
+#include "Navigation.h"
 #include "Sprite.h"
 #include "sol.hpp"
 
