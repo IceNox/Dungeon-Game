@@ -3,9 +3,17 @@
 #ifndef POSITION_H
 #define POSITION_H
 
-#include "Constants.h"
-
 #include <cmath>
+#include <unordered_map>
+
+enum Direction
+{
+    NO_DIRECTION = -1,
+    UP,
+    RIGHT,
+    DOWN,
+    LEFT
+};
 
 class Pos2D
 {
@@ -178,5 +186,10 @@ inline bool operator> (const Pos2D &p1, const Pos2D &p2)
 {
     return (p1.x > p2.x || p1.y > p2.y);
 }
+
+void rotate_direction(Direction &dir, int t);
+
+extern std::unordered_map<std::string, Direction> directionMap;
+extern std::unordered_map<Direction, Pos2D> directionVectorMap;
 
 #endif // POSITION_H

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Location.h"
 #include "Constants.h"
 
 #include <string>

@@ -1,7 +1,8 @@
 #pragma once
 
 #include "GameTime.h"
-#include "Position.h"
+#include "Location.h"
+#include "Constants.h"
 
 #include <Windows.h>
 

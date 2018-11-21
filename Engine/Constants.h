@@ -1,7 +1,6 @@
 #pragma once
 
 #include <string>
-#include <unordered_map>
 
 // Path data
 const std::string CONFIG_PATH = "Content/User/Config.json";
@@ -42,17 +41,6 @@ enum MenuSceneName
     SCENE_VIDEO,
     SCENE_CONTROLS
 };
-
-enum Direction
-{
-    NO_DIRECTION = -1,
-    UP,
-    RIGHT,
-    DOWN,
-    LEFT
-};
-
-void rotate_direction(Direction &dir, int t);
 
 enum DamageType
 {
@@ -101,21 +89,6 @@ enum PlayerAction
     P_IDLE,
     P_MOVING
 };
-
-const std::string action_strings[9] =
-{
-    "idle",
-    "moving",
-    "attacking",
-    "casting_bolt",
-    "casting_eruption",
-    "casting_slow",
-    "charging",
-    "blocking",
-    "raising_zombie"
-};
-
-std::string action_string(int ma);
 
 enum TileType
 {

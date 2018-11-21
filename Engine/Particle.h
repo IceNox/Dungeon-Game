@@ -2,7 +2,7 @@
 
 #include "GameTime.h"
 
-#include "Position.h"
+#include "Location.h"
 
 #include "Sprite.h"
 

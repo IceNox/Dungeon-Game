@@ -228,7 +228,7 @@
     <ClInclude Include="StatusEffects.h" />
     <ClInclude Include="LevelStateData.h" />
     <ClInclude Include="UserData.h" />
-    <ClInclude Include="Position.h" />
+    <ClInclude Include="Location.h" />
     <ClInclude Include="PressurePlate.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ScreenAnimations.h" />
@@ -245,7 +245,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Barbarian.cpp" />
-    <ClCompile Include="Constants.cpp" />
     <ClCompile Include="Crate.cpp" />
     <ClCompile Include="GameTime.cpp" />
     <ClCompile Include="Game_level.cpp" />
@@ -256,6 +255,8 @@
     <ClCompile Include="DXErr.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="LevelObject.cpp" />
+    <ClCompile Include="LevelStateData.cpp" />
+    <ClCompile Include="Location.cpp" />
     <ClCompile Include="Lua\lapi.c" />
     <ClCompile Include="Lua\lauxlib.c" />
     <ClCompile Include="Lua\lbaselib.c" />

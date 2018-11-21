@@ -3,7 +3,7 @@
 #include "Constants.h"
 
 #include "GameTime.h"
-#include "Position.h"
+#include "Location.h"
 
 #include <windows.h>
 #include <string>

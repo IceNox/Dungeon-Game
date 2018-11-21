@@ -35,4 +35,4 @@ powering = 0
 -- 125 of 6666 functions ( 1.9%) were compiled
 
 -- Logic
-moving = false
+function update(ld, curTime) end

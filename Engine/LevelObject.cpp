@@ -3,6 +3,8 @@
 #include "GlobalData.h"
 #include "Functions.h"
 
+#include "LevelStateData.h"
+
 #include <exception>
 
 #include <fstream>
@@ -14,10 +16,10 @@ void LevelObject::move(Pos2D pos, int duration, int jumpHeight)
     moveState.ongoing  = true;
     moveState.duration = duration;
     moveState.progress = 0.0f;
-    moveState.start       = maintime::now();
+    moveState.start    = maintime::now();
 
     moveStartPos = gPos;
-    moveEndPos     = pos;
+    moveEndPos   = pos;
 
     moveHeight = jumpHeight;
 
@@ -36,6 +38,43 @@ StaticObject::StaticObject(int id, Pos2D gPos)
     this->gPos = gPos;
 
     cPos = gPos * cellSize + Pos2D(cellSize / 2);
+
+    // Set up script state
+    script.open_libraries(sol::lib::base);
+
+    script.new_usertype<Pos2D>
+    (
+        "position",
+        sol::constructors<>(),
+        "x", sol::readonly(&Pos2D::x),
+        "y", sol::readonly(&Pos2D::y)
+    );
+
+    script.new_usertype<TileData>
+    (
+        "tileData",
+        sol::constructors<>(),
+        "pressuredW" , sol::readonly(&TileData::pressuredW ),
+        "pressuredS" , sol::readonly(&TileData::pressuredS ),
+        "pressuredG" , sol::readonly(&TileData::pressuredG ),
+        "pressuredB" , sol::readonly(&TileData::pressuredB ),
+        "pressured"  , sol::readonly(&TileData::pressured  ),
+        "powered"    , sol::readonly(&TileData::powered    ),
+        "terrain"    , sol::readonly(&TileData::terrain    ),
+        "object"     , sol::readonly(&TileData::object     ),
+        "player"     , sol::readonly(&TileData::player     ),
+        "enemy"      , sol::readonly(&TileData::enemy      ),
+        "directlyLit", sol::readonly(&TileData::directlyLit)
+    );
+
+    script.new_usertype<LevelStateData>
+    (
+        "levelData",
+        sol::constructors<>(),
+        "width" , sol::readonly(&LevelStateData::width ),
+        "height", sol::readonly(&LevelStateData::height),
+        "tiles" , sol::readonly(&LevelStateData::tiles )
+    );
 
     // Link object to apropriate script
     int linked = false;
@@ -66,7 +105,7 @@ StaticObject::StaticObject(int id, Pos2D gPos)
     sol::optional<int> soy = script["spriteoffset"]["y"];
     sOffset = { sox.value(), soy.value() };
 
-    currentSprite = script["spriteindexes"][0];
+    currentSprite = EMPTY_SPRITE;
 
     // Set hitbox
     sol::optional<int> hType = script["hitbox"]["type"];
@@ -96,15 +135,12 @@ StaticObject::StaticObject(int id, Pos2D gPos)
 
         sol::optional<int> str = script["lightsources"][i]["strength"];
     }
-
-
-    update();
 }
 
-void StaticObject::update()
+void StaticObject::update(const LevelStateData &ld, long int curTime)
 {
     // Run logic
-
+    script["update"](cPos, ld, curTime);
 
     // Set sprite
     sPos = cPos + sOffset;
@@ -117,7 +153,7 @@ void StaticObject::update()
     sol::optional<int> pre = script["pressuring"];
     sol::optional<int> pwr = script["powering"];
     obstructive = obs.value();
-    pressuring    = pre.value();
+    pressuring  = pre.value();
     powering    = pwr.value();
 
     return;

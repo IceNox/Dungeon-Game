@@ -626,7 +626,7 @@ void Level::update_level(std::vector<GameMessage*> &msg, ScreenAnimations &scree
         crates[i].update_crate();
     }
     for (auto it : levelObjects) {
-        it->update();
+        it->update(levelStateData, maintime::currentGameTime);
     }
     for (unsigned i = 0; i < pressurePlates.size(); i++) {
         //pressurePlates[i].update_plate(tiles);

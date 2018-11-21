@@ -554,6 +554,7 @@ void Game::read_textures()
     int typeCount;
 
     // Add empty sprite
+    sprites.push_back(Sprite("Content/Game/Other/Blank.tga", "blank"));
     spriteFilePaths.push_back("Content/Game/Other/Blank.tga");
 
     // Blocks

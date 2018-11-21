@@ -1,7 +1,8 @@
 #pragma once
 
 #include "HelperStructs.h"
-#include "Position.h"
+#include "LevelStateData.h"
+#include "Location.h"
 #include "Constants.h"
 
 #include "Sol.hpp"
@@ -47,14 +48,14 @@ public:
 
     // Other
     bool obstructive = false;
-    bool pressuring     = false;
-    bool powering     = false;
+    bool pressuring  = false;
+    bool powering    = false;
 
     // Destruction
     bool destroyed = false;
     
     // Movement
-    int jumpHeight     = 30;
+    int jumpHeight   = 30;
     int moveDuration = 150;
 
     // Movement state
@@ -70,7 +71,7 @@ public:
     // FUNCTIONS
     ~LevelObject() = default;
 
-    virtual void update() {}
+    virtual void update(const LevelStateData &ld, long int curTime) {}
     virtual void interact() {}
     virtual void destroy() {}
     virtual void damage() {}
@@ -86,5 +87,5 @@ class StaticObject : public LevelObject
 public:
     StaticObject(int id, Pos2D gPos);
 
-    virtual void update();
+    virtual void update(const LevelStateData &ld, long int curTime);
 };

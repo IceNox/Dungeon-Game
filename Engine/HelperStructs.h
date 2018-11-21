@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Constants.h"
-#include "Position.h"
+#include "Location.h"
 #include "GameTime.h"
 
 #include <string>

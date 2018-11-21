@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Position.h"
+#include "Location.h"
 
 #include <string>
 #include <vector>
