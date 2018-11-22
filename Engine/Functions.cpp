@@ -30,6 +30,7 @@ int distance_manh(Pos2D pos1, Pos2D pos2)
     return absv(pos1.x - pos2.x) + absv(pos1.y - pos2.y);
 }
 
+// Strings
 std::string wstring_to_string(std::wstring ws)
 {
     //setup converter
@@ -100,7 +101,7 @@ std::string int_to_str(int num)
     return ss.str();
 }
 
-int    find_text_in_vec(std::string str, std::vector<std::string> vec)
+int find_text_in_vec(std::string str, std::vector<std::string> vec)
 {
     for (int i = 0; i < vec.size(); i++)
         if (vec[i] == str)
@@ -109,7 +110,7 @@ int    find_text_in_vec(std::string str, std::vector<std::string> vec)
     return -1;
 }
 
-int    find_text_in_arr(std::string str, std::string arr[], int size)
+int find_text_in_arr(std::string str, std::string arr[], int size)
 {
     for (int i = 0; i < size; i++)
         if (arr[i] == str)
@@ -118,6 +119,22 @@ int    find_text_in_arr(std::string str, std::string arr[], int size)
     return -1;
 }
 
+std::string extract_str_until(std::string str, char tc)
+{
+    std::string s;
+    s.reserve(10);
+
+    for (unsigned i = 0; i < str.length(); i++) {
+        if (str[i] != tc)
+            s.push_back(str[i]);
+        else
+            break;
+    }
+
+    return s;
+}
+
+// Bounds
 bool add_bounds(Pos2D &pos, const RECT &bounds)
 {
     bool inBounds = true;
