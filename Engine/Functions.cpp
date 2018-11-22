@@ -134,6 +134,28 @@ std::string extract_str_until(std::string str, char tc)
     return s;
 }
 
+void erase_str_until(std::string &str, char tc)
+{
+    int l = extract_str_until(str, tc).length();
+
+    str.erase(str.begin(), str.begin() + l);
+    while (str[0] == tc) {
+        str.erase(str[0]);
+    }
+}
+
+std::string exer_str_until(std::string &str, char tc)
+{
+    std::string s = extract_str_until(str, tc);
+
+    str.erase(str.begin(), str.begin() + s.length());
+    while (str[0] == tc) {
+        str.erase(str[0]);
+    }
+
+    return s;
+}
+
 // Bounds
 bool add_bounds(Pos2D &pos, const RECT &bounds)
 {

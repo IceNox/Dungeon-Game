@@ -22,6 +22,8 @@ std::string int_to_str(int num);
 int         find_text_in_vec(std::string str, std::vector<std::string> vec);
 int         find_text_in_arr(std::string str, std::string arr[], int size);
 std::string extract_str_until(std::string str, char tc = ' ');
+void        erase_str_until(std::string &str, char tc = ' ');
+std::string exer_str_until(std::string &str, char tc = ' ');
 
 // Bounds
 bool add_bounds(Pos2D &pos, const RECT &bounds);
