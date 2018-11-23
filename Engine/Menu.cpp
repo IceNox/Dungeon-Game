@@ -39,7 +39,7 @@ void Menu::enter_game(std::string newMode, LevelType lType, std::string lName)
     this->lName   = lName;
 }
 */
-void Menu::update_menu(std::vector<GameMessage*> &msg, Keys &keys, UserData &userData)
+void Menu::update_menu(std::vector<GameMessage*> &msg, kb::Keys &keys, UserData &userData)
 {
     using namespace std::chrono;
 
@@ -211,7 +211,7 @@ void Menu::update_menu(std::vector<GameMessage*> &msg, Keys &keys, UserData &use
     }
 }
 
-void Menu::menu_control(std::vector<GameMessage*> &msg, std::string action, UserData &userData, Keys &keys)
+void Menu::menu_control(std::vector<GameMessage*> &msg, std::string action, UserData &userData, kb::Keys &keys)
 {
     std::ofstream debug("debug.txt");
 
@@ -469,7 +469,7 @@ void Menu::menu_control(std::vector<GameMessage*> &msg, std::string action, User
                 else if (cElement == 12) userData.keyBindings.ITEM_4            = code;
                 else if (cElement == 13) userData.keyBindings.ITEM_5            = code;
 
-                scenes[cScene].elements[cElement].text = keys.key_name(code);
+                scenes[cScene].elements[cElement].text = kb::code_to_name(code);
 
                 userData.save_data();
                 locked = false;

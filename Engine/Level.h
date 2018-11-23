@@ -77,6 +77,7 @@ public:
     // Elements
     std::vector<LevelMessage> levelMessages;
     std::vector<Command> commands;
+    std::vector<std::string> messages;
 
     std::vector<Player> players;
 
@@ -178,7 +179,7 @@ public:
     void load_save_file(std::string saveName);
     void save_save_file() {};
 
-    void update_level(std::vector<GameMessage*> &msg, ScreenAnimations &screenAnimations, Keys &keys, UserData &userData);
+    void update_level(std::vector<GameMessage*> &msg, ScreenAnimations &screenAnimations, kb::Keys &keys, UserData &userData);
     void set_game_state_data();
     void handle_messages();
 
@@ -191,7 +192,7 @@ public:
 
     void merge_gold_on_ground();
 
-    void update_minimap(Keys &keys, UserData &userData);
+    void update_minimap(kb::Keys &keys, UserData &userData);
     void update_tile_info();
     void update_wires();
     void update_lighting();

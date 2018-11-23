@@ -446,33 +446,33 @@ void Game::load_menu()
         std::string kName;
 
         // Buttons
-        kName = keys.key_name(userData.keyBindings.MOVE_UP);
+        kName = kb::code_to_name(userData.keyBindings.MOVE_UP);
         menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, kName, true, true, SM_LINE, -350 + 150, 128));
-        kName = keys.key_name(userData.keyBindings.MOVE_DOWN);
+        kName = kb::code_to_name(userData.keyBindings.MOVE_DOWN);
         menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, kName, true, true, SM_LINE, -350 + 150, 192));
-        kName = keys.key_name(userData.keyBindings.MOVE_LEFT);
+        kName = kb::code_to_name(userData.keyBindings.MOVE_LEFT);
         menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, kName, true, true, SM_LINE, -350 + 150, 256));
-        kName = keys.key_name(userData.keyBindings.MOVE_RIGHT);
+        kName = kb::code_to_name(userData.keyBindings.MOVE_RIGHT);
         menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, kName, true, true, SM_LINE, -350 + 150, 320));
-        kName = keys.key_name(userData.keyBindings.CHANGE_DIRECTION);
+        kName = kb::code_to_name(userData.keyBindings.CHANGE_DIRECTION);
         menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, kName, true, true, SM_LINE, -350 + 150, 384));
-        kName = keys.key_name(userData.keyBindings.CHANGE_MAP_SIZE);
+        kName = kb::code_to_name(userData.keyBindings.CHANGE_MAP_SIZE);
         menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, kName, true, true, SM_LINE, -350 + 150, 448));
-        kName = keys.key_name(userData.keyBindings.PAUSE);
+        kName = kb::code_to_name(userData.keyBindings.PAUSE);
         menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, kName, true, true, SM_LINE, -350 + 150, 512));
-        kName = keys.key_name(userData.keyBindings.USE_ITEM);
+        kName = kb::code_to_name(userData.keyBindings.USE_ITEM);
         menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, kName, true, true, SM_LINE, 250 + 150, 128));
-        kName = keys.key_name(userData.keyBindings.DROP_ITEM);
+        kName = kb::code_to_name(userData.keyBindings.DROP_ITEM);
         menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, kName, true, true, SM_LINE, 250 + 150, 192));
-        kName = keys.key_name(userData.keyBindings.ITEM_1);
+        kName = kb::code_to_name(userData.keyBindings.ITEM_1);
         menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, kName, true, true, SM_LINE, 250 + 150, 256));
-        kName = keys.key_name(userData.keyBindings.ITEM_2);
+        kName = kb::code_to_name(userData.keyBindings.ITEM_2);
         menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, kName, true, true, SM_LINE, 250 + 150, 320));
-        kName = keys.key_name(userData.keyBindings.ITEM_3);
+        kName = kb::code_to_name(userData.keyBindings.ITEM_3);
         menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, kName, true, true, SM_LINE, 250 + 150, 384));
-        kName = keys.key_name(userData.keyBindings.ITEM_4);
+        kName = kb::code_to_name(userData.keyBindings.ITEM_4);
         menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, kName, true, true, SM_LINE, 250 + 150, 448));
-        kName = keys.key_name(userData.keyBindings.ITEM_5);
+        kName = kb::code_to_name(userData.keyBindings.ITEM_5);
         menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, kName, true, true, SM_LINE, 250 + 150, 512));
 
         // Descriptions

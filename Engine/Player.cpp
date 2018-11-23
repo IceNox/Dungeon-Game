@@ -58,7 +58,7 @@ void Player::update_player
     std::vector<DamageMap> &damageMap,
     std::vector<Command> &commands,
     ScreenAnimations &screenAnimations,
-    Keys &keys,
+    kb::Keys &keys,
     UserData &userData,
     bool &paused,
     std::chrono::time_point<std::chrono::system_clock> &pauseStartTime
@@ -134,7 +134,7 @@ void Player::update_player
 }
 
 void Player::get_input(
-    Keys     &keys,
+    kb::Keys &keys,
     UserData &userData,
     bool &enter,
     bool &escape,
@@ -243,7 +243,7 @@ void Player::apply_effects
 
 void Player::move
 (
-    Keys &keys,
+    kb::Keys &keys,
     UserData &userData,
     bool up,
     bool down,

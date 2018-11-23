@@ -118,7 +118,7 @@ public:
         std::vector<DamageMap> &damageMap,
         std::vector<Command> &commands,
         ScreenAnimations &screenAnimations,
-        Keys &keys,
+        kb::Keys &keys,
         UserData &userData,
         bool &paused,
         std::chrono::time_point<std::chrono::system_clock> &pauseStartTime
@@ -126,7 +126,7 @@ public:
 
     void get_input
     (
-        Keys     &keys,
+        kb::Keys &keys,
         UserData &userData,
         bool &enter,
         bool &escape,
@@ -145,7 +145,7 @@ public:
 
     void move
     (
-        Keys &keys,
+        kb::Keys &keys,
         UserData &userData,
         bool up,
         bool down,

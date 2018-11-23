@@ -38,6 +38,8 @@ void Level::load_save_file(std::string saveName)
     saveData.read_from_file(saveName);
 
     // Clear all level data
+    messages.clear();
+
     players.clear();
     portals.clear();
     tiles.clear();
@@ -565,7 +567,7 @@ void Level::load_level(std::string levelName, std::vector<LevelData> &levelData)
 }
 */
 
-void Level::update_level(std::vector<GameMessage*> &msg, ScreenAnimations &screenAnimations, Keys &keys, UserData &userData)
+void Level::update_level(std::vector<GameMessage*> &msg, ScreenAnimations &screenAnimations, kb::Keys &keys, UserData &userData)
 {
     if (inFA) {
         //duration<float> elapsed_seconds = system_clock::now() - FAstart;
@@ -738,6 +740,22 @@ void Level::set_game_state_data()
 
 void Level::handle_messages()
 {
+    /*
+    for (unsigned i = 0; i < messages.size(); i++) {
+        std::string source  = exer_str_until(messages[i]);
+        std::string command = exer_str_until(messages[i]);
+
+        // Damage messages
+        if (command == "damage" || command == "dmg") {
+            std::string xstr = exer_str_until(messages[i]);
+            std::string ystr = exer_str_until(messages[i]);
+
+            int x = str_to_int(xstr);
+            int y = str_to_int(ystr);
+
+            healthMap[y * width + x].add_damage(messages[i], source);
+        }
+    }
     /*
     for (auto it : levelMessages) {
         it->handle_msg
@@ -1215,7 +1233,7 @@ void Level::merge_gold_on_ground()
     */
 }
 
-void Level::update_minimap(Keys &keys, UserData &userData)
+void Level::update_minimap(kb::Keys &keys, UserData &userData)
 {
     for (unsigned i = 0; i < minimap.grid.size(); i++) {
         minimap.grid[i] = 0;

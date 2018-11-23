@@ -79,7 +79,7 @@ private:
     Graphics gfx;
 public:
     // Variables
-    Keys keys;
+    kb::Keys keys;
 
     UserData userData;
 
