@@ -7,6 +7,7 @@
 #include "GameMessage.h"
 #include "LevelMessage.h"
 #include "Command.h"
+#include "LevelConsole.h"
 
 #include "Player.h"
 
@@ -77,6 +78,8 @@ public:
     // Elements
     std::vector<LevelMessage> levelMessages;
     std::vector<Command> commands;
+
+    LevelConsole console;
     std::vector<std::string> messages;
 
     std::vector<Player> players;
@@ -170,6 +173,8 @@ public:
     float FAprogress;
     TimePoint FAstart;
 
+    bool tildeIsPressed = false;
+
 /// Functions
     Level();
     void load_game(LevelType lType, std::string lName);
@@ -199,4 +204,6 @@ public:
     void update_visibility();
 
     void finish_level();
+
+    void toggle_pause();
 };

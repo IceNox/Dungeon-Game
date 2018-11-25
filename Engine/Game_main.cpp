@@ -95,26 +95,26 @@ void Game::UpdateModel()
 
     // Update level model
     if (gameStateData.inLevel) {
+        // Pause clock
+        if (level.paused)
+            maintime::pause();
+        else
+            maintime::unpause();
+
+        // Load level if necessary
         if (gameStateData.enterLevel) {
-            // Load level if nescessary
             level.load_game(gameStateData.lType, gameStateData.lName);
             level.update_level(gameMessages, screenAnimations, keys, userData);
             gameStateData.levelLoaded = true;
             gameStateData.enterLevel  = false;
         }
+        // If level isn't loaded go back to menu
         else if (!gameStateData.levelLoaded) {
-            // If level isn't loaded go back to menu
             menu.enter_menu(0, 0);
             gameStateData.inLevel = false;
         }
         else {
-            // Don't update the model if game is paused
-            if (!level.paused) {
-                level.update_level(gameMessages, screenAnimations, keys, userData);
-            }
-            else {
-                unpause();
-            }
+            level.update_level(gameMessages, screenAnimations, keys, userData);
         }
     }
     // Update editor model

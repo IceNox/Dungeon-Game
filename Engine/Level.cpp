@@ -590,6 +590,29 @@ void Level::update_level(std::vector<GameMessage*> &msg, ScreenAnimations &scree
 
     if (inDeathScreen || inEndScreen) return;
 
+    // Pause/unpause 
+    if (keys.key_state(userData.keyBindings.PAUSE)) toggle_pause();
+
+    // Open/close console
+    if ((GetKeyState(0xC0) & 0x8000) && !tildeIsPressed) {
+        if (!console.is_opened()) {
+            console.open();
+        }
+        else {
+            console.close();
+        }
+
+        tildeIsPressed = true;
+    }
+    else if (!(GetKeyState(0xC0) & 0x8000) && tildeIsPressed) {
+        tildeIsPressed = false;
+    }
+
+    // Update console
+    console.update_console(keys, messages);
+
+    if (paused) return;
+
     // Set/Reset variables
     players[0].tookDamage   = false;
     players[0].damageAmount = 0;
@@ -614,8 +637,7 @@ void Level::update_level(std::vector<GameMessage*> &msg, ScreenAnimations &scree
         screenAnimations,
         keys,
         userData,
-        paused,
-        pauseStartTime
+        console.is_opened()?true:false
     );
 
     for (int i = 0; i < _LEVEL_WIDTH * _LEVEL_HEIGHT; i++) {
@@ -740,7 +762,6 @@ void Level::set_game_state_data()
 
 void Level::handle_messages()
 {
-    /*
     for (unsigned i = 0; i < messages.size(); i++) {
         std::string source  = exer_str_until(messages[i]);
         std::string command = exer_str_until(messages[i]);
@@ -2187,5 +2208,15 @@ void Level::finish_level()
                 */
             }
         }
+    }
+}
+
+void Level::toggle_pause()
+{
+    if (!paused) {
+        paused = true;
+    }
+    else {
+        paused = false;
     }
 }

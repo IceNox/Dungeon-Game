@@ -8,6 +8,7 @@
 #include <codecvt>
 #include <bitset>
 #include <sstream>
+#include <fstream>
 
 int absv(int v)
 {
@@ -150,7 +151,7 @@ std::string exer_str_until(std::string &str, char tc)
 
     str.erase(str.begin(), str.begin() + s.length());
     while (str[0] == tc) {
-        str.erase(str[0]);
+        str.erase(str.begin(), str.begin() + 1);
     }
 
     return s;

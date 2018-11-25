@@ -120,8 +120,7 @@ public:
         ScreenAnimations &screenAnimations,
         kb::Keys &keys,
         UserData &userData,
-        bool &paused,
-        std::chrono::time_point<std::chrono::system_clock> &pauseStartTime
+        bool lockInput = false
     );
 
     void get_input

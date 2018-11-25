@@ -60,12 +60,9 @@ void Player::update_player
     ScreenAnimations &screenAnimations,
     kb::Keys &keys,
     UserData &userData,
-    bool &paused,
-    std::chrono::time_point<std::chrono::system_clock> &pauseStartTime
+    bool lockInput
 )
 {
-    if (paused) return;
-
     bool enter    = false;
     bool escape = false;
     bool up        = false;
@@ -75,12 +72,15 @@ void Player::update_player
     bool use    = false;
     bool drop    = false;
 
-    get_input(keys, userData, enter, escape, up, down, left, right, use, drop);
+    if (!lockInput) {
+        get_input(keys, userData, enter, escape, up, down, left, right, use, drop);
 
-    if (escape) {
-        paused = true;
-        pauseStartTime = std::chrono::system_clock::now();
-        return;
+        // Inventory selection
+        if (keys.key_state(userData.keyBindings.ITEM_1)) if (items[0].name != "") currentlySelectedItem = 0;
+        if (keys.key_state(userData.keyBindings.ITEM_2)) if (items[1].name != "") currentlySelectedItem = 1;
+        if (keys.key_state(userData.keyBindings.ITEM_3)) if (items[2].name != "") currentlySelectedItem = 2;
+        if (keys.key_state(userData.keyBindings.ITEM_4)) if (items[3].name != "") currentlySelectedItem = 3;
+        if (keys.key_state(userData.keyBindings.ITEM_5)) if (items[4].name != "") currentlySelectedItem = 4;
     }
 
     if (!inMA) {
@@ -100,13 +100,6 @@ void Player::update_player
             if (statusEffects.burning) statusEffects.burning = false;
         }
     }
-
-    // Inventory selection
-    if (keys.key_state(userData.keyBindings.ITEM_1)) if (items[0].name != "") currentlySelectedItem = 0;
-    if (keys.key_state(userData.keyBindings.ITEM_2)) if (items[1].name != "") currentlySelectedItem = 1;
-    if (keys.key_state(userData.keyBindings.ITEM_3)) if (items[2].name != "") currentlySelectedItem = 2;
-    if (keys.key_state(userData.keyBindings.ITEM_4)) if (items[3].name != "") currentlySelectedItem = 3;
-    if (keys.key_state(userData.keyBindings.ITEM_5)) if (items[4].name != "") currentlySelectedItem = 4;
 
     /*
     if (GetKeyState('1') & 0x8000) currentlySelectedItem = 0;
