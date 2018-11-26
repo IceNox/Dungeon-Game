@@ -28,12 +28,10 @@ std::string HealthMap::add_damage(std::string msg, std::string source)
     args.reserve(10);
 
     split_str(msg, args);
-    volatile int size = args.size();
 
     // Return if not enough arguments
-    if (size <= 3) {
-        volatile int s = size;
-        //return "error: not enough arguments";
+    if (args.size() < 4) {
+        return "error: not enough arguments";
     }
 
     dInfo.push_back(DamageInfo());
@@ -88,12 +86,13 @@ std::string HealthMap::add_damage(std::string msg, std::string source)
         else if (args[i] == "t")
             dInfo[index].terrain = true;
         else if (args[i].length() > 7) {
-            if (args[i].substr(0, 7) == "effect:")
+            if (args[i].substr(0, 7) == "effect:") {
                 dInfo[index].statusEffects.push_back(args[i].substr(7));
-            else {
-                dInfo.pop_back();
-                return "error: argument \"" + args[i] + "\" is invalid";
             }
+        }
+        else {
+            dInfo.pop_back();
+            return "error: argument \"" + args[i] + "\" is invalid";
         }
     }
 
