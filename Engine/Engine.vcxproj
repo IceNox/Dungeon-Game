@@ -201,7 +201,6 @@
     <ClInclude Include="Lua\lundump.h" />
     <ClInclude Include="Lua\lvm.h" />
     <ClInclude Include="Lua\lzio.h" />
-    <ClInclude Include="Matrix.h" />
     <ClInclude Include="Portal.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="Functions.h" />

@@ -5,6 +5,8 @@
 #include "Navigation.h"
 #include "Constants.h"
 
+#include "HealthMap.h"
+
 #include "Sol.hpp"
 
 #include <vector>
@@ -34,7 +36,6 @@ public:
 
     // Hitbox
     Hitbox hitbox;
-
     Pos2D hOffset;
 
     // Visibility
@@ -53,10 +54,6 @@ public:
 
     // Destruction
     bool destroyed = false;
-    
-    // Movement
-    int jumpHeight   = 30;
-    int moveDuration = 150;
 
     // Movement state
     ActionState moveState;
@@ -64,7 +61,7 @@ public:
     Pos2D moveStartPos;
     Pos2D moveEndPos;
 
-    int moveHeight;
+    int height = 0;
 
     Direction moveDirection;
 
@@ -74,18 +71,25 @@ public:
     virtual void update(const LevelStateData &ld, long int curTime) {}
     virtual void interact() {}
     virtual void destroy() {}
-    virtual void damage() {}
+    virtual void damage(const DamageInfo &di) {}
     virtual void heal() {}
 
-    void move(Pos2D pos, int duration = 0, int jumpHeight = 0);
+    void move_to(Pos2D pos, int duration = 0);
+    void move_by(Pos2D pos, int duration = 0);
+    void move_to_(int x, int y, int duration = 0);
+    void move_by_(int x, int y, int duration = 0);
     void update_movement();
+
+private:
+    //void self_damage
 };
 
 class StaticObject : public LevelObject
 {
 
 public:
-    StaticObject(int id, Pos2D gPos);
+    StaticObject(int id, Pos2D gPos, bool setup = true);
 
     virtual void update(const LevelStateData &ld, long int curTime);
+    virtual void damage(const DamageInfo &di);
 };

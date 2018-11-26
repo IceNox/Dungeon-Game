@@ -226,16 +226,9 @@ void Level::load_save_file(std::string saveName)
         }
     }
 
-    // Fill damage and heal map arrays
+    // Fill healthMap array
     for (int i = 0; i < tileCount; i++) {
-        damageMap.push_back(
-            DamageMap(
-            )
-        );
-        healMap.push_back(
-            HealMap(
-            )
-        );
+        healthMap.push_back(HealthMap());
     }
 
     // Read portals
@@ -1028,6 +1021,23 @@ void Level::collide_entities(ScreenAnimations &screenAnimations)
 
 void Level::deal_damage(ScreenAnimations &screenAnimations)
 {
+    // Player damage
+
+
+    // Level objects
+    for (int it = 0; it < levelObjects.size(); it++) {
+        int index = levelObjects[it]->gPos.index(width);
+        if (!healthMap[index].active) continue;
+
+        for (unsigned i = 0; i < healthMap[index].dInfo.size(); i++) {
+            levelObjects[it]->damage(healthMap[index].dInfo[i]);
+        }
+    }
+
+    // Clear damage map
+    for (int i = 0; i < width * height; i++) {
+        healthMap[i].reset();
+    }
     /*
     int index;
     // Player
@@ -1042,7 +1052,7 @@ void Level::deal_damage(ScreenAnimations &screenAnimations)
             if (damageMap[index].startShake) screenAnimations.start_shake(0);
         }
     }
-    
+
     // Doors
     for (int i = doors.size() - 1; i >= 0; i--) {
         index = doors[i].gY * width + doors[i].gX;
@@ -1081,7 +1091,7 @@ void Level::deal_damage(ScreenAnimations &screenAnimations)
             if (damageMap[index].startShake) screenAnimations.start_shake(0);
         }
     }
-    
+
     // Paladins
     for (int i = 0; i < paladins.size(); i++) {
         index = paladins[i].gY * width + paladins[i].gX;
@@ -1120,11 +1130,6 @@ void Level::deal_damage(ScreenAnimations &screenAnimations)
 
     // Start shake if player took damage
     if (player[0].tookDamage) screenAnimations.start_shake(player[0].damageAmount / 5);
-
-    // Clear damage map
-    for (int i = 0; i < width * height; i++) {
-        damageMap[i].reset();
-    }
     */
 }
 
@@ -1938,6 +1943,20 @@ void Level::update_visibility()
             portals[i].visible = false;
     }
 
+    // Objects
+    for (auto it : levelObjects) {
+        int arrayPos = it->gPos.index(width);
+
+        if (tiles[arrayPos].visible) {
+            it->visible = true;
+            it->revealed = true;
+        }
+        else {
+            it->visible = false;
+        }
+    }
+
+    /*
     // Entities
     for (unsigned i = 0; i < entities.size(); i++) {
         //int arrayPos = entities[i].gY * width + entities[i].gX;
@@ -2143,6 +2162,7 @@ void Level::update_visibility()
             wraiths[i].visible = false;
         }
     }
+    */
 }
 
 void Level::finish_level()

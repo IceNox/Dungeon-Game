@@ -27,12 +27,12 @@ struct GameStateData
 
 struct ActionState
 {
-    bool ongoing;
+    bool ongoing = false;
     
-    int      duration;
-    float progress;
+    int duration = 0;
+    float progress = 0.0f;
 
-    TimePoint start;
+    TimePoint start = TimePoint(0);
 };
 
 struct Hitbox

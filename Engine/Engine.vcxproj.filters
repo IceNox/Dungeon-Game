@@ -294,9 +294,6 @@
     <ClInclude Include="Navigation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Matrix.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="LevelConsole.h">
       <Filter>Header Files</Filter>
     </ClInclude>

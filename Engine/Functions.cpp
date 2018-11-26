@@ -54,6 +54,11 @@ void split_str(std::string str, std::vector<std::string> &v)
             t.clear();
         }
     }
+
+    if (t.length() > 0) {
+        v.push_back(t);
+        t.clear();
+    }
 }
 
 int str_to_int(std::string str, int base)

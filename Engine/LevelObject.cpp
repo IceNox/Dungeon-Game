@@ -3,13 +3,11 @@
 #include "GlobalData.h"
 #include "Functions.h"
 
-#include "LevelStateData.h"
-
 #include <exception>
 
 #include <fstream>
 
-void LevelObject::move(Pos2D pos, int duration, int jumpHeight)
+void LevelObject::move_to(Pos2D pos, int duration)
 {
     if (pos == gPos) return;
 
@@ -18,18 +16,74 @@ void LevelObject::move(Pos2D pos, int duration, int jumpHeight)
     moveState.progress = 0.0f;
     moveState.start    = maintime::now();
 
-    moveStartPos = gPos;
-    moveEndPos   = pos;
-
-    moveHeight = jumpHeight;
+    moveStartPos = cPos;
+    moveEndPos   = pos * cellSize + cellSize / 2;
 
     if (duration != 0) {
         moveDirection = (pos - gPos).vdirection();
     }
 }
 
-StaticObject::StaticObject(int id, Pos2D gPos)
+void LevelObject::move_by(Pos2D vec, int duration)
 {
+    move_to(gPos + vec, duration);
+}
+
+void LevelObject::move_to_(int x, int y, int duration)
+{
+    move_to({ x, y }, duration);
+}
+
+void LevelObject::move_by_(int x, int y, int duration)
+{
+    move_by({ x, y }, duration);
+}
+
+void LevelObject::update_movement()
+{
+    // Get time elapsed
+    int mselapsed = (maintime::now() - moveState.start).get_duration(MILLISECONDS);
+    moveState.progress = (double)mselapsed / moveState.duration;
+
+    // End movement state if necessary
+    if (moveState.progress >= 1.0f) {
+        cPos = moveEndPos;
+        height = 0;
+
+        moveState.ongoing = false;
+        script["reset_movement"]();
+
+        return;
+    }
+
+    // Calculate position
+    float movedBy = 0.0f;
+    float mheight = 0.0f;
+
+    // Default move path
+    if (script["movement"]["mtype"] == -1) {
+        movedBy = 1.0f - (1.0f - moveState.progress) * (1.0f - moveState.progress);
+
+        float xAxis = 2 * (moveState.progress - 0.5f);
+        float yAxis = xAxis * xAxis * -1.0f;
+
+        mheight = yAxis * 30.0f + 30.0f;
+    }
+    // Script calculated move path
+    else {
+        sol::tie(movedBy, mheight) = script["movementtypes"][script["movement"]["mtype"]](moveState.progress);
+    }
+
+    Pos2D moveVec = moveEndPos - moveStartPos;
+
+    cPos = moveStartPos + moveVec * movedBy;
+    height = ceil(mheight);
+}
+
+StaticObject::StaticObject(int id, Pos2D gPos, bool setup)
+{
+    if (!setup) return;
+
     // Set essential data
     this->oid = id;
     this->ID = oid / 1000;
@@ -54,16 +108,16 @@ StaticObject::StaticObject(int id, Pos2D gPos)
     (
         "tileData",
         sol::constructors<>(),
-        "pressuredW" , sol::readonly(&TileData::pressuredW ),
-        "pressuredS" , sol::readonly(&TileData::pressuredS ),
-        "pressuredG" , sol::readonly(&TileData::pressuredG ),
-        "pressuredB" , sol::readonly(&TileData::pressuredB ),
-        "pressured"  , sol::readonly(&TileData::pressured  ),
-        "powered"    , sol::readonly(&TileData::powered    ),
-        "terrain"    , sol::readonly(&TileData::terrain    ),
-        "object"     , sol::readonly(&TileData::object     ),
-        "player"     , sol::readonly(&TileData::player     ),
-        "enemy"      , sol::readonly(&TileData::enemy      ),
+        "pressuredW" , sol::readonly(&TileData::pressuredW),
+        "pressuredS" , sol::readonly(&TileData::pressuredS),
+        "pressuredG" , sol::readonly(&TileData::pressuredG),
+        "pressuredB" , sol::readonly(&TileData::pressuredB),
+        "pressured"  , sol::readonly(&TileData::pressured),
+        "powered"    , sol::readonly(&TileData::powered),
+        "terrain"    , sol::readonly(&TileData::terrain),
+        "object"     , sol::readonly(&TileData::object),
+        "player"     , sol::readonly(&TileData::player),
+        "enemy"      , sol::readonly(&TileData::enemy),
         "directlyLit", sol::readonly(&TileData::directlyLit)
     );
 
@@ -71,9 +125,25 @@ StaticObject::StaticObject(int id, Pos2D gPos)
     (
         "levelData",
         sol::constructors<>(),
-        "width" , sol::readonly(&LevelStateData::width ),
+        "width" , sol::readonly(&LevelStateData::width),
         "height", sol::readonly(&LevelStateData::height),
-        "tiles" , sol::readonly(&LevelStateData::tiles )
+        "tiles" , sol::readonly(&LevelStateData::tiles)
+    );
+
+    script.new_usertype<DamageInfo>
+    (
+        "damageInfo",
+        sol::constructors<>(),
+        "amount"       , sol::readonly(&DamageInfo::amount),
+        "type"         , sol::readonly(&DamageInfo::type),
+        "players"      , sol::readonly(&DamageInfo::players),
+        "enemies"      , sol::readonly(&DamageInfo::enemies),
+        "terrain"      , sol::readonly(&DamageInfo::terrain),
+        "direction"    , sol::readonly(&DamageInfo::dir),
+        "ground"       , sol::readonly(&DamageInfo::ground),
+        "precise"      , sol::readonly(&DamageInfo::precise),
+        "knockbackStr" , sol::readonly(&DamageInfo::knockbackStr),
+        "statusEffects", sol::readonly(&DamageInfo::statusEffects)
     );
 
     // Link object to apropriate script
@@ -85,7 +155,7 @@ StaticObject::StaticObject(int id, Pos2D gPos)
 
             // Set sprites
             for (int j = 0; j < _OBJECT_SCRIPTS[i].spriteIndexes.size(); j++) {
-                script["spriteindexes"][j] = _OBJECT_SCRIPTS[i].spriteIndexes[j];
+                script["spriteindexes"][j+1] = _OBJECT_SCRIPTS[i].spriteIndexes[j];
             }
 
             linked = true;
@@ -108,7 +178,7 @@ StaticObject::StaticObject(int id, Pos2D gPos)
     currentSprite = EMPTY_SPRITE;
 
     // Set hitbox
-    sol::optional<int> hType = script["hitbox"]["type"];
+    sol::optional<int> hType = script["hitbox"]["shape"];
     hitbox.type = hType.value();
 
     sol::optional<int> w = script["hitbox"]["size"]["w"];
@@ -139,11 +209,39 @@ StaticObject::StaticObject(int id, Pos2D gPos)
 
 void StaticObject::update(const LevelStateData &ld, long int curTime)
 {
-    // Run logic
-    script["update"](cPos, ld, curTime);
+    if (!moveState.ongoing) {
+        // Run logic
+        script["update"](cPos, ld, maintime::currentGameTime);
+
+        // Check for a movement call
+        if (script["startmovement"] == true) {
+            if (script["movement"]["relative"] == true) {
+                move_by_(
+                    script["movement"]["x"],
+                    script["movement"]["y"],
+                    script["movement"]["duration"]
+                );
+            }
+            else {
+                move_to_(
+                    script["movement"]["x"],
+                    script["movement"]["y"],
+                    script["movement"]["duration"]
+                );
+            }
+        }
+    }
+    else {
+        update_movement();
+    }
+
+    // Set grid position
+    gPos = cPos / cellSize;
 
     // Set sprite
+    currentSprite = script["select_sprite"](facing, moveState.ongoing, moveState.progress);
     sPos = cPos + sOffset;
+    sPos.y -= height;
 
     // Set hitbox
     hitbox.cPos = cPos;
@@ -157,4 +255,29 @@ void StaticObject::update(const LevelStateData &ld, long int curTime)
     powering    = pwr.value();
 
     return;
+}
+
+void StaticObject::damage(const DamageInfo &di)
+{
+    destroyed = script["damage"](di, destroyed);
+
+    if (!moveState.ongoing) {
+        // Check for a movement call
+        if (script["startmovement"] == true) {
+            if (script["movement"]["relative"] == true) {
+                move_by_(
+                    script["movement"]["x"],
+                    script["movement"]["y"],
+                    script["movement"]["duration"]
+                );
+            }
+            else {
+                move_to_(
+                    script["movement"]["x"],
+                    script["movement"]["y"],
+                    script["movement"]["duration"]
+                );
+            }
+        }
+    }
 }

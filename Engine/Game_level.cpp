@@ -171,7 +171,7 @@ void Game::ComposeGame()
 
         // Objects
         for (auto it : level.levelObjects) {
-            if (it->gPos.y == y) {
+            if (it->gPos.y == y && it->visible) {
                 send_draw_info(startPos + it->sPos, 1.0f, sprites[it->currentSprite]);
             }
         }

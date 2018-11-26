@@ -97,11 +97,11 @@ struct HealInfo
 
 class HealthMap
 {
+public:
     bool active; // Specifies if the tile has any damage/heal applied
 
     std::vector<DamageInfo> dInfo;
     std::vector<HealInfo>   hInfo;
-public:
 
     HealthMap();
 
