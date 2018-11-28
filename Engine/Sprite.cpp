@@ -53,6 +53,16 @@ Sprite::Sprite(const std::string& filename, std::string spriteName)
     // Upscale the sprite
     Upscale(4);
 
+    // Check if sprite is animated
+    int l = filename.length();
+    if (l >= 4) {
+        if (filename.substr(l-4, l-3) == "-f") {
+            std::string fcount = filename.substr(l-2, l-1);
+
+            frames = str_to_int(fcount);
+        }
+    }
+
     // Close file
     file.close();
 }
@@ -229,6 +239,11 @@ int Sprite::GetWidth() const
 int Sprite::GetHeight() const
 {
     return height;
+}
+
+int Sprite::GetFrames() const
+{
+    return frames;
 }
 
 std::string Sprite::GetName() const

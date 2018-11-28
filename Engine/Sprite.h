@@ -25,12 +25,14 @@ public:
     Color GetPixel(int x, int y, float brightness) const;
     int GetWidth() const;
     int GetHeight() const;
+    int GetFrames() const;
     std::string GetName() const;
 private:
     std::string spriteName;
     Color* pPixels = nullptr;
     int width;
     int height;
+    int frames = 1;
 };
 
 Sprite get_sprite_region(Sprite s, RECT r);
