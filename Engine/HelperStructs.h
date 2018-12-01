@@ -35,6 +35,12 @@ struct ActionState
     TimePoint start = TimePoint(0);
 };
 
+enum HitboxType
+{
+    HITBOX_CIRCLE,
+    HITBOX_RECTANGLE
+};
+
 struct Hitbox
 {
     int type = 0; // 0 - circle, 1 - rectangle
