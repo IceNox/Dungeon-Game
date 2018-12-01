@@ -42,14 +42,14 @@ std::string wstring_to_string(std::wstring ws)
     return converter.to_bytes(ws);
 }
 
-void split_str(std::string str, std::vector<std::string> &v)
+void split_str(std::string str, std::vector<std::string> &v, char split)
 {
     std::string t; t.reserve(10);
     for (int i = 0; i < str.length(); i++) {
-        if (str[i] != ' ') {
+        if (str[i] != split) {
             t.push_back(str[i]);
         }
-        else if (str[i] == ' ' && t.length() > 0) {
+        else if (str[i] == split && t.length() > 0) {
             v.push_back(t);
             t.clear();
         }

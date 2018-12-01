@@ -16,7 +16,7 @@ int distance_manh(Pos2D pos1, Pos2D pos2);
 
 // Strings
 std::string wstring_to_string(std::wstring ws);
-void        split_str(std::string str, std::vector<std::string> &v);
+void        split_str(std::string str, std::vector<std::string> &v, char split = ' ');
 int         str_to_int(std::string str, int base = 10);
 std::string int_to_str(int num);
 int         find_text_in_vec(std::string str, std::vector<std::string> vec);
