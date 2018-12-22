@@ -90,15 +90,15 @@ Menu/Elements/Sliderbody.tga sliderbody
 Menu/Elements/Sliderhead.tga sliderhead
 
 7
-Game/Animations/Attack/Attack_chop_up_animation.tga attack_chop_up_animation
-Game/Animations/Attack/Attack_chop_down_animation.tga attack_chop_down_animation
-Game/Animations/Attack/Attack_chop_left_animation.tga attack_chop_left_animation
-Game/Animations/Attack/Attack_chop_right_animation.tga attack_chop_right_animation
+Game/Animations/Attack/Attack_chop_up_animation-f07.tga attack_chop_up_animation
+Game/Animations/Attack/Attack_chop_down_animation-f07.tga attack_chop_down_animation
+Game/Animations/Attack/Attack_chop_left_animation-f07.tga attack_chop_left_animation
+Game/Animations/Attack/Attack_chop_right_animation-f07.tga attack_chop_right_animation
 
-Game/Animations/Spell/Eruption_windup_animation.tga eruption_windup_animation
-Game/Animations/Spell/Eruption_animation.tga eruption_animation
+Game/Animations/Spell/Eruption_windup_animation-f08.tga eruption_windup_animation
+Game/Animations/Spell/Eruption_animation-f09.tga eruption_animation
 
-Game/Animations/Spawn/Zombie_small_spawn_animation.tga zombie_small_spawn_animation
+Game/Animations/Spawn/Zombie_small_spawn_animation-f09.tga zombie_small_spawn_animation
 
 96
 Misc/Fonts/Large/Space.tga Space
