@@ -2,10 +2,11 @@
 
 #include "Navigation.h"
 #include "Constants.h"
+#include "LevelMessage.h"
+#include "ConversionMaps.h"
 
 #include <string>
 #include <vector>
-#include <unordered_map>
 
 class HealMap
 {
@@ -105,8 +106,8 @@ public:
 
     HealthMap();
 
-    std::string add_damage(std::string msg, std::string source = "unspecified");
-    std::string add_heal  (std::string msg, std::string source = "unspecified");
+    std::string add_damage(LevelMessage msg);
+    std::string add_heal  (LevelMessage msg);
 
     void reset();
 };

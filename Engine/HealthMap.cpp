@@ -1,7 +1,6 @@
 #include "HealthMap.h"
 
 #include "Functions.h"
-#include "ConversionMaps.h"
 
 #include <exception>
 
@@ -10,7 +9,7 @@ HealthMap::HealthMap()
     reset();
 }
 
-std::string HealthMap::add_damage(std::string msg, std::string source)
+std::string HealthMap::add_damage(LevelMessage msg)
 {
     /** Format of damage message:
     * [] - mandatory arguments, <> - optional arguments
@@ -20,17 +19,17 @@ std::string HealthMap::add_damage(std::string msg, std::string source)
     *
     * [type]      : "physical", "p", "air", "a", "earth", "e", "fire", "f", "water", "w", "holy", "h", "demonic", "d"
     * [direction] : "up", "down", "left", "right", "none", "u", "d", "l", "r", "n"
-    * <arg>          : "ground", "precise", "players", "enemies", "terrain", "effect:*type*;*duration*;*strength*"
+    * <arg>          : "ground", "precise", "players", "enemies", "terrain", "effects=*type*;*duration*;*strength*|*type*;*duration*;*strength*|..."
     */
 
     // Get arguments
     std::vector<std::string> args;
     args.reserve(10);
 
-    split_str(msg, args);
+    split_str(msg.message, args);
 
     // Return if not enough arguments
-    if (args.size() < 4) {
+    if (args.size() < 3) {
         return "error: not enough arguments";
     }
 
@@ -59,42 +58,21 @@ std::string HealthMap::add_damage(std::string msg, std::string source)
         return "error: invalid direction";
     }
 
-    // Knockback
-    dInfo[index].knockbackStr = str_to_int(args[3]);
-    if (dInfo[index].knockbackStr > 10) dInfo[index].knockbackStr = 10;
-
     /// Evaluate other arguments
-    for (int i = 4; i < args.size(); i++) {
-        if        (args[i] == "ground")
-            dInfo[index].ground = true;
-        else if (args[i] == "precise")
-            dInfo[index].precise = true;
-        else if (args[i] == "players")
-            dInfo[index].players = true;
-        else if (args[i] == "player")
-            dInfo[index].players = true;
-        else if (args[i] == "p")
-            dInfo[index].players = true;
-        else if (args[i] == "enemies")
-            dInfo[index].enemies = true;
-        else if (args[i] == "enemy")
-            dInfo[index].enemies = true;
-        else if (args[i] == "e")
-            dInfo[index].enemies = true;
-        else if (args[i] == "terrain")
-            dInfo[index].terrain = true;
-        else if (args[i] == "t")
-            dInfo[index].terrain = true;
-        else if (args[i].length() > 7) {
-            if (args[i].substr(0, 7) == "effect:") {
-                dInfo[index].statusEffects.push_back(args[i].substr(7));
-            }
-        }
-        else {
-            dInfo.pop_back();
-            return "error: argument \"" + args[i] + "\" is invalid";
-        }
+    if (msg.argKeys.size() > 0) {
+        dInfo[index].ground = msg.int_at("ground");
+        dInfo[index].precise = msg.int_at("precise");
+        dInfo[index].players = msg.int_at("enemies");
+        dInfo[index].enemies = msg.int_at("players");
+        dInfo[index].terrain = msg.int_at("terrain");
+        dInfo[index].knockbackStr = msg.int_at("knockback");
+
+        std::vector<std::string> effects;
+        split_str(msg.str_at("effects"), effects, '|');
+        dInfo[index].statusEffects = effects;
     }
+
+    add_bounds(dInfo[index].knockbackStr, 0, 10);
 
     if (!dInfo[index].players && !dInfo[index].enemies && !dInfo[index].terrain) {
         dInfo[index].players = true;
@@ -106,7 +84,7 @@ std::string HealthMap::add_damage(std::string msg, std::string source)
     return "success!";
 }
 
-std::string HealthMap::add_heal(std::string msg, std::string source)
+std::string HealthMap::add_heal(LevelMessage msg)
 {
     /** Format of heal message:
     * [] - mandatory arguments, <> - optional arguments
@@ -121,7 +99,7 @@ std::string HealthMap::add_heal(std::string msg, std::string source)
     std::vector<std::string> args;
     args.reserve(10);
 
-    split_str(msg, args);
+    split_str(msg.message, args);
 
     // Return if not enough arguments
     if (args.size() < 2) return "error: not enough parameters";
