@@ -23,8 +23,8 @@ int PXL_RATIO = 1;
 std::vector<std::string> _SAVE_FILE_NAMES;
 std::vector<std::string> _USER_LEVEL_FILE_NAMES;
 
-std::vector<Sprite> sprites;
-std::vector<std::string> spriteFilePaths;
+std::vector<Sprite> sprites = {};
+std::vector<std::string> spriteFilePaths = {};
 
 std::vector<ScriptLoadData> _ITEM_SCRIPTS;
 std::vector<ScriptLoadData> _OBJECT_SCRIPTS;
@@ -228,7 +228,6 @@ void Game::draw_text(Pos2D pos, std::string text, bool centered, bool large, flo
 {
     if (large) {
         /// Large text drawing
-
         // Set starting x coordinate
         int startX = pos.x;
 
@@ -237,11 +236,11 @@ void Game::draw_text(Pos2D pos, std::string text, bool centered, bool large, flo
             int textWidth = text.length() * 40 - 8;
             startX = pos.x - textWidth / 2;
         }
-
+        
         // Draw every letter
         int textPos = 0;
         for (int i = 0; i < text.length(); i++) {
-            send_draw_info(Pos2D(startX + textPos, pos.y), brightness, f_large.character[(int)text[i] - 32], transparency);
+            send_draw_info(Pos2D(startX + textPos, pos.y), brightness, f_large.character.at((int)text[i] - 32), transparency);
 
             // Set next letter pos
             textPos += f_large.characterW[(int)text[i] - 32];
@@ -551,128 +550,116 @@ void Game::read_textures()
     std::ifstream in;
     in.open("Textures.txt");
 
+    sprites.reserve(100);
+
     int typeCount;
+    int i;
+    std::string fileDirectory;
+    std::string spriteName;
+    std::string fileDirectoryFull;
 
     // Add empty sprite
     sprites.push_back(Sprite("Content/Game/Other/Blank.tga", "blank"));
     spriteFilePaths.push_back("Content/Game/Other/Blank.tga");
 
+    std::string name;
+
     // Blocks
     in >> typeCount;
-    for (int i = 0; i < typeCount; i++) {
-        std::string fileDirectory;
+    for (i = 0; i < typeCount; i++) {
         in >> fileDirectory;
-        std::string spriteName;
         in >> spriteName;
-        std::string fileDirectoryFull = "Content/" + fileDirectory;
+        fileDirectoryFull = "Content/" + fileDirectory;
         sprites.push_back(Sprite(fileDirectoryFull, spriteName));
         spriteFilePaths.push_back(fileDirectoryFull);
     }
 
     // Entities
     in >> typeCount;
-    for (int i = 0; i < typeCount; i++) {
-        std::string fileDirectory;
+    for (i = 0; i < typeCount; i++) {
         in >> fileDirectory;
-        std::string spriteName;
         in >> spriteName;
-        std::string fileDirectoryFull = "Content/" + fileDirectory;
+        fileDirectoryFull = "Content/" + fileDirectory;
         sprites.push_back(Sprite(fileDirectoryFull, spriteName));
         spriteFilePaths.push_back(fileDirectoryFull);
     }
 
     // Player
     in >> typeCount;
-    for (int i = 0; i < typeCount; i++) {
-        std::string fileDirectory;
+    for (i = 0; i < typeCount; i++) {
         in >> fileDirectory;
-        std::string spriteName;
         in >> spriteName;
-        std::string fileDirectoryFull = "Content/" + fileDirectory;
+        fileDirectoryFull = "Content/" + fileDirectory;
         sprites.push_back(Sprite(fileDirectoryFull, spriteName));
         spriteFilePaths.push_back(fileDirectoryFull);
     }
 
     // Wiring
     in >> typeCount;
-    for (int i = 0; i < typeCount; i++) {
-        std::string fileDirectory;
+    for (i = 0; i < typeCount; i++) {
         in >> fileDirectory;
-        std::string spriteName;
         in >> spriteName;
-        std::string fileDirectoryFull = "Content/" + fileDirectory;
+        fileDirectoryFull = "Content/" + fileDirectory;
         sprites.push_back(Sprite(fileDirectoryFull, spriteName));
         spriteFilePaths.push_back(fileDirectoryFull);
     }
 
     // Door
     in >> typeCount;
-    for (int i = 0; i < typeCount; i++) {
-        std::string fileDirectory;
+    for (i = 0; i < typeCount; i++) {
         in >> fileDirectory;
-        std::string spriteName;
         in >> spriteName;
-        std::string fileDirectoryFull = "Content/" + fileDirectory;
+        fileDirectoryFull = "Content/" + fileDirectory;
         sprites.push_back(Sprite(fileDirectoryFull, spriteName));
         spriteFilePaths.push_back(fileDirectoryFull);
     }
 
     // UI
     in >> typeCount;
-    for (int i = 0; i < typeCount; i++) {
-        std::string fileDirectory;
+    for (i = 0; i < typeCount; i++) {
         in >> fileDirectory;
-        std::string spriteName;
         in >> spriteName;
-        std::string fileDirectoryFull = "Content/" + fileDirectory;
+        fileDirectoryFull = "Content/" + fileDirectory;
         sprites.push_back(Sprite(fileDirectoryFull, spriteName));
         spriteFilePaths.push_back(fileDirectoryFull);
     }
 
     // Other
     in >> typeCount;
-    for (int i = 0; i < typeCount; i++) {
-        std::string fileDirectory;
+    for (i = 0; i < typeCount; i++) {
         in >> fileDirectory;
-        std::string spriteName;
         in >> spriteName;
-        std::string fileDirectoryFull = "Content/" + fileDirectory;
+        fileDirectoryFull = "Content/" + fileDirectory;
         sprites.push_back(Sprite(fileDirectoryFull, spriteName));
         spriteFilePaths.push_back(fileDirectoryFull);
     }
 
     // Menu
     in >> typeCount;
-    for (int i = 0; i < typeCount; i++) {
-        std::string fileDirectory;
+    for (i = 0; i < typeCount; i++) {
         in >> fileDirectory;
-        std::string spriteName;
         in >> spriteName;
-        std::string fileDirectoryFull = "Content/" + fileDirectory;
+        fileDirectoryFull = "Content/" + fileDirectory;
         sprites.push_back(Sprite(fileDirectoryFull, spriteName));
         spriteFilePaths.push_back(fileDirectoryFull);
     }
 
     // Animations
     in >> typeCount;
-    for (int i = 0; i < typeCount; i++) {
-        std::string fileDirectory;
+    for (i = 0; i < typeCount; i++) {
         in >> fileDirectory;
-        std::string spriteName;
         in >> spriteName;
-        std::string fileDirectoryFull = "Content/" + fileDirectory;
+        fileDirectoryFull = "Content/" + fileDirectory;
         sprites.push_back(Sprite(fileDirectoryFull, spriteName));
         spriteFilePaths.push_back(fileDirectoryFull);
     }
 
     // Large font
     in >> typeCount;
-    for (int i = 0; i < typeCount; i++) {
-        std::string fileDirectory;
+    for (i = 0; i < typeCount; i++) {
         in >> fileDirectory;
-        std::string spriteName;
         in >> spriteName;
-        std::string fileDirectoryFull = "Content/" + fileDirectory;
+        fileDirectoryFull = "Content/" + fileDirectory;
         f_large.character.push_back(Sprite(fileDirectoryFull, spriteName));
         spriteFilePaths.push_back(fileDirectoryFull);
         //s_font_large.push_back(Sprite(fileDirectoryFull, spriteName));
@@ -680,12 +667,10 @@ void Game::read_textures()
 
     // Small font
     in >> typeCount;
-    for (int i = 0; i < typeCount; i++) {
-        std::string fileDirectory;
+    for (i = 0; i < typeCount; i++) {
         in >> fileDirectory;
-        std::string spriteName;
         in >> spriteName;
-        std::string fileDirectoryFull = "Content/" + fileDirectory;
+        fileDirectoryFull = "Content/" + fileDirectory;
         f_small.character.push_back(Sprite(fileDirectoryFull, spriteName));
         spriteFilePaths.push_back(fileDirectoryFull);
         //s_font_small.push_back(Sprite(fileDirectoryFull, spriteName));
