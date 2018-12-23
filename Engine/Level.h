@@ -76,11 +76,10 @@ public:
     time_point<system_clock> pauseStartTime;
 
     // Elements
-    std::vector<LevelMessage> levelMessages;
     std::vector<Command> commands;
 
     LevelConsole console;
-    std::vector<std::string> messages;
+    std::vector<LevelMessage> messages;
 
     std::vector<Player> players;
 
@@ -129,7 +128,7 @@ public:
     // UNNESCESSARY
 
 
-    std::vector<Entity> entities;
+    std::vector<Entity*> entities;
 
     std::vector<Animation> animations;
     std::vector<Particle> particles;

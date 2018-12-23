@@ -636,14 +636,17 @@ void Level::update_level(std::vector<GameMessage*> &msg, ScreenAnimations &scree
     for (int i = 0; i < _LEVEL_WIDTH * _LEVEL_HEIGHT; i++) {
         tiles[i].update_tile(wires, baseFloorVariant, damageMap);
     }
-    for (unsigned i = 0; i < portals.size(); i++) {
-        portals[i].update_portal();
-    }
-    for (unsigned i = 0; i < crates.size(); i++) {
-        crates[i].update_crate();
-    }
     for (auto it : levelObjects) {
         it->update(levelStateData, maintime::currentGameTime);
+    }
+    for (auto it : entities) {
+        it->update();
+    }
+    for (unsigned i = 0; i < portals.size(); i++) {
+        //portals[i].update_portal();
+    }
+    for (unsigned i = 0; i < crates.size(); i++) {
+        //crates[i].update_crate();
     }
     for (unsigned i = 0; i < pressurePlates.size(); i++) {
         //pressurePlates[i].update_plate(tiles);
@@ -686,7 +689,7 @@ void Level::update_level(std::vector<GameMessage*> &msg, ScreenAnimations &scree
         particles[i].update_particle();
     }
     for (unsigned i = 0; i < entities.size(); i++) {
-        entities[i].update_entity();
+        //entities[i].update_entity();
     }
 
     // Update level
@@ -756,18 +759,59 @@ void Level::set_game_state_data()
 void Level::handle_messages()
 {
     for (unsigned i = 0; i < messages.size(); i++) {
-        std::string source  = exer_str_until(messages[i]);
-        std::string command = exer_str_until(messages[i]);
+        std::string source  = messages[i].source;
+        std::string command = exer_str_until(messages[i].message);
 
         // Damage messages
         if (command == "damage" || command == "dmg") {
-            std::string xstr = exer_str_until(messages[i]);
-            std::string ystr = exer_str_until(messages[i]);
+            std::string xstr = exer_str_until(messages[i].message);
+            std::string ystr = exer_str_until(messages[i].message);
 
             int x = str_to_int(xstr);
             int y = str_to_int(ystr);
 
-            healthMap[y * width + x].add_damage(messages[i], source);
+            healthMap[y * width + x].add_damage(messages[i]);
+        }
+
+        // Heal messages
+        if (command == "heal") {
+            std::string xstr = exer_str_until(messages[i].message);
+            std::string ystr = exer_str_until(messages[i].message);
+
+            int x = str_to_int(xstr);
+            int y = str_to_int(ystr);
+
+            healthMap[y * width + x].add_damage(messages[i]);
+        }
+
+        // Damage projectile messages
+        if (command == "damageprojectile" || command == "dmgprojectile") {
+            std::string result;
+            entities.push_back(new DamageProjectile(messages[i], result));
+
+            if (result.length() > 2) {
+                entities.pop_back();
+            }
+        }
+
+        // Heal projectile messages
+        if (command == "healprojectile") {
+            std::string result;
+            entities.push_back(new HealProjectile(messages[i], result));
+
+            if (result.length() > 2) {
+                entities.pop_back();
+            }
+        }
+
+        // Gold entity messages
+        if (command == "gold") {
+            std::string result;
+            entities.push_back(new GoldEntity(messages[i], result));
+
+            if (result.length() > 2) {
+                entities.pop_back();
+            }
         }
     }
     /*
@@ -1310,11 +1354,11 @@ void Level::update_minimap(kb::Keys &keys, UserData &userData)
 
     // Gold and items
     for (unsigned i = 0; i < entities.size(); i++) {
-        if (entities[i].gold) {
+        if (entities[i]->get_type() == ENTITY_GOLD) {
             //int index = entities[i].gY * width + entities[i].gX;
             //if (entities[i].revealed) minimap.grid[index] = 10;
         }
-        if (entities[i].item) {
+        if (entities[i]->get_type() == ENTITY_ITEM) {
             //int index = entities[i].gY * width + entities[i].gX;
             //if (entities[i].revealed) minimap.grid[index] = 11;
         }
@@ -1527,7 +1571,7 @@ void Level::update_tile_info()
 
     // Gold
     for (unsigned i = 0; i < entities.size(); i++) {
-        if (entities[i].gold) {
+        if (entities[i]->get_type() == ENTITY_GOLD) {
             //int index = entities[i].gY * width + entities[i].gX;
             //tiles[index].pressured  = true;
             //tiles[index].pressuredW = true;
@@ -1537,7 +1581,7 @@ void Level::update_tile_info()
 
     // Items
     for (unsigned i = 0; i < entities.size(); i++) {
-        if (entities[i].item) {
+        if (entities[i]->get_type() == ENTITY_ITEM) {
             //int index = entities[i].gY * width + entities[i].gX;
             //tiles[index].pressured  = true;
             //tiles[index].pressuredW = true;
@@ -1956,19 +2000,18 @@ void Level::update_visibility()
         }
     }
 
-    /*
     // Entities
     for (unsigned i = 0; i < entities.size(); i++) {
-        //int arrayPos = entities[i].gY * width + entities[i].gX;
+        int arrayPos = entities[i]->gPos.index(width);
 
-        //if (tiles[arrayPos].visible) {
-            //entities[i].visible  = true;
-            //entities[i].revealed = true;
-        //}
-        //else
-            //entities[i].visible = false;
+        if (tiles[arrayPos].visible) {
+            entities[i]->visible  = true;
+            entities[i]->revealed = true;
+        }
+        else
+            entities[i]->visible = false;
     }
-
+    /*
     // Crates
     for (unsigned i = 0; i < crates.size(); i++) {
         int arrayPos = crates[i].gY * width + crates[i].gX;

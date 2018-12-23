@@ -145,22 +145,17 @@ void Game::ComposeGame()
         }
         */
 
-        /* UNCOMMENT LATER
         // Entities (upper half of a tile)
         for (int i = 0; i < level.entities.size(); i++) {
-            if (level.entities[i].gY == y) {
-                int cellY = level.entities[i].sY - (y * cellSize);
+            if (level.entities[i]->gPos.y == y) {
+                int cellY = level.entities[i]->cPos.y - (y * cellSize);
 
-                if (cellY < cellHeight / 2 && level.entities[i].visible) {
-                    std::string spriteInfo = level.entities[i].spriteName;
-                    if (!level.entities[i].gold && !level.entities[i].item)
-                        send_draw_info(startX + level.entities[i].sX, startY + level.entities[i].sY, spriteInfo, 1.0f * pauseDim, level.entities[i].spriteRegion, s_entities);
-                    else
-                        send_draw_info(startX + level.entities[i].sX, startY + level.entities[i].sY, spriteInfo, 1.0f * pauseDim, s_entities);
+                if (cellY < cellHeight / 2 && level.entities[i]->visible) {
+                    //send_draw_info_IRECT(startPos + level.entities[i]->sPos, 1.0f, sprites[level.entities[i]->spriteIndex], level.entities[i]->spriteRegion);
+                    send_draw_info(startPos + level.entities[i]->sPos, 1.0f, sprites[level.entities[i]->spriteIndex]);
                 }
             }
         }
-        */
 
         // Players
         for (int i = 0; i < level.players.size(); i++) {
@@ -255,22 +250,19 @@ void Game::ComposeGame()
                 send_draw_info(startX + level.wraiths[i].sX, startY + level.wraiths[i].sY, spriteInfo, 1.0f * pauseDim, s_wraith);
             }
         }
-
+        */
         // Entities (lower half of a tile)
         for (int i = 0; i < level.entities.size(); i++) {
-            if (level.entities[i].gY == y) {
-                int cellY = level.entities[i].sY - (y * cellHeight);
+            if (level.entities[i]->gPos.y == y) {
+                int cellY = level.entities[i]->cPos.y - (y * cellSize);
 
-                if (cellY >= cellHeight / 2 && level.entities[i].visible) {
-                    std::string spriteInfo = level.entities[i].spriteName;
-                    if (!level.entities[i].gold && !level.entities[i].item)
-                        send_draw_info(startX + level.entities[i].sX, startY + level.entities[i].sY, spriteInfo, 1.0f * pauseDim, level.entities[i].spriteRegion, s_entities);
-                    else
-                        send_draw_info(startX + level.entities[i].sX, startY + level.entities[i].sY, spriteInfo, 1.0f * pauseDim, s_entities);
+                if (cellY >= cellHeight / 2 && level.entities[i]->visible) {
+                    //send_draw_info_IRECT(startPos + level.entities[i]->sPos, 1.0f, sprites[level.entities[i]->spriteIndex], level.entities[i]->spriteRegion);
+                    send_draw_info(startPos + level.entities[i]->sPos, 1.0f, sprites[level.entities[i]->spriteIndex]);
                 }
             }
         }
-
+        /*
         // Visual effects
         for (int i = 0; i < level.visualEffects.size(); i++) {
             if (!level.visualEffects[i].ground) {
