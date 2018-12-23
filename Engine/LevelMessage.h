@@ -2,31 +2,148 @@
 
 #include "Constants.h"
 
+#include "Functions.h"
 #include "Navigation.h"
-#include "Sprite.h"
-
-#include "Particle.h"
-#include "Animation.h"
-#include "Entity.h"
 
 #include <string>
 #include <vector>
+#include <exception>
+
+namespace lmsg {
+    class ReturnVal
+    {
+        int valI;
+        std::string valS;
+
+        int type;
+        bool ok;
+
+    public:
+        bool valid()
+        {
+            return ok;
+        }
+
+        int valueI()
+        {
+            return valI;
+        }
+
+        std::string valueS()
+        {
+            return valS;
+        }
+    };
+}
 
 class LevelMessage
 {
-    std::string msg;
-    std::string src;
 public:
-    LevelMessage(std::string msg, std::string src = "unspecified") : msg(msg), src(src) {};
+    std::string source;
+    std::string message;
+    std::vector<std::string> argKeys;
+    std::vector<std::string> argValsStr;
+    std::vector<    int    > argValsInt;
 
-    std::string handle_msg
-    (
-        std::vector<Particle> &particles,
-        std::vector<Animation> &animations,
-        std::vector<Entity> &entities
-    )
+    LevelMessage()
     {
+        source = "";
+        message = "";
+    }
+    LevelMessage(std::string msg, std::string src = "???") : source(src)
+    {
+        std::vector<std::string> args;
+        split_str(msg, args);
 
+        // Split additional arguments
+        for (unsigned i = 0; i < args.size(); i++) {
+            if (args[i][0] == '[') {
+                // Remove brackets
+                args[i].pop_back();
+                args[i].erase(args[i].begin());
+
+                // Remove '=' and split the values
+                for (unsigned j = 0; j < args[i].length(); j++) {
+                    if (args[i][j] == '=') {
+                        args[i][j] = ' ';
+                        break;
+                    }
+                }
+
+                std::vector<std::string> kvpair;
+                split_str(args[i], kvpair);
+
+                // Get key and value
+                if (kvpair.size() == 2) {
+                    if (kvpair[1] == "true" ) kvpair[1] = "1";
+                    if (kvpair[1] == "false") kvpair[1] = "0";
+
+                    argKeys.push_back(kvpair[0]);
+                    argValsStr.push_back(kvpair[1]);
+                    argValsInt.push_back(str_to_int(kvpair[1]));
+
+                    args.erase(args.begin() + i);
+                    i--;
+                }
+                else {
+                    continue;
+                }
+            }
+        }
+
+        // Recombine message
+        message = "";
+        for (unsigned i = 0; i < args.size(); i++) {
+            message += args[i];
+
+            if (i < args.size() - 1) {
+                message += ' ';
+            }
+        }
+    }
+    LevelMessage(const LevelMessage &msg)
+    {
+        source = msg.source;
+        message = msg.message;
+        argKeys = msg.argKeys;
+        argValsStr = msg.argValsStr;
+        argValsInt = msg.argValsInt;
+    }
+
+    int index_at(const std::string &key) const
+    {
+        for (unsigned i = 0; i < argKeys.size(); i++) {
+            if (key == argKeys[i]) {
+                return i;
+            }
+        }
+
+        throw std::out_of_range("Key doesn't exist");
+        return -1;
+    }
+
+    int int_at(const std::string &key) const
+    {
+        for (unsigned i = 0; i < argKeys.size(); i++) {
+            if (key == argKeys[i]) {
+                return argValsInt[i];
+            }
+        }
+
+        throw std::out_of_range("Key doesn't exist");
+        return -1;
+    }
+
+    std::string str_at(const std::string &key) const
+    {
+        for (unsigned i = 0; i < argKeys.size(); i++) {
+            if (key == argKeys[i]) {
+                return argValsStr[i];
+            }
+        }
+
+        throw std::out_of_range("Key doesn't exist");
+        return "";
     }
 };
 
