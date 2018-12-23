@@ -6,7 +6,7 @@
 #include <cassert>
 #include <fstream>
 
-Sprite::Sprite(const std::string& filename, std::string spriteName)
+Sprite::Sprite(const std::string &filename, const std::string &spriteName)
 {
     // Clear pixels
     pPixels = nullptr;
@@ -79,7 +79,7 @@ Sprite::Sprite(int width, int height, std::string spriteName)
 
 Sprite::Sprite(const Sprite& rhs)
     :
-    Sprite(rhs.width, rhs.height, rhs.spriteName)
+    Sprite(rhs.GetWidth(), rhs.GetHeight(), rhs.GetName())
 {
     const int nPixels = width * height;
     for (int i = 0; i < nPixels; i++) {
@@ -95,9 +95,9 @@ Sprite::~Sprite()
 
 Sprite& Sprite::operator=(const Sprite& rhs)
 {
-    width = rhs.width;
-    height = rhs.height;
-    spriteName = rhs.spriteName;
+    width = rhs.GetWidth();
+    height = rhs.GetHeight();
+    spriteName = rhs.GetName();
 
     delete [] pPixels;
     pPixels = new Color[width*height];
