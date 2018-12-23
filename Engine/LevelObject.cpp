@@ -2,6 +2,7 @@
 
 #include "GlobalData.h"
 #include "Functions.h"
+#include "LevelMessage.h"
 
 #include <exception>
 
@@ -144,6 +145,17 @@ StaticObject::StaticObject(int id, Pos2D gPos, bool setup)
         "precise"      , sol::readonly(&DamageInfo::precise),
         "knockbackStr" , sol::readonly(&DamageInfo::knockbackStr),
         "statusEffects", sol::readonly(&DamageInfo::statusEffects)
+    );
+
+    script.new_usertype<LevelMessage>
+    (
+        "levelMessage",
+        sol::constructors<>(),
+        "source" , &LevelMessage::source,
+        "message", &LevelMessage::message,
+        "argKeys", &LevelMessage::argKeys,
+        "argVals", &LevelMessage::argValsInt,
+        "argVals", &LevelMessage::argValsStr
     );
 
     // Link object to apropriate script
