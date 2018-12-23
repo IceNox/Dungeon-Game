@@ -2,6 +2,8 @@
 
 #include "Keys.h"
 
+#include "LevelMessage.h"
+
 #include <vector>
 #include <string>
 
@@ -16,7 +18,7 @@ public:
         close();
     }
 
-    void update_console(kb::Keys &k, std::vector<std::string> &messages)
+    void update_console(kb::Keys &k, std::vector<LevelMessage> &messages)
     {
         if (!opened) return;
 
@@ -24,7 +26,7 @@ public:
 
         if (k.key_state(kb::KC_ENTER))
         {
-            messages.push_back("console " + text.get_text());
+            messages.push_back(LevelMessage("console " + text.get_text()));
             text.clear_text();
         }
     }
