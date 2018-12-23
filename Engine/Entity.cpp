@@ -5,7 +5,9 @@
 void DamageProjectile::update()
 {
     // Move the entity
-    cPos = cPos + vVec * ((maintime::now() - lastMove).get_duration() / 1000000.0f);
+    cPos_hp = cPos_hp + (vVec * 1000) * ((maintime::now() - lastMove).get_duration() / 1000000.0f);
+
+    cPos = cPos_hp / 1000;
     gPos = cPos / cellSize;
     sPos = cPos + spriteOffset;
 
@@ -29,7 +31,9 @@ void DamageProjectile::update()
 void HealProjectile::update()
 {
     // Move the entity
-    cPos = cPos + vVec * ((maintime::now() - lastMove).get_duration() / 1000000.0f);
+    cPos_hp = cPos_hp + (vVec * 1000) * ((maintime::now() - lastMove).get_duration() / 1000000.0f);
+
+    cPos = cPos_hp / 1000;
     gPos = cPos / cellSize;
     sPos = cPos + spriteOffset;
 
@@ -101,6 +105,7 @@ DamageProjectile::DamageProjectile
     this->cPos = cPos;
     this->vVec = vVec;
     gPos = cPos / cellSize;
+    cPos_hp = cPos * 1000;
 
     collidesP = cwp;
     collidesE = cwe;
@@ -123,8 +128,9 @@ DamageProjectile::DamageProjectile
     currentFrame = 0;
     frameHoldTime = holdtime;
     spriteRegion = { 0, 0, spriteWidth, spriteHeight };
-    lastFrameChange = maintime::now();
+    sPos = cPos + spriteOffset;
 
+    lastFrameChange = maintime::now();
     lastMove = maintime::now();
 }
 
@@ -139,6 +145,8 @@ DamageProjectile::DamageProjectile(const LevelMessage &msg, std::string &result)
     /// Evaluate mandatory arguments
     // Position
     cPos = { str_to_int(args[0]), str_to_int(args[1]) };
+    gPos = cPos / cellSize;
+    cPos_hp = cPos * 1000;
 
     // Damage
     damage.amount = str_to_int(args[2]);
@@ -161,6 +169,8 @@ DamageProjectile::DamageProjectile(const LevelMessage &msg, std::string &result)
         pair.reserve(2);
         split_str(soff, pair, ';');
         spriteOffset = { str_to_int(pair[0]), str_to_int(pair[1]) };
+
+        frameHoldTime = msg.int_at("fholdtime");
 
         spriteWidth = sprites[spriteIndex].GetWidth() / sprites[spriteIndex].GetFrames();
         spriteHeight = sprites[spriteIndex].GetHeight();
@@ -212,6 +222,18 @@ DamageProjectile::DamageProjectile(const LevelMessage &msg, std::string &result)
         split_str(msg.str_at("effects"), effects, '|');
         damage.statusEffects = effects;
     }
+
+    if (spriteCount > 1)
+        animated = true;
+    else
+        animated = false;
+
+    currentFrame = 0;
+    spriteRegion = { 0, 0, spriteWidth, spriteHeight };
+    sPos = cPos + spriteOffset;
+
+    lastFrameChange = maintime::now();
+    lastMove = maintime::now();
 }
 
 HealProjectile::HealProjectile
@@ -230,6 +252,7 @@ HealProjectile::HealProjectile
     this->cPos = cPos;
     this->vVec = vVec;
     gPos = cPos / cellSize;
+    cPos_hp = cPos * 1000;
 
     collidesP = cwp;
     collidesE = cwe;
@@ -252,8 +275,9 @@ HealProjectile::HealProjectile
     currentFrame = 0;
     frameHoldTime = holdtime;
     spriteRegion = { 0, 0, spriteWidth, spriteHeight };
-    lastFrameChange = maintime::now();
+    sPos = cPos + spriteOffset;
 
+    lastFrameChange = maintime::now();
     lastMove = maintime::now();
 }
 
@@ -268,6 +292,8 @@ HealProjectile::HealProjectile(const LevelMessage &msg, std::string &result)
     /// Evaluate mandatory arguments
     // Position
     cPos = { str_to_int(args[0]), str_to_int(args[1]) };
+    gPos = cPos / cellSize;
+    cPos_hp = cPos * 1000;
 
     // Heal
     heal.amount = str_to_int(args[2]);
@@ -283,6 +309,8 @@ HealProjectile::HealProjectile(const LevelMessage &msg, std::string &result)
         pair.reserve(2);
         split_str(soff, pair, ';');
         spriteOffset = { str_to_int(pair[0]), str_to_int(pair[1]) };
+
+        frameHoldTime = msg.int_at("fholdtime");
 
         spriteWidth = sprites[spriteIndex].GetWidth() / sprites[spriteIndex].GetFrames();
         spriteHeight = sprites[spriteIndex].GetHeight();
@@ -326,6 +354,18 @@ HealProjectile::HealProjectile(const LevelMessage &msg, std::string &result)
             hitbox.active = false;
         }
     }
+
+    if (spriteCount > 1)
+        animated = true;
+    else
+        animated = false;
+
+    currentFrame = 0;
+    spriteRegion = { 0, 0, spriteWidth, spriteHeight };
+    sPos = cPos + spriteOffset;
+
+    lastFrameChange = maintime::now();
+    lastMove = maintime::now();
 }
 
 GoldEntity::GoldEntity(Pos2D gPos, int amount)
@@ -334,6 +374,7 @@ GoldEntity::GoldEntity(Pos2D gPos, int amount)
     this->amount = amount;
 
     cPos = gPos * cellSize + Pos2D(cellSize / 2) + Pos2D(0, -1);
+    cPos_hp = cPos * 1000;
 
     collidesP = true;
     collidesE = false;
@@ -398,7 +439,9 @@ GoldEntity::GoldEntity(const LevelMessage &msg, std::string &result)
 
     /// Evaluate mandatory arguments
     // Position
-    cPos = { str_to_int(args[0]), str_to_int(args[1]) };
+    gPos = { str_to_int(args[0]), str_to_int(args[1]) };
+    cPos = gPos * cellSize + Pos2D(cellSize / 2) + Pos2D(0, -1);
+    cPos_hp = cPos * 1000;
 
     // Amount
     amount = str_to_int(args[2]);

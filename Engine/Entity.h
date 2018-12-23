@@ -31,6 +31,7 @@ public:
     // Position
     Pos2D gPos;
     Pos2D cPos;
+    Pos2D cPos_hp;
 
     // Collision
     bool collidesP = false; // Collides with players
