@@ -118,7 +118,7 @@ public:
             }
         }
 
-        throw std::out_of_range("Key doesn't exist");
+        //throw std::out_of_range("Key doesn't exist");
         return -1;
     }
 
@@ -130,7 +130,7 @@ public:
             }
         }
 
-        throw std::out_of_range("Key doesn't exist");
+        //throw std::out_of_range("Key doesn't exist");
         return -1;
     }
 
@@ -142,7 +142,7 @@ public:
             }
         }
 
-        throw std::out_of_range("Key doesn't exist");
+        //throw std::out_of_range("Key doesn't exist");
         return "";
     }
 };
