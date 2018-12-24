@@ -126,6 +126,22 @@ void Sprite::PutPixel(int i, Color c)
     pPixels[i] = c;
 }
 
+void Sprite::SetCenterX(int x)
+{
+    centerX = x;
+}
+
+void Sprite::SetCenterY(int y)
+{
+    centerY = y;
+}
+
+void Sprite::SetCenterPos(int x, int y)
+{
+    centerX = x;
+    centerY = y;
+}
+
 void Sprite::RotateClockwise(int times)
 {
     for (int i = 0; i < times; i++) {
@@ -244,6 +260,16 @@ int Sprite::GetHeight() const
 int Sprite::GetFrames() const
 {
     return frames;
+}
+
+int Sprite::GetCenterX() const
+{
+    return centerX;
+}
+
+int Sprite::GetCenterY() const
+{
+    return centerY;
 }
 
 std::string Sprite::GetName() const

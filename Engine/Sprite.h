@@ -17,6 +17,9 @@ public:
     Sprite& operator=(const Sprite&);
     void PutPixel(int x, int y, Color c);
     void PutPixel(int i, Color c);
+    void SetCenterX(int x);
+    void SetCenterY(int y);
+    void SetCenterPos(int x, int y);
     void RotateClockwise(int times);
     void Upscale(int ratio);
     void ApplyTransparency(float t);
@@ -26,6 +29,8 @@ public:
     int GetWidth() const;
     int GetHeight() const;
     int GetFrames() const;
+    int GetCenterX() const;
+    int GetCenterY() const;
     std::string GetName() const;
 private:
     std::string spriteName;
@@ -33,6 +38,8 @@ private:
     int width;
     int height;
     int frames = 1;
+    int centerX;
+    int centerY;
 };
 
 Sprite get_sprite_region(Sprite s, RECT r);
