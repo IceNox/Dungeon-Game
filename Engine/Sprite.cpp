@@ -56,8 +56,8 @@ Sprite::Sprite(const std::string &filename, const std::string &spriteName)
     // Check if sprite is animated
     int l = filename.length();
     if (l >= 4) {
-        if (filename.substr(l-4, l-3) == "-f") {
-            std::string fcount = filename.substr(l-2, l-1);
+        if (filename.substr(l-8, 2) == "-f") {
+            std::string fcount = filename.substr(l-6, 2);
 
             frames = str_to_int(fcount);
         }
@@ -67,11 +67,14 @@ Sprite::Sprite(const std::string &filename, const std::string &spriteName)
     file.close();
 }
 
-Sprite::Sprite(int width, int height, std::string spriteName)
+Sprite::Sprite(int width, int height, std::string spriteName, int frames, int centerx, int centery)
     :
     width(width),
     height(height),
-    spriteName(spriteName)
+    spriteName(spriteName),
+    frames(frames),
+    centerX(centerx),
+    centerY(centery)
 {
     pPixels = nullptr;
     pPixels = new Color[width*height];
@@ -79,7 +82,7 @@ Sprite::Sprite(int width, int height, std::string spriteName)
 
 Sprite::Sprite(const Sprite& rhs)
     :
-    Sprite(rhs.GetWidth(), rhs.GetHeight(), rhs.GetName())
+    Sprite(rhs.GetWidth(), rhs.GetHeight(), rhs.GetName(), rhs.GetFrames(), rhs.GetCenterX(), rhs.GetCenterY())
 {
     const int nPixels = width * height;
     for (int i = 0; i < nPixels; i++) {
@@ -144,8 +147,9 @@ void Sprite::SetCenterPos(int x, int y)
 
 void Sprite::RotateClockwise(int times)
 {
+    // REWRITE
     for (int i = 0; i < times; i++) {
-        Sprite ns(width, height, spriteName);
+        Sprite ns(width, height, spriteName, 0, 0, 0);
 
         for (int x = 0; x < width; x++) {
             for (int y = height - 1; y >= 0; y--) {
@@ -287,7 +291,7 @@ void Sprite::ApplyTransparency(float t)
 Sprite get_sprite_region(Sprite s, RECT r)
 {
     // Create new sprite
-    Sprite snew(r.right - r.left, r.bottom - r.top, "region");
+    Sprite snew(r.right - r.left, r.bottom - r.top, "region", 1, 0, 0);
 
     // Fill it with a region of the original sprite
     for (int y = r.top; y < r.bottom; y++) {
@@ -305,7 +309,7 @@ Sprite get_sprite_region(Sprite s, RECT r)
 
 Sprite create_rectangle(int w, int h, Color c)
 {
-    Sprite rectangle(w, h, "rect");
+    Sprite rectangle(w, h, "rect", 1, w/2, h/2);
 
     for (int y = 0; y < h; y++) {
         for (int x = 0; x < w; x++) {
@@ -322,7 +326,7 @@ Sprite create_circle(int r, Color c, bool C)
     if (C) s = r * 2 - 1;
     else   s = r * 2;
 
-    Sprite circle(s, s, "circ");
+    Sprite circle(s, s, "circ", 0, 0, 0);
 
     for (int y = 0; y < s; y++) {
         for (int x = 0; x < s; x++) {

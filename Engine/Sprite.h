@@ -11,7 +11,7 @@ class Sprite
 public:
     Sprite() {}
     Sprite(const std::string& filename, const std::string& spriteName);
-    Sprite(int width, int height, std::string spriteName);
+    Sprite(int width, int height, std::string spriteName, int frames, int centerx, int centery);
     Sprite(const Sprite&);
     ~Sprite();
     Sprite& operator=(const Sprite&);
