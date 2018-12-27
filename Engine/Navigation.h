@@ -100,10 +100,6 @@ public:
             this->x + p.x,
             this->y + p.y
         );
-
-        this->x += p.x;
-        this->y += p.y;
-        return *this;
     }
 
     Pos2D operator- (const Pos2D &p)
@@ -113,10 +109,6 @@ public:
             this->x - p.x,
             this->y - p.y
         );
-
-        this->x -= p.x;
-        this->y -= p.y;
-        return *this;
     }
 
     Pos2D operator* (int t)
@@ -126,10 +118,6 @@ public:
             this->x * t,
             this->y * t
         );
-
-        this->x *= t;
-        this->y *= t;
-        return *this;
     }
 
     Pos2D operator* (float t)
@@ -139,10 +127,6 @@ public:
             this->x * t,
             this->y * t
         );
-
-        this->x *= t;
-        this->y *= t;
-        return *this;
     }
 
     Pos2D operator/ (int t)
@@ -152,10 +136,6 @@ public:
             this->x / t,
             this->y / t
         );
-
-        this->x /= t;
-        this->y /= t;
-        return *this;
     }
 
     Pos2D operator/ (float t)
@@ -165,10 +145,15 @@ public:
             this->x / t,
             this->y / t
         );
+    }
 
-        this->x /= t;
-        this->y /= t;
-        return *this;
+    Pos2D operator% (int t)
+    {
+        return Pos2D
+        (
+            this->x % t,
+            this->y % t
+        );
     }
 };
 
