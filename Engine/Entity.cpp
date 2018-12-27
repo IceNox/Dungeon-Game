@@ -11,6 +11,8 @@ void DamageProjectile::update()
     gPos = cPos / cellSize;
     sPos = cPos + spriteOffset;
 
+    hitbox.cPos = cPos;
+
     lastMove = maintime::now();
 
     // Update animation
@@ -36,6 +38,8 @@ void HealProjectile::update()
     cPos = cPos_hp / 1000;
     gPos = cPos / cellSize;
     sPos = cPos + spriteOffset;
+
+    hitbox.cPos = cPos;
 
     lastMove = maintime::now();
 
@@ -112,6 +116,7 @@ DamageProjectile::DamageProjectile
     damage = di;
 
     hitbox = hb;
+    hitbox.cPos = cPos;
 
     spriteIndex = spri;
     spriteOffset = { -sprites[spri].GetCenterX(), -sprites[spri].GetCenterY() };
@@ -216,6 +221,8 @@ DamageProjectile::DamageProjectile(const LevelMessage &msg, std::string &result)
         damage.statusEffects = effects;
     }
 
+    hitbox.cPos = cPos;
+
     spriteOffset = { -sprites[spriteIndex].GetCenterX(), -sprites[spriteIndex].GetCenterY() };
     spriteWidth = sprites[spriteIndex].GetWidth() / sprites[spriteIndex].GetFrames();
     spriteHeight = sprites[spriteIndex].GetHeight();
@@ -257,6 +264,7 @@ HealProjectile::HealProjectile
     heal = hi;
 
     hitbox = hb;
+    hitbox.cPos = cPos;
 
     spriteIndex = spri;
     spriteOffset = { -sprites[spri].GetCenterX(), -sprites[spri].GetCenterY() };
@@ -345,6 +353,8 @@ HealProjectile::HealProjectile(const LevelMessage &msg, std::string &result)
             hitbox.active = false;
         }
     }
+
+    hitbox.cPos = cPos;
 
     spriteOffset = { -sprites[spriteIndex].GetCenterX(), -sprites[spriteIndex].GetCenterY() };
     spriteWidth = sprites[spriteIndex].GetWidth() / sprites[spriteIndex].GetFrames();
