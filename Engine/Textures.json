@@ -102,7 +102,7 @@
 		{ "filepath": "Misc/Fonts/Large/B.tga", "spritename": "B", "centerpos": {"x": 0, "y": 0}},
 		{ "filepath": "Misc/Fonts/Large/C.tga", "spritename": "C", "centerpos": {"x": 0, "y": 0}},
 		{ "filepath": "Misc/Fonts/Large/D.tga", "spritename": "D", "centerpos": {"x": 0, "y": 0}},
-		{ "filepath": "isc/Fonts/Large/E.tga", "spritename": "E", "centerpos": {"x": 0, "y": 0}},
+		{ "filepath": "Misc/Fonts/Large/E.tga", "spritename": "E", "centerpos": {"x": 0, "y": 0}},
 		{ "filepath": "Misc/Fonts/Large/F.tga", "spritename": "F", "centerpos": {"x": 0, "y": 0}},
 		{ "filepath": "Misc/Fonts/Large/G.tga", "spritename": "G", "centerpos": {"x": 0, "y": 0}},
 		{ "filepath": "Misc/Fonts/Large/H.tga", "spritename": "H", "centerpos": {"x": 0, "y": 0}},
