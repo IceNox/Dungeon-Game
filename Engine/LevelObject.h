@@ -11,10 +11,16 @@
 
 #include <vector>
 
+enum ObjectType
+{
+    OBJECT_BASE = -1,
+    OBJECT_STATIC,
+    OBJECT_DYNAMIC
+};
+
 class LevelObject
 {
 public:
-    int oType; // Object type: 0 - static, 1 - dynamic
     int oid;   // a 6-digit number: first 3 digits - ID, last 3 digits - variant
     int ID;
     int VR;
@@ -68,6 +74,8 @@ public:
     // FUNCTIONS
     ~LevelObject() = default;
 
+    virtual ObjectType get_type() { return OBJECT_BASE; }
+
     virtual void update(const LevelStateData &ld, long int curTime) {}
     virtual void interact() {}
     virtual void destroy() {}
@@ -89,6 +97,8 @@ class StaticObject : public LevelObject
 
 public:
     StaticObject(int id, Pos2D gPos, bool setup = true);
+
+    virtual ObjectType get_type() { return OBJECT_STATIC; }
 
     virtual void update(const LevelStateData &ld, long int curTime);
     virtual void damage(const DamageInfo &di);
