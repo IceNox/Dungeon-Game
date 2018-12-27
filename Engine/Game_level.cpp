@@ -71,14 +71,12 @@ void Game::ComposeGame()
         */
     }
 
-    /* UNCOMMENT LATER
-    // Draw ground effects
-    for (int i = 0; i < level.visualEffects.size(); i++) {
-        if (level.visualEffects[i].ground) {
-            send_draw_info(startX + level.visualEffects[i].sX, startY + level.visualEffects[i].sY, level.visualEffects[i].spriteName, 1.0f, level.visualEffects[i].spriteRegion, s_vfx);
+    // Draw ground animations
+    for (int i = 0; i < level.animations.size(); i++) {
+        if (level.animations[i].ground) {
+            send_draw_info_IRECT(startPos + level.animations[i].sPos, 1.0f, sprites[level.animations[i].spriteIndex], level.animations[i].spriteRegion);
         }
     }
-    */
 
 /// Draw level elements top to botton
     for (int y = 0; y < level.height; y++) {
@@ -262,14 +260,14 @@ void Game::ComposeGame()
                 }
             }
         }
-        /*
+        
         // Visual effects
-        for (int i = 0; i < level.visualEffects.size(); i++) {
-            if (!level.visualEffects[i].ground) {
-                send_draw_info(startX + level.visualEffects[i].sX, startY + level.visualEffects[i].sY, level.visualEffects[i].spriteName, 1.0f, level.visualEffects[i].spriteRegion, s_vfx);
+        for (int i = 0; i < level.animations.size(); i++) {
+            if (!level.animations[i].ground) {
+                send_draw_info_IRECT(startPos + level.animations[i].sPos, 1.0f, sprites[level.animations[i].spriteIndex], level.animations[i].spriteRegion);
             }
         }
-
+        /*
         // Particles (non-text)
         for (int i = 0; i < level.particles.size(); i++) {
             if (!level.particles[i].isText) {

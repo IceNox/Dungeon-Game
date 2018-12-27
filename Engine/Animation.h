@@ -5,11 +5,11 @@
 #include "Navigation.h"
 #include "Constants.h"
 
+#include "LevelMessage.h"
+
 #include <windows.h>
 #include <string>
 #include <chrono>
-
-using namespace std::chrono;
 
 class Animation
 {
@@ -17,31 +17,32 @@ public:
     Pos2D cPos;
 
     bool ground;
+    bool finished;
 
-    SpriteName spriteName;
-    RECT       spriteRegion;
-    
-    int sWidth;
-    int sHeight;
+    // Visuals
+    Pos2D sPos;
+    Pos2D spriteOffset;
 
-    int frameHoldTime;
-    int    currentFrame;
-    int    frameCount;
+    int spriteIndex = EMPTY_SPRITE;
+    int spriteWidth;
+    int spriteHeight;
 
+    int frameCount;
+    int currentFrame;
+    int frameHoldTime = 150;
     TimePoint creationTime;
 
-    bool finished;
+    RECT spriteRegion;
+
 
     Animation
     (
         Pos2D cPos,
-        bool g,
-        SpriteName name,
-        int sw,
-        int sh,
-        int ht,
-        int fc
+        bool ground,
+        int spri,
+        int holdtime
     );
+    Animation(const LevelMessage &msg, std::string &result);
 
     void update_animation();
 };

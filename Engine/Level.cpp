@@ -813,6 +813,16 @@ void Level::handle_messages()
                 entities.pop_back();
             }
         }
+
+        // Animation messages
+        if (command == "animation") {
+            std::string result;
+            animations.push_back(Animation(messages[i], result));
+
+            if (result.length() > 2) {
+                animations.pop_back();
+            }
+        }
     }
     /*
     for (auto it : levelMessages) {
