@@ -741,7 +741,7 @@ void Level::set_game_state_data()
         }
 
         // Set enemies
-        if (levelObjects[i]->oType == 1) {
+        if (levelObjects[i]->get_type() == OBJECT_DYNAMIC) {
             int index = levelObjects[i]->gPos.index(_LEVEL_WIDTH);
 
             levelStateData.tiles[index].enemy = true;
@@ -961,6 +961,238 @@ void Level::handle_messages()
 
 void Level::collide_entities(ScreenAnimations &screenAnimations)
 {
+    { // Collide terrain
+        for (int it = 0; it < entities.size(); it++) {
+            int index = entities[it]->gPos.index(width);
+
+            // Check if entity is in a wall/out of map
+            if (tiles[index].type == WALL && tiles[index].active) {
+                entities.erase(entities.begin() + it);
+                it--;
+                continue;
+            }
+            if (index < 0 || index >= width * height) {
+                entities.erase(entities.begin() + it);
+                it--;
+                continue;
+            }
+
+            // Don't check neighbouring tiles because radius/width/height are 0
+            if (!entities[it]->hitbox.active) {
+                continue;
+            }
+
+            // Check more complicated collisions
+            Pos2D tPos = entities[it]->cPos % cellSize;
+
+            int ileft  = entities[it]->gPos.index(width, LEFT , 1);
+            int iup    = entities[it]->gPos.index(width, UP   , 1);
+            int iright = entities[it]->gPos.index(width, RIGHT, 1);
+            int idown  = entities[it]->gPos.index(width, DOWN , 1);
+
+            bool wleft  = (tiles[ileft ].type == WALL && tiles[ileft ].active);
+            bool wup    = (tiles[iup   ].type == WALL && tiles[iup   ].active);
+            bool wright = (tiles[iright].type == WALL && tiles[iright].active);
+            bool wdown  = (tiles[idown ].type == WALL && tiles[idown ].active);
+
+            int w, h;
+            if (entities[it]->hitbox.type == HITBOX_CIRCLE) {
+                w = entities[it]->hitbox.radius;
+                h = entities[it]->hitbox.radius;
+            }
+            else {
+                w = entities[it]->hitbox.width / 2;
+                h = entities[it]->hitbox.height / 2;
+            }
+
+            // Left
+            if (wleft && tPos.x < w) {
+                entities.erase(entities.begin() + it);
+                it--;
+                continue;
+            }
+
+            // Up
+            if (wup && tPos.y < h) {
+                entities.erase(entities.begin() + it);
+                it--;
+                continue;
+            }
+
+            // Right
+            if (wright && tPos.x > (cellSize - w)) {
+                entities.erase(entities.begin() + it);
+                it--;
+                continue;
+            }
+
+            // Down
+            if (wdown && tPos.y > (cellSize - h)) {
+                entities.erase(entities.begin() + it);
+                it--;
+                continue;
+            }
+        }
+    }
+
+    { // Collide players
+        std::vector<Hitbox> hitboxes;
+
+        for (int i = 0; i < players.size(); i++) {
+            Hitbox hb;
+            hb.cPos = players[i].cPos;
+            hb.radius = players[i].hitboxRadius;
+
+            hitboxes.push_back(hb);
+        }
+
+        for (int it = 0; it < entities.size(); it++) {
+            if (!entities[it]->collidesP) continue;
+
+            for (int i = 0; i < hitboxes.size(); i++) {
+                bool collided;
+
+                // rectangle-rectangle collision impossible
+
+                // circle-circle collision
+                if (entities[it]->hitbox.type == HITBOX_CIRCLE) {
+                    Pos2D dPos = hitboxes[i].cPos - entities[it]->hitbox.cPos;
+
+                    int rsum = entities[it]->hitbox.radius + hitboxes[i].radius;
+
+                    collided = ((dPos.x * dPos.x) + (dPos.y * dPos.y)) < (rsum * rsum);
+                }
+
+                // rectangle-circle collision
+                else {
+                    Pos2D dPos = hitboxes[i].cPos - entities[it]->hitbox.cPos;
+
+                    int w = entities[it]->hitbox.width;
+                    int h = entities[it]->hitbox.height;
+                    int r = hitboxes[i].radius;
+
+                    // Edge (horizontal)
+                    if (absv(dPos.x) * 2 > w || absv(dPos.y) * 2 < h) {
+                        collided = dPos.x < w / 2 + r;
+                    }
+
+                    // Edge (vertical)
+                    else if (absv(dPos.x) * 2 < w || absv(dPos.y) * 2 > h) {
+                        collided = dPos.y < h / 2 + r;
+                    }
+
+                    // Corners
+                    else {
+                        collided = (dPos.x - w / 2) * (dPos.x - w / 2) + (dPos.y - h / 2) * (dPos.y - h / 2) < r * r;
+                    }
+                }
+
+                if (collided) {
+                    Pos2D colgPos = hitboxes[i].cPos / cellSize;
+
+                    if (entities[it]->get_type() == ENTITY_DAMAGE) {
+                        healthMap[colgPos.index(width)].dInfo.push_back(entities[it]->damage);
+                    }
+                    else if (entities[it]->get_type() == ENTITY_HEAL) {
+                        healthMap[colgPos.index(width)].hInfo.push_back(entities[it]->heal);
+                    }
+
+                    entities.erase(entities.begin() + it);
+                    it--;
+                    break;
+                }
+            }
+        }
+    }
+
+    { // Collide objects
+        std::vector<Hitbox> hitboxes;
+
+        for (int i = 0; i < levelObjects.size(); i++) {
+            if (levelObjects[i]->get_type() == OBJECT_DYNAMIC) {
+                if (levelObjects[i]->hitbox.active) {
+                    hitboxes.push_back(levelObjects[i]->hitbox);
+                }
+            }
+        }
+
+        for (int it = 0; it < entities.size(); it++) {
+            if (!entities[it]->collidesE) continue;
+
+            for (int i = 0; i < hitboxes.size(); i++) {
+                bool collided;
+
+                // rectangle-rectangle collision
+                if (entities[it]->hitbox.type == HITBOX_RECTANGLE && hitboxes[i].type == HITBOX_RECTANGLE) {
+                    Pos2D dPos = hitboxes[i].cPos - entities[it]->hitbox.cPos;
+
+                    int w1 = entities[it]->hitbox.width;
+                    int h1 = entities[it]->hitbox.height;
+                    int w2 = hitboxes[i].width;
+                    int h2 = hitboxes[i].height;
+
+                    collided = (absv(dPos.x) < (w1 + w2) / 2) && (absv(dPos.y) < (h1 + h2) / 2);
+                }
+
+                // circle-circle collision
+                else if (entities[it]->hitbox.type == HITBOX_CIRCLE && hitboxes[i].type == HITBOX_CIRCLE) {
+                    Pos2D dPos = hitboxes[i].cPos - entities[it]->hitbox.cPos;
+
+                    int rsum = entities[it]->hitbox.radius + hitboxes[i].radius;
+
+                    collided = ((dPos.x * dPos.x) + (dPos.y * dPos.y)) < (rsum * rsum);
+                }
+
+                // rectangle-circle collision
+                else {
+                    Pos2D dPos = hitboxes[i].cPos - entities[it]->hitbox.cPos;
+
+                    int w, h, r;
+                    if (entities[it]->hitbox.type == HITBOX_CIRCLE) {
+                        w = hitboxes[i].width;
+                        h = hitboxes[i].height;
+                        r = entities[it]->hitbox.radius;
+                    }
+                    else {
+                        w = entities[it]->hitbox.width;
+                        h = entities[it]->hitbox.height;
+                        r = hitboxes[i].radius;
+                    }
+
+                    // Edge (horizontal)
+                    if (absv(dPos.x) * 2 > w || absv(dPos.y) * 2 < h) {
+                        collided = dPos.x < w/2 + r;
+                    }
+
+                    // Edge (vertical)
+                    else if (absv(dPos.x) * 2 < w || absv(dPos.y) * 2 > h) {
+                        collided = dPos.y < h/2 + r;
+                    }
+
+                    // Corners
+                    else {
+                        collided = (dPos.x - w/2) * (dPos.x - w/2) + (dPos.y - h/2) * (dPos.y - h/2) < r * r;
+                    }
+                }
+
+                if (collided) {
+                    Pos2D colgPos = hitboxes[i].cPos / cellSize;
+
+                    if (entities[it]->get_type() == ENTITY_DAMAGE) {
+                        healthMap[colgPos.index(width)].dInfo.push_back(entities[it]->damage);
+                    }
+                    else if (entities[it]->get_type() == ENTITY_HEAL) {
+                        healthMap[colgPos.index(width)].hInfo.push_back(entities[it]->heal);
+                    }
+
+                    entities.erase(entities.begin() + it);
+                    it--;
+                    break;
+                }
+            }
+        }
+    }
+
     /*
     for (int i = 0; i < entities.size(); i++) {
         if (entities[i].collidesWithPlayer) {
