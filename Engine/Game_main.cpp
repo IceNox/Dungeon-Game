@@ -677,17 +677,20 @@ void Game::load_objects()
                 _OBJECT_SCRIPTS.push_back(ScriptLoadData());
 
                 // Set id and file path
-                _OBJECT_SCRIPTS[index].id        = scr["ID"];
+                _OBJECT_SCRIPTS[index].id = scr["ID"];
                 _OBJECT_SCRIPTS[index].filePath = spath;
 
                 // Add requested sprites
                 sol::optional<int> spriteCount = scr["spritecount"];
                 for (int i = 1; i <= spriteCount.value(); i++) {
-                    // Get sprite path
+                    // Get sprite data
                     std::string spritePath = scr["spritepaths"][i];
+                    int centerx = scr["spritexcenters"][i];
+                    int centery = scr["spriteycenters"][i];
 
                     // Add sprite and get its position
                     int sprindex = load_sprite(spritePath);
+                    sprites[sprindex].SetCenterPos(centerx, centery);
 
                     // Add index to script data
                     _OBJECT_SCRIPTS[index].spriteIndexes.push_back(sprindex);

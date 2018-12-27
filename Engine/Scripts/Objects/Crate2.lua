@@ -9,8 +9,15 @@ spritepaths =
 {
 	"Content/Game/Wiring/Crate.tga"
 }
+spritexcenters =
+{
+	36
+}
+spriteycenters =
+{
+	68
+}
 spriteindexes = {}
-spriteoffset = { x = -36, y = -68 }
 
 -- Hitbox
 hitbox = 

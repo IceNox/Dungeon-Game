@@ -96,6 +96,7 @@ StaticObject::StaticObject(int id, Pos2D gPos, bool setup)
 
     // Set up script state
     script.open_libraries(sol::lib::base);
+    script.open_libraries(sol::lib::math);
 
     script.new_usertype<Pos2D>
     (
@@ -151,11 +152,11 @@ StaticObject::StaticObject(int id, Pos2D gPos, bool setup)
     (
         "levelMessage",
         sol::constructors<>(),
-        "source" , &LevelMessage::source,
-        "message", &LevelMessage::message,
-        "argKeys", &LevelMessage::argKeys,
-        "argVals", &LevelMessage::argValsInt,
-        "argVals", &LevelMessage::argValsStr
+        "source"    , &LevelMessage::source,
+        "message"   , &LevelMessage::message,
+        "argKeys"   , &LevelMessage::argKeys,
+        "argValsInt", &LevelMessage::argValsInt,
+        "argValsStr", &LevelMessage::argValsStr
     );
 
     // Link object to apropriate script
@@ -183,11 +184,8 @@ StaticObject::StaticObject(int id, Pos2D gPos, bool setup)
     }
 
     // Set sprite variables
-    sol::optional<int> sox = script["spriteoffset"]["x"];
-    sol::optional<int> soy = script["spriteoffset"]["y"];
-    sOffset = { sox.value(), soy.value() };
-
     currentSprite = EMPTY_SPRITE;
+    sOffset = { -sprites[currentSprite].GetCenterX(), -sprites[currentSprite].GetCenterY() };
 
     // Set hitbox
     sol::optional<int> hType = script["hitbox"]["shape"];
@@ -252,6 +250,7 @@ void StaticObject::update(const LevelStateData &ld, long int curTime)
 
     // Set sprite
     currentSprite = script["select_sprite"](facing, moveState.ongoing, moveState.progress);
+    sOffset = { -sprites[currentSprite].GetCenterX(), -sprites[currentSprite].GetCenterY() };
     sPos = cPos + sOffset;
     sPos.y -= height;
 

@@ -81,7 +81,6 @@ public:
         bool cwe,
         DamageInfo di,
         Hitbox hb,
-        Pos2D soff,
         int spri,
         int holdtime = 150
     );
@@ -106,7 +105,6 @@ public:
         bool cwe,
         HealInfo hi,
         Hitbox hb,
-        Pos2D soff,
         int spri,
         int holdtime = 150
     );

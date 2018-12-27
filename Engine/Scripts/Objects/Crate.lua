@@ -9,8 +9,15 @@ spritepaths =
 {
 	"Content/Game/Wiring/Crate.tga"
 }
+spritexcenters =
+{
+	36
+}
+spriteycenters =
+{
+	68
+}
 spriteindexes = {}
-spriteoffset = { x = -36, y = -68 }
 
 -- Hitbox
 hitbox = 
@@ -57,7 +64,7 @@ movementtypecount = 1
 movementtypes =
 {
 	function (progress)
-		x = progress
+		x = math.sqrt(progress)
 		y = ((2*(progress-0.5))^2*-1)*30+30
 		return x, y
 	end

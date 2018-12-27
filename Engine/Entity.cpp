@@ -97,7 +97,6 @@ DamageProjectile::DamageProjectile
     bool cwe,
     DamageInfo di,
     Hitbox hb,
-    Pos2D soff,
     int spri,
     int holdtime
 )
@@ -114,9 +113,9 @@ DamageProjectile::DamageProjectile
 
     hitbox = hb;
 
-    spriteOffset = soff;
     spriteIndex = spri;
-    spriteWidth = sprites[spri].GetWidth() / sprites[spri].GetFrames();;
+    spriteOffset = { -sprites[spri].GetCenterX(), -sprites[spri].GetCenterY() };
+    spriteWidth = sprites[spri].GetWidth() / sprites[spri].GetFrames();
     spriteHeight = sprites[spri].GetHeight();
     spriteCount = sprites[spri].GetFrames();
 
@@ -164,17 +163,11 @@ DamageProjectile::DamageProjectile(const LevelMessage &msg, std::string &result)
         spriteIndex = msg.int_at("sprite");
         if (spriteIndex < 0 || spriteIndex >= sprites.size()) spriteIndex = EMPTY_SPRITE;
 
-        std::string soff = msg.str_at("spriteoffset");
-        std::vector<std::string> pair;
-        pair.reserve(2);
-        split_str(soff, pair, ';');
-        spriteOffset = { str_to_int(pair[0]), str_to_int(pair[1]) };
-
-        frameHoldTime = msg.int_at("fholdtime");
-
-        spriteWidth = sprites[spriteIndex].GetWidth() / sprites[spriteIndex].GetFrames();
-        spriteHeight = sprites[spriteIndex].GetHeight();
-        spriteCount = sprites[spriteIndex].GetFrames();
+        int ht = msg.int_at("fholdtime");
+        if (ht != -1)
+            frameHoldTime = ht;
+        else
+            frameHoldTime = 150;
 
         // Velocity
         std::string vec = msg.str_at("velocity");
@@ -223,6 +216,11 @@ DamageProjectile::DamageProjectile(const LevelMessage &msg, std::string &result)
         damage.statusEffects = effects;
     }
 
+    spriteOffset = { -sprites[spriteIndex].GetCenterX(), -sprites[spriteIndex].GetCenterY() };
+    spriteWidth = sprites[spriteIndex].GetWidth() / sprites[spriteIndex].GetFrames();
+    spriteHeight = sprites[spriteIndex].GetHeight();
+    spriteCount = sprites[spriteIndex].GetFrames();
+
     if (spriteCount > 1)
         animated = true;
     else
@@ -244,7 +242,6 @@ HealProjectile::HealProjectile
     bool cwe,
     HealInfo hi,
     Hitbox hb,
-    Pos2D soff,
     int spri,
     int holdtime
 )
@@ -261,9 +258,9 @@ HealProjectile::HealProjectile
 
     hitbox = hb;
 
-    spriteOffset = soff;
     spriteIndex = spri;
-    spriteWidth = sprites[spri].GetWidth() / sprites[spri].GetFrames();;
+    spriteOffset = { -sprites[spri].GetCenterX(), -sprites[spri].GetCenterY() };
+    spriteWidth = sprites[spri].GetWidth() / sprites[spri].GetFrames();
     spriteHeight = sprites[spri].GetHeight();
     spriteCount = sprites[spri].GetFrames();
 
@@ -304,17 +301,11 @@ HealProjectile::HealProjectile(const LevelMessage &msg, std::string &result)
         spriteIndex = msg.int_at("sprite");
         if (spriteIndex < 0 || spriteIndex >= sprites.size()) spriteIndex = EMPTY_SPRITE;
 
-        std::string soff = msg.str_at("spriteoffset");
-        std::vector<std::string> pair;
-        pair.reserve(2);
-        split_str(soff, pair, ';');
-        spriteOffset = { str_to_int(pair[0]), str_to_int(pair[1]) };
-
-        frameHoldTime = msg.int_at("fholdtime");
-
-        spriteWidth = sprites[spriteIndex].GetWidth() / sprites[spriteIndex].GetFrames();
-        spriteHeight = sprites[spriteIndex].GetHeight();
-        spriteCount = sprites[spriteIndex].GetFrames();
+        int ht = msg.int_at("fholdtime");
+        if (ht != -1)
+            frameHoldTime = ht;
+        else
+            frameHoldTime = 150;
 
         // Velocity
         std::string vec = msg.str_at("velocity");
@@ -355,6 +346,11 @@ HealProjectile::HealProjectile(const LevelMessage &msg, std::string &result)
         }
     }
 
+    spriteOffset = { -sprites[spriteIndex].GetCenterX(), -sprites[spriteIndex].GetCenterY() };
+    spriteWidth = sprites[spriteIndex].GetWidth() / sprites[spriteIndex].GetFrames();
+    spriteHeight = sprites[spriteIndex].GetHeight();
+    spriteCount = sprites[spriteIndex].GetFrames();
+
     if (spriteCount > 1)
         animated = true;
     else
@@ -380,52 +376,42 @@ GoldEntity::GoldEntity(Pos2D gPos, int amount)
     collidesE = false;
 
     hitbox.active = true;
-    hitbox.type = 0;
+    hitbox.type = HITBOX_CIRCLE;
     hitbox.cPos = cPos;
 
-    if (amount > 0) {
-        spriteIndex = GOLD_1;
-
-        hitbox.radius = 12;
-        spriteOffset = Pos2D(-12, -12);
-    }
-    if (amount > 1) {
-        spriteIndex = GOLD_2;
-
-        hitbox.radius = 20;
-        spriteOffset = Pos2D(-20, -16);
-    }
-    if (amount > 2) {
-        spriteIndex = GOLD_3;
-
-        hitbox.radius = 20;
-        spriteOffset = Pos2D(-20, -24);
-    }
-    if (amount > 4) {
-        spriteIndex = GOLD_4;
-
-        hitbox.radius = 24;
-        spriteOffset = Pos2D(-24, -28);
-    }
-    if (amount > 9) {
-        spriteIndex = GOLD_5;
-
-        hitbox.radius = 28;
-        spriteOffset = Pos2D(-28, -36);
-    }
-    if (amount > 19) {
-        spriteIndex = GOLD_6;
-
-        hitbox.radius = 28;
-        spriteOffset = Pos2D(-28, -36);
-    }
     if (amount > 49) {
         spriteIndex = GOLD_7;
-
         hitbox.radius = 40;
-        spriteOffset = Pos2D(-40, -48);
+    }
+    else if (amount > 19) {
+        spriteIndex = GOLD_6;
+        hitbox.radius = 28;
+    }
+    else if (amount > 9) {
+        spriteIndex = GOLD_5;
+        hitbox.radius = 28;
+    }
+    else if (amount > 4) {
+        spriteIndex = GOLD_4;
+        hitbox.radius = 24;
+    }
+    else if (amount > 2) {
+        spriteIndex = GOLD_3;
+        hitbox.radius = 20;
+    }
+    else if (amount > 1) {
+        spriteIndex = GOLD_2;
+        hitbox.radius = 20;
+    }
+    else if (amount > 0) {
+        spriteIndex = GOLD_1;
+        hitbox.radius = 12;
+    }
+    else {
+        spriteIndex = EMPTY_SPRITE;
     }
 
+    spriteOffset = { -sprites[spriteIndex].GetCenterX(), -sprites[spriteIndex].GetCenterY() };
     sPos = cPos + spriteOffset;
 }
 
@@ -451,52 +437,42 @@ GoldEntity::GoldEntity(const LevelMessage &msg, std::string &result)
     collidesE = false;
 
     hitbox.active = true;
-    hitbox.type = 0;
+    hitbox.type = HITBOX_CIRCLE;
     hitbox.cPos = cPos;
 
-    if (amount > 0) {
-        spriteIndex = GOLD_1;
-
-        hitbox.radius = 12;
-        spriteOffset = Pos2D(-12, -12);
-    }
-    if (amount > 1) {
-        spriteIndex = GOLD_2;
-
-        hitbox.radius = 20;
-        spriteOffset = Pos2D(-20, -16);
-    }
-    if (amount > 2) {
-        spriteIndex = GOLD_3;
-
-        hitbox.radius = 20;
-        spriteOffset = Pos2D(-20, -24);
-    }
-    if (amount > 4) {
-        spriteIndex = GOLD_4;
-
-        hitbox.radius = 24;
-        spriteOffset = Pos2D(-24, -28);
-    }
-    if (amount > 9) {
-        spriteIndex = GOLD_5;
-
-        hitbox.radius = 28;
-        spriteOffset = Pos2D(-28, -36);
-    }
-    if (amount > 19) {
-        spriteIndex = GOLD_6;
-
-        hitbox.radius = 28;
-        spriteOffset = Pos2D(-28, -36);
-    }
     if (amount > 49) {
         spriteIndex = GOLD_7;
-
         hitbox.radius = 40;
-        spriteOffset = Pos2D(-40, -48);
+    }
+    else if (amount > 19) {
+        spriteIndex = GOLD_6;
+        hitbox.radius = 28;
+    }
+    else if (amount > 9) {
+        spriteIndex = GOLD_5;
+        hitbox.radius = 28;
+    }
+    else if (amount > 4) {
+        spriteIndex = GOLD_4;
+        hitbox.radius = 24;
+    }
+    else if (amount > 2) {
+        spriteIndex = GOLD_3;
+        hitbox.radius = 20;
+    }
+    else if (amount > 1) {
+        spriteIndex = GOLD_2;
+        hitbox.radius = 20;
+    }
+    else if (amount > 0) {
+        spriteIndex = GOLD_1;
+        hitbox.radius = 12;
+    }
+    else {
+        spriteIndex = EMPTY_SPRITE;
     }
 
+    spriteOffset = { -sprites[spriteIndex].GetCenterX(), -sprites[spriteIndex].GetCenterY() };
     sPos = cPos + spriteOffset;
 }
 
