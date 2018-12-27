@@ -59,6 +59,10 @@ public:
     bool revealed = false;
     bool visible  = false;
 
+    // Health
+    DamageInfo damage;
+    HealInfo heal;
+
     // Functions
     ~Entity() = default;
 
@@ -70,7 +74,6 @@ class DamageProjectile : public Entity
 {
 public:
     Pos2D vVec; // Velocity
-    DamageInfo damage;
     TimePoint lastMove;
 
     DamageProjectile
@@ -94,7 +97,6 @@ class HealProjectile : public Entity
 {
 public:
     Pos2D vVec; // Velocity
-    HealInfo heal;
     TimePoint lastMove;
 
     HealProjectile
