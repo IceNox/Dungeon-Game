@@ -2,7 +2,7 @@
 
 Sprite Graphics::CaptureScreenshot()
 {
-    Sprite ss(ScreenWidth, ScreenHeight, "ss");
+    Sprite ss(ScreenWidth, ScreenHeight, "ss", 1, ScreenWidth / 2, ScreenHeight / 2);
 
     for (int i = 0; i < ScreenWidth * ScreenHeight; i++) {
         ss.PutPixel(i, GetPixel(i));
