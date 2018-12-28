@@ -348,7 +348,53 @@ Color Graphics::GetPixel( int i )
 
 void Graphics::DrawSprite(Pos2D pos, Sprite s, float brightness, float transparency)
 {
-    DrawSpriteRECT(pos, s, brightness, {0, 0, s.GetWidth(), s.GetHeight()}, {0, 0, ScreenWidth, ScreenHeight}, transparency);
+    // Set transparency bounds
+    add_bounds(transparency, 0.0f, 1.0f);
+
+    // Apply transparency to the sprite
+    if (transparency < 1.0f) {
+        s.ApplyTransparency(transparency);
+    }
+
+    // Get sprite dimensions
+    const int height = s.GetHeight();
+    const int width = s.GetWidth();
+
+    // Create offset variables
+    int ox = 0;
+    int oy = 0;
+
+    if (pos.x < 0) ox = abs(pos.x);
+    if (pos.y < 0) oy = abs(pos.y);
+
+    int tx = width;
+    int ty = height;
+
+    if (tx + pos.x > ScreenWidth) tx = ScreenWidth - pos.x;
+    if (ty + pos.y > ScreenHeight) ty = ScreenHeight - pos.y;
+
+    // Draw to screen
+    for (int sy = oy; sy < ty; sy++) {
+        for (int sx = ox; sx < tx; sx++) {
+            // Skip transparent pixels
+            if (s.GetPixel(sx, sy).GetA() == 0)
+                continue;
+
+            // Draw the pixel
+            if (s.GetPixel(sx, sy).GetA() == 255) {
+                PutPixel(pos.x + sx, pos.y + sy, s.GetPixel(sx, sy, brightness));
+            }
+            else {
+                float ratio = s.GetPixel(sx, sy).GetA() / 255.0f;
+
+                int nr = GetPixel(pos.x + sx, pos.y + sy).GetR() + (s.GetPixel(sx, sy, brightness).GetR() - GetPixel(pos.x + sx, pos.y + sy).GetR()) * ratio;
+                int ng = GetPixel(pos.x + sx, pos.y + sy).GetG() + (s.GetPixel(sx, sy, brightness).GetG() - GetPixel(pos.x + sx, pos.y + sy).GetG()) * ratio;
+                int nb = GetPixel(pos.x + sx, pos.y + sy).GetB() + (s.GetPixel(sx, sy, brightness).GetB() - GetPixel(pos.x + sx, pos.y + sy).GetB()) * ratio;
+
+                PutPixel(pos.x + sx, pos.y + sy, Color(nr, ng, nb));
+            }
+        }
+    }
 }
 /*
 void Graphics::DrawSpriteTransparent(int x, int y, const Sprite& s, float brightness, float transparency, Color chroma)
