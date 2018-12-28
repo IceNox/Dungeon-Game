@@ -101,6 +101,9 @@ Sprite& Sprite::operator=(const Sprite& rhs)
     width = rhs.GetWidth();
     height = rhs.GetHeight();
     spriteName = rhs.GetName();
+    frames = rhs.GetFrames();
+    centerX = rhs.GetCenterX();
+    centerY = rhs.GetCenterY();
 
     delete [] pPixels;
     pPixels = new Color[width*height];
