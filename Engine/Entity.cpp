@@ -169,10 +169,7 @@ DamageProjectile::DamageProjectile(const LevelMessage &msg, std::string &result)
         if (spriteIndex < 0 || spriteIndex >= sprites.size()) spriteIndex = EMPTY_SPRITE;
 
         int ht = msg.int_at("fholdtime");
-        if (ht != -1)
-            frameHoldTime = ht;
-        else
-            frameHoldTime = 150;
+        frameHoldTime = (ht == -1) ? 150 : ht;
 
         // Velocity
         std::string vec = msg.str_at("velocity");
@@ -182,6 +179,9 @@ DamageProjectile::DamageProjectile(const LevelMessage &msg, std::string &result)
 
             if (vals.size() == 2) {
                 vVec = { str_to_int(vals[0]), str_to_int(vals[1]) };
+            }
+            else {
+                vVec = { 0, 0 };
             }
         }
         else {
@@ -310,10 +310,7 @@ HealProjectile::HealProjectile(const LevelMessage &msg, std::string &result)
         if (spriteIndex < 0 || spriteIndex >= sprites.size()) spriteIndex = EMPTY_SPRITE;
 
         int ht = msg.int_at("fholdtime");
-        if (ht != -1)
-            frameHoldTime = ht;
-        else
-            frameHoldTime = 150;
+        frameHoldTime = (ht == -1) ? 150 : ht;
 
         // Velocity
         std::string vec = msg.str_at("velocity");
@@ -323,6 +320,9 @@ HealProjectile::HealProjectile(const LevelMessage &msg, std::string &result)
 
             if (vals.size() == 2) {
                 vVec = { str_to_int(vals[0]), str_to_int(vals[1]) };
+            }
+            else {
+                vVec = { 0, 0 };
             }
         }
         else {
