@@ -642,6 +642,13 @@ void Level::update_level(std::vector<GameMessage*> &msg, ScreenAnimations &scree
     for (auto it : entities) {
         it->update();
     }
+    for (unsigned i = 0; i < animations.size(); i++) {
+        animations[i].update_animation();
+    }
+    for (unsigned i = 0; i < particles.size(); i++) {
+        particles[i].update_particle();
+    }
+
     for (unsigned i = 0; i < portals.size(); i++) {
         //portals[i].update_portal();
     }
@@ -679,14 +686,6 @@ void Level::update_level(std::vector<GameMessage*> &msg, ScreenAnimations &scree
     }
     for (unsigned i = 0; i < wraiths.size(); i++) {
         //wraiths[i].update_wraith(player[0], tiles, commands);
-    }
-
-    // Other
-    for (unsigned i = 0; i < animations.size(); i++) {
-        animations[i].update_animation();
-    }
-    for (unsigned i = 0; i < particles.size(); i++) {
-        particles[i].update_particle();
     }
     for (unsigned i = 0; i < entities.size(); i++) {
         //entities[i].update_entity();
@@ -821,6 +820,16 @@ void Level::handle_messages()
 
             if (result.length() > 2) {
                 animations.pop_back();
+            }
+        }
+
+        // Particle messages
+        if (command == "particle") {
+            std::string result;
+            particles.push_back(Particle(messages[i], result));
+
+            if (result.length() > 2) {
+                particles.pop_back();
             }
         }
     }

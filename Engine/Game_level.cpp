@@ -267,14 +267,16 @@ void Game::ComposeGame()
                 send_draw_info_IRECT(startPos + level.animations[i].sPos, 1.0f, sprites[level.animations[i].spriteIndex], level.animations[i].spriteRegion);
             }
         }
-        /*
-        // Particles (non-text)
-        for (int i = 0; i < level.particles.size(); i++) {
-            if (!level.particles[i].isText) {
-                send_draw_info(startX + level.particles[i].cX, startY + level.particles[i].cY, 1.0f, level.particles[i].s, level.particles[i].transparency);
-            }
+    }
+
+    // Particles (non-text)
+    for (int i = 0; i < level.particles.size(); i++) {
+        if (!(level.particles[i].dtype == PARTICLE_TEXT)) {
+            if (level.particles[i].dtype == PARTICLE_SPRITE)
+                send_draw_info(startPos + level.particles[i].sPos, 1.0f, sprites[level.particles[i].spriteIndex], level.particles[i].transparency);
+            else if (level.particles[i].dtype == PARTICLE_RECTANGLE)
+                send_draw_info(startPos + level.particles[i].sPos, 1.0f, level.particles[i].srect, level.particles[i].transparency);
         }
-        */
     }
 
     /*
@@ -342,14 +344,13 @@ void Game::ComposeGame()
 /// Draw Text
     // Sign text
     draw_sign_text(startX, startY, pauseDim);
-
+    */
     // Text particles
     for (int i = 0; i < level.particles.size(); i++) {
-        if (level.particles[i].isText) {
-            draw_text(startX + level.particles[i].cX, startY + level.particles[i].cY, level.particles[i].text, true, false, 1.0f, level.particles[i].transparency);
+        if (level.particles[i].dtype == PARTICLE_TEXT) {
+            draw_text(startPos + level.particles[i].cPos, level.particles[i].text, true, false, 1.0f, level.particles[i].transparency);
         }
     }
-    */
 
     //draw_text(50, 500, "! #$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ", false, false, 1.0f);
     //draw_text(50, 524, "[\\]^_`abcdefghijklmopqrstuvwxyz{|}~", false, false, 1.0f);

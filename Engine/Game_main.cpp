@@ -164,22 +164,22 @@ void Game::ComposeFrame()
     draw_text(Pos2D(4, gfx.ScreenHeight - 48), ss2.str(), false, false, 1.0f);
 }
 
-void Game::send_draw_info        (Pos2D pos, float brightness, Sprite spr,                    float transparency)
+void Game::send_draw_info       (Pos2D pos, float brightness, const Sprite &spr,                   float transparency)
 {
     gfx.DrawSprite(pos, spr, brightness, transparency);
 }
 
-void Game::send_draw_info_IRECT    (Pos2D pos, float brightness, Sprite spr, RECT ri,            float transparency)
+void Game::send_draw_info_IRECT (Pos2D pos, float brightness, const Sprite &spr, RECT ri,          float transparency)
 {
     gfx.DrawSpriteRECT(pos, spr, brightness, ri, { 0, 0, gfx.ScreenWidth, gfx.ScreenHeight }, transparency);
 }
 
-void Game::send_draw_info_ORECT    (Pos2D pos, float brightness, Sprite spr,           RECT ro,    float transparency)
+void Game::send_draw_info_ORECT (Pos2D pos, float brightness, const Sprite &spr,          RECT ro, float transparency)
 {
     gfx.DrawSpriteRECT(pos, spr, brightness, { 0, 0, spr.GetWidth(), spr.GetHeight() }, ro, transparency);
 }
 
-void Game::send_draw_info_IORECT(Pos2D pos, float brightness, Sprite spr, RECT ri, RECT ro, float transparency)
+void Game::send_draw_info_IORECT(Pos2D pos, float brightness, const Sprite &spr, RECT ri, RECT ro, float transparency)
 {
     gfx.DrawSpriteRECT(pos, spr, brightness, ri, ro, transparency);
 }

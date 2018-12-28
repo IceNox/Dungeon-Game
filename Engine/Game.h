@@ -162,10 +162,10 @@ public:
     void draw_elements(int centerX, float menuBrightness);
 
     // Main
-    void send_draw_info          (Pos2D pos, float brightness, Sprite spr,                      float transparency = 1.0f);
-    void send_draw_info_IRECT (Pos2D pos, float brightness, Sprite spr, RECT ri,          float transparency = 1.0f);
-    void send_draw_info_ORECT (Pos2D pos, float brightness, Sprite spr,             RECT ro, float transparency = 1.0f);
-    void send_draw_info_IORECT(Pos2D pos, float brightness, Sprite spr, RECT ri, RECT ro, float transparency = 1.0f);
+    void send_draw_info       (Pos2D pos, float brightness, const Sprite &spr,                   float transparency = 1.0f);
+    void send_draw_info_IRECT (Pos2D pos, float brightness, const Sprite &spr, RECT ri,          float transparency = 1.0f);
+    void send_draw_info_ORECT (Pos2D pos, float brightness, const Sprite &spr,          RECT ro, float transparency = 1.0f);
+    void send_draw_info_IORECT(Pos2D pos, float brightness, const Sprite &spr, RECT ri, RECT ro, float transparency = 1.0f);
     //void send_draw_info(Pos2D pos, std::string sprname, float brightness, std::vector<Sprite> &spr, float transparency = 0.0f);
     //void send_draw_info(int x, int y, float brightness, Sprite spr, RECT r, float transparency = 0.0f);
     //void send_draw_info(int x, int y, std::string sprname, float brightness, RECT r, std::vector<Sprite> &spr, float transparency = 0.0f);
