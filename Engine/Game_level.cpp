@@ -261,10 +261,12 @@ void Game::ComposeGame()
             }
         }
         
-        // Visual effects
+        // Animations
         for (int i = 0; i < level.animations.size(); i++) {
             if (!level.animations[i].ground) {
-                send_draw_info_IRECT(startPos + level.animations[i].sPos, 1.0f, sprites[level.animations[i].spriteIndex], level.animations[i].spriteRegion);
+                if ((level.animations[i].cPos / cellSize).y == y) {
+                    send_draw_info_IRECT(startPos + level.animations[i].sPos, 1.0f, sprites[level.animations[i].spriteIndex], level.animations[i].spriteRegion);
+                }
             }
         }
     }
