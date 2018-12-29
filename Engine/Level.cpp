@@ -52,7 +52,6 @@ void Level::load_save_file(std::string saveName)
     doors.clear();
     signs.clear();
 
-    shooters.clear();
     barbarians.clear();
     wizards.clear();
     paladins.clear();
@@ -137,7 +136,6 @@ void Level::load_save_file(std::string saveName)
     lampCount          = 0;
     doorCount          = 0;
     signCount          = 0;
-    shooterCount       = 0;
     barbarianCount     = 0;
     wizardCount        = 0;
     paladinCount       = 0;
@@ -666,9 +664,6 @@ void Level::update_level(std::vector<GameMessage*> &msg, ScreenAnimations &scree
     }
 
     // Mobs
-    for (unsigned i = 0; i < shooters.size(); i++) {
-        //shooters[i].update_shooter(entities,entityCount);
-    }
     for (unsigned i = 0; i < barbarians.size(); i++) {
         //barbarians[i].update_barbarian(player[0], tiles, damageMap, commands);
     }
@@ -1439,14 +1434,6 @@ void Level::remove_destroyed_objects()
 
     return;
 
-    // Shooters
-    for (unsigned i = 0; i < shooters.size(); i++) {
-        if (shooters[i].dead) {
-            shooters.erase(shooters.begin() + i);
-            i--;
-        }
-    }
-
     // Barbarians
     for (unsigned i = 0; i < barbarians.size(); i++) {
         if (barbarians[i].dead) {
@@ -1613,12 +1600,6 @@ void Level::update_minimap(kb::Keys &keys, UserData &userData)
             //int index = entities[i].gY * width + entities[i].gX;
             //if (entities[i].revealed) minimap.grid[index] = 11;
         }
-     }
-
-    // Shooters
-    for (unsigned i = 0; i < shooters.size(); i++) {
-        int index = shooters[i].gY * width + shooters[i].gX;
-        if (shooters[i].visible) minimap.grid[index] = 12;
     }
 
     // Barbarians
@@ -1718,11 +1699,6 @@ void Level::update_tile_info()
     // Signs
     for (unsigned i = 0; i < signs.size(); i++) {
         tiles[signs[i].gY * width + signs[i].gX].occupied = true;
-    }
-
-    // Shooters
-    for (unsigned i = 0; i < shooters.size(); i++) {
-        tiles[shooters[i].gY * width + shooters[i].gX].occupied = true;
     }
 
     // Barbarians
@@ -1847,11 +1823,6 @@ void Level::update_tile_info()
             tiles[index].pressuredW = true;
             tiles[index].pressuredS = true;
         }
-    }
-
-    // Shooters
-    for (unsigned i = 0; i < shooters.size(); i++) {
-        tiles[shooters[i].gY * width + shooters[i].gX].pressured = true;
     }
 
     // Barbarians

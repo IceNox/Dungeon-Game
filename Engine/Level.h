@@ -25,7 +25,6 @@
 #include "Door.h"
 #include "Sign.h"
 
-#include "Shooter.h"
 #include "Barbarian.h"
 #include "Wizard.h"
 #include "Paladin.h"
@@ -111,14 +110,12 @@ public:
     std::vector<Door> doors;
     std::vector<Sign> signs;
 
-    int shooterCount;
     int barbarianCount;
     int wizardCount;
     int paladinCount;
     int zombieCount;
     int lichCount;
     int wraithCount;
-    std::vector<Shooter> shooters;
     std::vector<Barbarian> barbarians;
     std::vector<Wizard> wizards;
     std::vector<Paladin> paladins;

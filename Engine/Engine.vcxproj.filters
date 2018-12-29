@@ -96,9 +96,6 @@
     <ClInclude Include="AI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Shooter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Item.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -348,9 +345,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Functions.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Shooter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Item.cpp">

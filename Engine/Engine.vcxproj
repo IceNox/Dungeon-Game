@@ -236,7 +236,6 @@
     <ClInclude Include="PressurePlate.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ScreenAnimations.h" />
-    <ClInclude Include="Shooter.h" />
     <ClInclude Include="Sign.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Textures.h" />
@@ -320,7 +319,6 @@
     <ClCompile Include="PressurePlate.cpp" />
     <ClCompile Include="SaveData.cpp" />
     <ClCompile Include="ScreenAnimations.cpp" />
-    <ClCompile Include="Shooter.cpp" />
     <ClCompile Include="Sign.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="SpriteSelection.cpp" />
