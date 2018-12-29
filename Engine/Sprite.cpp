@@ -150,21 +150,94 @@ void Sprite::SetCenterPos(int x, int y)
 
 void Sprite::RotateClockwise(int times)
 {
-    // REWRITE
-    for (int i = 0; i < times; i++) {
-        Sprite ns(width, height, spriteName, 0, 0, 0);
+    // TRANSFORMATION FORMULA
+    //
+    //   Initial coords: ( x ; y )
+    //   Final coords: ( (OLDHEIGHT|NEWWIDTH) - y - 1 ; x )
+    //
 
-        for (int x = 0; x < width; x++) {
-            for (int y = height - 1; y >= 0; y--) {
-                ns.PutPixel(height - 1 - y, x, pPixels[y * width + x]);
+    for (int t = 0; t < times; t++) {
+        int fwidth = width / frames;
+        int fheight = height;
+
+        int newfwidth = fheight;
+        int newfheight = fwidth;
+
+        int newcenterx = fheight - centerY - 1;
+        int newcentery = centerX;
+
+        // Rotate individual frames
+        std::vector<Sprite> newSprites;
+        for (int i = 0; i < frames; i++) {
+            Sprite ns(newfwidth, newfheight, spriteName, 0, 0, 0);
+
+            for (int x = 0; x < fwidth; x++) {
+                for (int y = 0; y < fheight; y++) {
+                    // Full sprite coords
+                    int sx = x + i * fwidth;
+                    int sy = y;
+
+                    ns.PutPixel(height - y - 1, x, pPixels[sy * width + sx]);
+                }
             }
+
+            newSprites.push_back(ns);
         }
 
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                int index = y * width + x;
-                pPixels[index] = ns.pPixels[index];
+        // Combine into 1 sprite
+        width  = newfwidth * frames;
+        height = newfheight;
+        centerX = newcenterx;
+        centerY = newcentery;
+
+        delete[] pPixels;
+        pPixels = new Color[width*height];
+
+        //Sprite combSpr(newfwidth * frames, newfheight, spriteName, frames, newcenterx, newcentery);
+
+        for (int i = 0; i < frames; i++) {
+
+            for (int x = 0; x < newfwidth; x++) {
+                for (int y = 0; y < newfheight; y++) {
+                    int sx = x + i * newfwidth;
+                    int sy = y;
+
+                    PutPixel(sx, sy, newSprites[i].GetPixel(x, y));
+                }
             }
+        }
+    }
+}
+
+void Sprite::FlipHorizontal()
+{
+    int fwidth = width / frames;
+    int fheight = height;
+
+    for (int i = 0; i < frames; i++) {
+        for (int x = 0; x < fwidth / 2; x++) {
+            for (int y = 0; y < fheight; y++) {
+                int lindex = y * width +               x  + (i * fwidth);
+                int rindex = y * width + (fwidth - 1 - x) + (i * fwidth);
+
+                Color l = pPixels[lindex];
+                pPixels[lindex] = pPixels[rindex];
+                pPixels[rindex] = l;
+            }
+        }
+    }
+}
+
+void Sprite::FlipVertical()
+{
+    for (int y = 0; y < height / 2; y++) {
+        for (int x = 0; x < width; x++) {
+            int uindex =               y  * width + x;
+            int dindex = (height - 1 - y) * width + x;
+
+            Color u = pPixels[uindex];
+            pPixels[uindex] = pPixels[dindex];
+            pPixels[dindex] = u;
         }
     }
 }

@@ -21,6 +21,8 @@ public:
     void SetCenterY(int y);
     void SetCenterPos(int x, int y);
     void RotateClockwise(int times);
+    void FlipHorizontal();
+    void FlipVertical();
     void Upscale(int ratio);
     void ApplyTransparency(float t);
     Color GetPixel(int id) const;
