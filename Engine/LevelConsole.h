@@ -31,7 +31,7 @@ public:
 
         text.update_text(k);
 
-        if (k.key_state(kb::KC_ENTER))
+        if (k.key_clicked(kb::KC_ENTER))
         {
             messages.push_back(LevelMessage("console " + text.get_content()));
             text.clear_text();

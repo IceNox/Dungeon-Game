@@ -58,7 +58,8 @@ namespace kb
         return -1;
     }
 
-    const std::string SmartText::spaces = " ";
+    // SmartText class implementation
+    const std::string SmartText::spaces  = " ";
     const std::string SmartText::numbers = "123456789";
     const std::string SmartText::letters = "abcdefghijklmnopqrstuvwxyz";
     const std::string SmartText::special = "";
@@ -130,23 +131,34 @@ namespace kb
 
     void SmartText::update_text(Keys &k)
     {
+        int time_pressed = MAX_INT;
+        int index = 0;
+
         if (_locked) {
             return;
         }
 
-        if (k.key_state(KC_BACKSPACE) && (_text != "")) {
+        if ((k.key_clicked(KC_BACKSPACE) || k.key_held(KC_BACKSPACE)) && (_text != "")) {
             _text.pop_back();
             return;
         }
 
         for (int i = 0; i < KEY_COUNT; i++) {
             if (k.index_state(i)) {
-                char c = index_to_char(i);
-
-                if (_whitelist.find(c) != std::string::npos) {
-                    _text.push_back(c);
+                if (k.index_state(i) < time_pressed) {
+                    time_pressed = k.index_state(i);
+                    index = i;
                 }
             }
+        }
+
+        if (!k.index_clicked(index) && !k.index_held(index)) {
+            return;
+        }
+
+        char c = index_to_char(index);
+        if (_whitelist.find(c) != std::string::npos) {
+            _text.push_back(c);
         }
     }
 

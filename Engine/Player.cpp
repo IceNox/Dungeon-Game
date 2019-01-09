@@ -75,11 +75,11 @@ void Player::update_player
         get_input(keys, userData, enter, escape, up, down, left, right, use, drop);
 
         // Inventory selection
-        if (keys.key_state(userData.keyBindings.ITEM_1)) if (items[0].name != "") currentlySelectedItem = 0;
-        if (keys.key_state(userData.keyBindings.ITEM_2)) if (items[1].name != "") currentlySelectedItem = 1;
-        if (keys.key_state(userData.keyBindings.ITEM_3)) if (items[2].name != "") currentlySelectedItem = 2;
-        if (keys.key_state(userData.keyBindings.ITEM_4)) if (items[3].name != "") currentlySelectedItem = 3;
-        if (keys.key_state(userData.keyBindings.ITEM_5)) if (items[4].name != "") currentlySelectedItem = 4;
+        if (keys.key_clicked(userData.keyBindings.ITEM_1)) if (items[0].name != "") currentlySelectedItem = 0;
+        if (keys.key_clicked(userData.keyBindings.ITEM_2)) if (items[1].name != "") currentlySelectedItem = 1;
+        if (keys.key_clicked(userData.keyBindings.ITEM_3)) if (items[2].name != "") currentlySelectedItem = 2;
+        if (keys.key_clicked(userData.keyBindings.ITEM_4)) if (items[3].name != "") currentlySelectedItem = 3;
+        if (keys.key_clicked(userData.keyBindings.ITEM_5)) if (items[4].name != "") currentlySelectedItem = 4;
     }
 
     if (!inMA) {
@@ -138,14 +138,14 @@ void Player::get_input(
     bool &dropItem
 )
 {
-    if (keys.key_state(userData.keyBindings.ENTER      )) enter      = true;
-    if (keys.key_state(userData.keyBindings.ESCAPE      )) escape      = true;
-    if (keys.key_state(userData.keyBindings.MOVE_UP      )) up          = true;
-    if (keys.key_state(userData.keyBindings.MOVE_DOWN )) down      = true;
-    if (keys.key_state(userData.keyBindings.MOVE_LEFT )) left      = true;
-    if (keys.key_state(userData.keyBindings.MOVE_RIGHT)) right      = true;
-    if (keys.key_state(userData.keyBindings.USE_ITEM  )) useItem  = true;
-    if (keys.key_state(userData.keyBindings.DROP_ITEM )) dropItem = true;
+    if (keys.key_clicked(userData.keyBindings.ENTER     )) enter    = true;
+    if (keys.key_clicked(userData.keyBindings.ESCAPE    )) escape   = true;
+    if (keys.key_clicked(userData.keyBindings.MOVE_UP   )) up       = true;
+    if (keys.key_clicked(userData.keyBindings.MOVE_DOWN )) down     = true;
+    if (keys.key_clicked(userData.keyBindings.MOVE_LEFT )) left     = true;
+    if (keys.key_clicked(userData.keyBindings.MOVE_RIGHT)) right    = true;
+    if (keys.key_clicked(userData.keyBindings.USE_ITEM  )) useItem  = true;
+    if (keys.key_clicked(userData.keyBindings.DROP_ITEM )) dropItem = true;
 
     /*
     if (paused) {
@@ -270,7 +270,7 @@ void Player::move
             moved = true;
         }
 
-        if (keys.key_state_true(userData.keyBindings.CHANGE_DIRECTION)) {
+        if (keys.key_clicked(userData.keyBindings.CHANGE_DIRECTION)) {
             Direction dir = facing;
 
             if        (up)    facing = UP;

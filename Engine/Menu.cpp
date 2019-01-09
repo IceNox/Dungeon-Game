@@ -69,19 +69,19 @@ void Menu::update_menu(std::vector<GameMessage*> &msg, kb::Keys &keys, UserData 
         return;
     }
 
-    bool enter    = false;
+    bool enter  = false;
     bool escape = false;
-    bool up        = false;
-    bool down    = false;
-    bool left    = false;
-    bool right    = false;
+    bool up     = false;
+    bool down   = false;
+    bool left   = false;
+    bool right  = false;
 
-    if (keys.key_state(userData.keyBindings.ENTER )) enter  = true;
-    if (keys.key_state(userData.keyBindings.ESCAPE)) escape = true;
-    if (keys.key_state(userData.keyBindings.UP    )) up        = true;
-    if (keys.key_state(userData.keyBindings.DOWN  )) down   = true;
-    if (keys.key_state(userData.keyBindings.LEFT  )) left   = true;
-    if (keys.key_state(userData.keyBindings.RIGHT )) right  = true;
+    if (keys.key_clicked(userData.keyBindings.ENTER )) enter  = true;
+    if (keys.key_clicked(userData.keyBindings.ESCAPE)) escape = true;
+    if (keys.key_clicked(userData.keyBindings.UP    )) up     = true;
+    if (keys.key_clicked(userData.keyBindings.DOWN  )) down   = true;
+    if (keys.key_clicked(userData.keyBindings.LEFT  )) left   = true;
+    if (keys.key_clicked(userData.keyBindings.RIGHT )) right  = true;
 
     if (locked) {
         menu_control(msg, "", userData, keys);
@@ -453,20 +453,20 @@ void Menu::menu_control(std::vector<GameMessage*> &msg, std::string action, User
         if (locked) {
             int code;
             if (keys.pressed_key_code(code)) {
-                if        (cElement == 0)  userData.keyBindings.MOVE_UP            = code;
-                else if (cElement == 1)  userData.keyBindings.MOVE_DOWN            = code;
-                else if (cElement == 2)  userData.keyBindings.MOVE_LEFT            = code;
-                else if (cElement == 3)  userData.keyBindings.MOVE_RIGHT        = code;
-                else if (cElement == 4)  userData.keyBindings.CHANGE_DIRECTION    = code;
-                else if (cElement == 5)  userData.keyBindings.CHANGE_MAP_SIZE    = code;
-                else if (cElement == 6)  userData.keyBindings.PAUSE                = code;
-                else if (cElement == 7)  userData.keyBindings.USE_ITEM            = code;
-                else if (cElement == 8)  userData.keyBindings.DROP_ITEM            = code;
-                else if (cElement == 9)  userData.keyBindings.ITEM_1            = code;
-                else if (cElement == 10) userData.keyBindings.ITEM_2            = code;
-                else if (cElement == 11) userData.keyBindings.ITEM_3            = code;
-                else if (cElement == 12) userData.keyBindings.ITEM_4            = code;
-                else if (cElement == 13) userData.keyBindings.ITEM_5            = code;
+                if      (cElement == 0)  userData.keyBindings.MOVE_UP          = code;
+                else if (cElement == 1)  userData.keyBindings.MOVE_DOWN        = code;
+                else if (cElement == 2)  userData.keyBindings.MOVE_LEFT        = code;
+                else if (cElement == 3)  userData.keyBindings.MOVE_RIGHT       = code;
+                else if (cElement == 4)  userData.keyBindings.CHANGE_DIRECTION = code;
+                else if (cElement == 5)  userData.keyBindings.CHANGE_MAP_SIZE  = code;
+                else if (cElement == 6)  userData.keyBindings.PAUSE            = code;
+                else if (cElement == 7)  userData.keyBindings.USE_ITEM         = code;
+                else if (cElement == 8)  userData.keyBindings.DROP_ITEM        = code;
+                else if (cElement == 9)  userData.keyBindings.ITEM_1           = code;
+                else if (cElement == 10) userData.keyBindings.ITEM_2           = code;
+                else if (cElement == 11) userData.keyBindings.ITEM_3           = code;
+                else if (cElement == 12) userData.keyBindings.ITEM_4           = code;
+                else if (cElement == 13) userData.keyBindings.ITEM_5           = code;
 
                 scenes[cScene].elements[cElement].text = kb::code_to_name(code);
 

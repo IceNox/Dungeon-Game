@@ -581,7 +581,7 @@ void Level::update_level(std::vector<GameMessage*> &msg, ScreenAnimations &scree
     if (inDeathScreen || inEndScreen) return;
 
     // Pause/unpause 
-    if (keys.key_state(userData.keyBindings.PAUSE)) toggle_pause();
+    if (keys.key_clicked(userData.keyBindings.PAUSE)) toggle_pause();
 
     // Open/close console
     if ((GetKeyState(0xC0) & 0x8000) && !tildeIsPressed) {
@@ -1546,15 +1546,15 @@ void Level::update_minimap(kb::Keys &keys, UserData &userData)
         minimap.grid[i] = 0;
     }
 
-    if (keys.key_state(userData.keyBindings.CHANGE_MAP_SIZE)) minimap.change_size();
+    if (keys.key_clicked(userData.keyBindings.CHANGE_MAP_SIZE)) minimap.change_size();
 
     // Tiles
     for (int i = 0; i < _LEVEL_WIDTH * _LEVEL_HEIGHT; i++) {
-        if        (tiles[i].type == WALL         && tiles[i].revealed) minimap.grid[i] = 1;
-        else if (tiles[i].type == FLOOR         && tiles[i].revealed) minimap.grid[i] = 2;
+        if      (tiles[i].type == WALL       && tiles[i].revealed) minimap.grid[i] = 1;
+        else if (tiles[i].type == FLOOR      && tiles[i].revealed) minimap.grid[i] = 2;
         else if (tiles[i].type == BASE_FLOOR && tiles[i].revealed) minimap.grid[i] = 2;
-        else if (tiles[i].type == WATER         && tiles[i].revealed) minimap.grid[i] = 3;
-        else if (tiles[i].type == LAVA         && tiles[i].revealed) minimap.grid[i] = 4;
+        else if (tiles[i].type == WATER      && tiles[i].revealed) minimap.grid[i] = 3;
+        else if (tiles[i].type == LAVA       && tiles[i].revealed) minimap.grid[i] = 4;
     }
 
     // Pressure plates

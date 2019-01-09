@@ -4,7 +4,9 @@
 #include <string>
 
 // Constants
+const int MAX_INT = 2147483647;
 const int KEY_COUNT = 58;
+const int CYCLES_HELD = 20;
 
 namespace kb
 {
@@ -259,18 +261,11 @@ namespace kb
         };
     }
 
-    enum States
-    {
-        NOT_PRESSED,
-        PRESSED,
-        HELD,
-    };
-
     // Key class stores key states and functions for accessing them 
     class Keys
     {
     private:
-        // 0 - not pressed, 1 - was pressed this cycle, 2 - is pressed for more than 1 cycle
+        // 0 - not pressed, 1+ cycles that it was held down for
         int state[KEY_COUNT];
 
     public:
@@ -281,63 +276,57 @@ namespace kb
             for (int i = 0; i < KEY_COUNT; i++) {
                 bool p = GetKeyState(keyCodes[i]) & 0x8000;
 
-                if (p && state[i] == NOT_PRESSED)  state[i] = PRESSED;
-                else if (p && state[i] == PRESSED) state[i] = HELD;
-                else if (!p)                       state[i] = NOT_PRESSED;
+                if (p) state[i]++;
+                else state[i] = 0;
             }
         }
 
-        bool key_state(int code)
+        int key_state(int code)
         {
             for (int i = 0; i < KEY_COUNT; i++) {
                 if (keyCodes[i] == code) {
-                    if (state[i] == PRESSED)
-                        return true;
-                    else
-                        return false;
+                    return state[i];
                 }
             }
-            return false;
+
+            return NULL;
         }
 
-        bool key_state_true(int code)
+        int index_state(int index)
         {
-            for (int i = 0; i < KEY_COUNT; i++) {
-                if (keyCodes[i] == code) {
-                    if (state[i] == PRESSED || state[i] == HELD)
-                        return true;
-                    else
-                        return false;
-                }
-            }
-            return false;
-        }
-
-        bool index_state(int index)
-        {
-            if (state[index] == PRESSED)
-                return true;
-            else
-                return false;
-        }
-
-        bool index_state_true(int index)
-        {
-            if (state[index] == PRESSED || state[index] == HELD)
-                return true;
-            else
-                return false;
+            return state[index];
         }
 
         bool pressed_key_code(int &code)
         {
             for (int i = 0; i < KEY_COUNT; i++) {
-                if (state[i] == PRESSED) {
+                if (state[i]) {
                     code = keyCodes[i];
                     return true;
                 }
             }
+
             return false;
+        }
+
+        bool key_clicked(int code)
+        {
+            return key_state(code) == 1;
+        }
+
+        bool key_held(int code)
+        {
+            return key_state(code) >= CYCLES_HELD;
+        }
+
+        bool index_clicked(int index)
+        {
+            return index_state(index) == 1;
+        }
+
+        bool index_held(int index)
+        {
+            return index_state(index) >= CYCLES_HELD;
         }
     };
 
