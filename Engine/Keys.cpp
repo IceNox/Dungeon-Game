@@ -60,7 +60,7 @@ namespace kb
 
     // SmartText class implementation
     const std::string SmartText::spaces  = " ";
-    const std::string SmartText::numbers = "123456789";
+    const std::string SmartText::numbers = "0123456789";
     const std::string SmartText::letters = "abcdefghijklmnopqrstuvwxyz";
     const std::string SmartText::special = "";
 
