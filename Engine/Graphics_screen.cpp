@@ -11,15 +11,44 @@ Sprite Graphics::CaptureScreenshot()
     return ss;
 }
 
-void Graphics::ChangeBrightness(float brightness)
+void Graphics::SetLuminance(double luminance)
 {
-    ChangeBrightness(brightness, { 0, 0, ScreenWidth, ScreenHeight });
+    SetLuminance(luminance, { 0, 0, ScreenWidth, ScreenHeight });
 }
 
-void Graphics::ChangeBrightness(float brightness, RECT r)
+void Graphics::SetLuminance(double luminance, RECT r)
 {
-    if (brightness < 0.0f) brightness = 0.0f;
-    if (brightness > 1.0f) brightness = 1.0f;
+    return;
+}
+
+void Graphics::ChangeLuminance(float factor)
+{
+    ChangeLuminance(factor, { 0, 0, ScreenWidth, ScreenHeight });
+}
+
+void Graphics::ChangeLuminance(float factor, RECT r)
+{
+    if (factor < 0.0f) factor = 0.0f;
+    if (factor > 1.0f) factor = 1.0f;
+
+    for (int y = r.top; y < r.bottom; y++) {
+        for (int x = r.left; x < r.right; x++) {
+            int index = y * ScreenWidth + x;
+
+            Color    RGBc = pSysBuffer[index];
+            ColorHSL HSLc = ColorHSL::RGBtoHSL(RGBc);
+            HSLc.SetL(HSLc.GetL() * factor);
+            RGBc = ColorHSL::HSLtoRGB(HSLc);
+            pSysBuffer[index] = RGBc;
+        }
+    }
+}
+
+/*
+void Graphics::ChangeLuminance(float factor, RECT r)
+{
+    if (factor < 0.0f) factor = 0.0f;
+    if (factor > 1.0f) factor = 1.0f;
 
     for (int y = r.top; y < r.bottom; y++) {
         for (int x = r.left; x < r.right; x++) {
@@ -27,11 +56,12 @@ void Graphics::ChangeBrightness(float brightness, RECT r)
             
             Color c = pSysBuffer[index];
 
-            c.SetR(c.GetR() * brightness);
-            c.SetG(c.GetG() * brightness);
-            c.SetB(c.GetB() * brightness);
+            c.SetR(c.GetR() * factor);
+            c.SetG(c.GetG() * factor);
+            c.SetB(c.GetB() * factor);
 
             pSysBuffer[index] = c;
         }
     }
 }
+*/

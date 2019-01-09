@@ -376,12 +376,12 @@ void Game::ComposeGame()
 
     // If level is paused draw text "PAUSED"
     if (level.paused) {
-        gfx.ChangeBrightness(0.5f);
+        gfx.ChangeLuminance(0.5f);
         draw_text(centerPos + Pos2D(0, -12), "paused", true, true, 1.0f);
     }
 
     if (level.console.is_opened()) {
-        gfx.ChangeBrightness(0.75f);
+        gfx.ChangeLuminance(0.75f);
         draw_text(Pos2D(4, 4), level.console.get_text(), false, false, 1.0f);
     }
 
@@ -400,7 +400,7 @@ void Game::ComposeGame()
 
     // Apply level start fade
     if (level.inFA) {
-        gfx.ChangeBrightness(level.FAprogress * level.FAprogress);
+        gfx.ChangeLuminance(level.FAprogress * level.FAprogress);
     }
 }
 

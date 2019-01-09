@@ -23,6 +23,7 @@
 #include <wrl.h>
 #include "ChiliException.h"
 #include "Colors.h"
+#include "ColorsHSL.h"
 
 #include "Navigation.h"
 
@@ -77,8 +78,18 @@ public:
 
     // Graphics_screen.cpp
     Sprite CaptureScreenshot();
-    void ChangeBrightness(float brightness);
-    void ChangeBrightness(float brightness, RECT r);
+    void SetHue(double hue);
+    void SetHue(double hue, RECT r);
+    void SetSaturation(double saturation);
+    void SetSaturation(double saturation, RECT r);
+    void SetLuminance(double luminance);
+    void SetLuminance(double luminance, RECT r);
+    void ChangeHue(float factor);
+    void ChangeHue(float factor, RECT r);
+    void ChangeSaturation(float factor);
+    void ChangeSaturation(float factor, RECT r);
+    void ChangeLuminance(float factor);
+    void ChangeLuminance(float factor, RECT r);
 
     // Graphics_level.cpp
     void DrawFloorEdgeShadows(int sx, int sy, std::string side);
