@@ -7,15 +7,22 @@
 #include <vector>
 #include <string>
 
+// Constants
+const std::string PREFIX = "> ";
+
 class LevelConsole
 {
+private:
     kb::SmartText text;
     bool opened;
-public:
 
+public:
     LevelConsole()
+        :
+        text(PREFIX),
+        opened(false)
     {
-        close();
+        text.setWhitelist();
     }
 
     void update_console(kb::Keys &k, std::vector<LevelMessage> &messages)
@@ -26,7 +33,7 @@ public:
 
         if (k.key_state(kb::KC_ENTER))
         {
-            messages.push_back(LevelMessage("console " + text.get_text()));
+            messages.push_back(LevelMessage("console " + text.get_content()));
             text.clear_text();
         }
     }
@@ -49,6 +56,6 @@ public:
 
     std::string get_text()
     {
-        return text.get_text();
+        return text.get_content();
     }
 };

@@ -3,11 +3,14 @@
 #include "ChiliWin.h"
 #include <string>
 
+// Constants
+const int KEY_COUNT = 58;
+
 namespace kb
 {
     namespace
     {
-        enum keyCodesEnum
+        enum KeyCodesEnum
         {
             KC_BACKSPACE = 0x08,
             KC_TAB = 0x09,
@@ -69,7 +72,7 @@ namespace kb
             KC_NUM_9 = 0x69
         };
 
-        const int keyCodes[58] =
+        const int keyCodes[KEY_COUNT] =
         {
             0x08,
             0x09,
@@ -131,7 +134,7 @@ namespace kb
             0x69
         };
 
-        const std::string keyNames[58] =
+        const std::string keyNames[KEY_COUNT] =
         {
             "backspace",
             "tab",
@@ -193,7 +196,7 @@ namespace kb
             "num 9"
         };
 
-        const char keyCharacters[58] =
+        const char keyCharacters[KEY_COUNT] =
         {
             0,
             0,
@@ -256,31 +259,39 @@ namespace kb
         };
     }
 
+    enum States
+    {
+        NOT_PRESSED,
+        PRESSED,
+        HELD,
+    };
+
     // Key class stores key states and functions for accessing them 
     class Keys
     {
-        int state[58] = { 0 }; // 0 - not pressed, 1 - was pressed this cycle, 2 - is pressed for more than 1 cycle
+    private:
+        // 0 - not pressed, 1 - was pressed this cycle, 2 - is pressed for more than 1 cycle
+        int state[KEY_COUNT];
 
     public:
-
         Keys() {};
 
         void update_key_states()
         {
-            for (int i = 0; i < 58; i++) {
+            for (int i = 0; i < KEY_COUNT; i++) {
                 bool p = GetKeyState(keyCodes[i]) & 0x8000;
 
-                if (p && state[i] == 0) state[i] = 1;
-                else if (p && state[i] == 1) state[i] = 2;
-                else if (!p)                 state[i] = 0;
+                if (p && state[i] == NOT_PRESSED)  state[i] = PRESSED;
+                else if (p && state[i] == PRESSED) state[i] = HELD;
+                else if (!p)                       state[i] = NOT_PRESSED;
             }
         }
 
         bool key_state(int code)
         {
-            for (int i = 0; i < 58; i++) {
+            for (int i = 0; i < KEY_COUNT; i++) {
                 if (keyCodes[i] == code) {
-                    if (state[i] == 1)
+                    if (state[i] == PRESSED)
                         return true;
                     else
                         return false;
@@ -291,9 +302,9 @@ namespace kb
 
         bool key_state_true(int code)
         {
-            for (int i = 0; i < 58; i++) {
+            for (int i = 0; i < KEY_COUNT; i++) {
                 if (keyCodes[i] == code) {
-                    if (state[i] == 1 || state[i] == 2)
+                    if (state[i] == PRESSED || state[i] == HELD)
                         return true;
                     else
                         return false;
@@ -304,7 +315,7 @@ namespace kb
 
         bool index_state(int index)
         {
-            if (state[index] == 1)
+            if (state[index] == PRESSED)
                 return true;
             else
                 return false;
@@ -312,7 +323,7 @@ namespace kb
 
         bool index_state_true(int index)
         {
-            if (state[index] == 1 || state[index] == 2)
+            if (state[index] == PRESSED || state[index] == HELD)
                 return true;
             else
                 return false;
@@ -320,8 +331,8 @@ namespace kb
 
         bool pressed_key_code(int &code)
         {
-            for (int i = 0; i < 58; i++) {
-                if (state[i] == 1) {
+            for (int i = 0; i < KEY_COUNT; i++) {
+                if (state[i] == PRESSED) {
                     code = keyCodes[i];
                     return true;
                 }
@@ -342,75 +353,32 @@ namespace kb
     // Class for entering text in real-time
     class SmartText
     {
-        std::string text;
-        std::string whitelist;
+    private:
+        std::string _text;
+        std::string _prefix;
+        std::string _whitelist;
+        bool _locked;
+
     public:
-        bool locked = false;
+        static const std::string spaces;
+        static const std::string numbers;
+        static const std::string letters;
+        static const std::string special;
 
-        SmartText()
-        {
-            this->whitelist = " 0123456789abcdefghijklmnopqrstuvwxyz";
-            text.reserve(30);
-        }
-        SmartText(bool allowSpaces, bool allowNumbers, bool allowLetters)
-        {
-            whitelist = "";
-            if (allowSpaces)
-                whitelist += " ";
-            if (allowNumbers)
-                whitelist += "0123456789";
-            if (allowLetters)
-                whitelist += "abcdefghijklmnopqrstuvwxyz";
-        }
-        SmartText(std::string whitelist)
-        {
-            this->whitelist = whitelist;
-        }
-
-        void update_text(Keys &k)
-        {
-            // Don't update if text is locked
-            if (locked) return;
-
-            // If backspace is pressed, remove 1 character from string
-            if (k.key_state(KC_BACKSPACE)) {
-                text.pop_back();
-                return;
-            }
-
-            // Get pressed characters
-            for (int i = 0; i < 58; i++) {
-                if (k.index_state(i)) {
-                    char c = index_to_char(i);
-
-                    // TODO
-                    // Check whitelist
-
-                    if (c != 0) {
-                        text.push_back(c);
-                    }
-                }
-            }
-        }
-
-        void clear_text()
-        {
-            text.clear();
-        }
-
-        std::string get_text()
-        {
-            return text;
-        }
-
-        void lock()
-        {
-            locked = true;
-        }
-
-        void unlock()
-        {
-            locked = false;
-        }
+        SmartText();
+        SmartText(std::string prefix);
+        SmartText(std::string text, std::string prefix);
+        std::string get_text();
+        std::string get_prefix();
+        std::string get_content();
+        void setWhitelist();
+        void setWhitelist(bool allowSpaces, bool allowNumbers, bool allowLetters, bool allowSpecial);
+        void setWhitelist(std::string whitelist);
+        void update_text(Keys &k);
+        void clear_text();
+        void set_text(std::string text);
+        void clear_prefix();
+        void set_prefix(std::string prefix);
+        void toggle_lock();
     };
 }
