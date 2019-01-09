@@ -4,7 +4,6 @@
 #include "Colors.h"
 
 #include <string>
-#include <Windows.h>
 
 class Sprite
 {

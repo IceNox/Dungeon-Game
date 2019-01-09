@@ -4,7 +4,6 @@
 
 #include "Functions.h"
 
-#include <Windows.h>
 #include <sstream>
 
 int _LEVEL_WIDTH;

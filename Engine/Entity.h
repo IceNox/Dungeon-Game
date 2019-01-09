@@ -12,7 +12,6 @@
 #include "Navigation.h"
 #include "HealthMap.h"
 
-#include <windows.h>
 #include <string>
 #include <vector>
 

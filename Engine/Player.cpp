@@ -5,7 +5,6 @@
 
 #include "HealthMap.h"
 
-#include <Windows.h>
 #include <vector>
 #include <assert.h>
 

@@ -2,7 +2,7 @@
 
 #include "Navigation.h"
 
-#include <Windows.h>
+#include "ChiliWin.h"
 
 #include <string>
 
