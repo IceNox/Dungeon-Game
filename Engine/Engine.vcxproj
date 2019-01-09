@@ -160,6 +160,7 @@
     <ClInclude Include="ChiliException.h" />
     <ClInclude Include="ChiliWin.h" />
     <ClInclude Include="Colors.h" />
+    <ClInclude Include="ColorsHSL.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="ConversionMaps.h" />
