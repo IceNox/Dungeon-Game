@@ -69,24 +69,33 @@ namespace kb
         _text(),
         _prefix(),
         _whitelist(),
+        _cursor(),
         _locked(false)
-    {}
+    {
+        _text.reserve(TEXT_RESERVE);
+    }
 
     SmartText::SmartText(std::string prefix)
         :
         _text(),
         _prefix(prefix),
         _whitelist(),
+        _cursor(),
         _locked(false)
-    {}
+    {
+        _text.reserve(TEXT_RESERVE);
+    }
 
     SmartText::SmartText(std::string text, std::string prefix)
         :
         _text(text),
         _prefix(prefix),
         _whitelist(),
+        _cursor(text.length()),
         _locked(false)
-    {}
+    {
+        _text.reserve(TEXT_RESERVE);
+    }
 
     std::string SmartText::get_text()
     {
@@ -138,10 +147,21 @@ namespace kb
             return;
         }
 
-        if ((k.key_clicked(KC_BACKSPACE) || k.key_held(KC_BACKSPACE)) && (_text != "")) {
-            _text.pop_back();
+        if ((k.key_clicked(KC_BACKSPACE) || k.key_held(KC_BACKSPACE)) && (_cursor != 0)) {
+            _text.erase(--_cursor, 1);
             return;
         }
+
+        if ((k.key_clicked(KC_LEFT_ARROW) || k.key_held(KC_LEFT_ARROW)) && (_cursor != 0)) {
+            _cursor--;
+            return;
+        }
+
+        if ((k.key_clicked(KC_RIGHT_ARROW) || k.key_held(KC_RIGHT_ARROW)) && (_cursor != _text.length())) {
+            _cursor++;
+            return;
+        }
+
 
         for (int i = 0; i < KEY_COUNT; i++) {
             if (k.index_state(i)) {
@@ -158,7 +178,8 @@ namespace kb
 
         char c = index_to_char(index);
         if (_whitelist.find(c) != std::string::npos) {
-            _text.push_back(c);
+            _text.insert(_cursor, 1, c);
+            _cursor++;
         }
     }
 

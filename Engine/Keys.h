@@ -7,6 +7,7 @@
 const int MAX_INT = 2147483647;
 const int KEY_COUNT = 58;
 const int CYCLES_HELD = 20;
+const int TEXT_RESERVE = 30;
 
 namespace kb
 {
@@ -346,6 +347,7 @@ namespace kb
         std::string _text;
         std::string _prefix;
         std::string _whitelist;
+        int _cursor;
         bool _locked;
 
     public:
