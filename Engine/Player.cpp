@@ -32,9 +32,6 @@ Player::Player(Pos2D gPos) : gPos(gPos)
 
     sPos = cPos + spriteOffset;
     
-    items[0].name = "wooden_sword";
-    currentlySelectedItem = 0;
-    
     facing = RIGHT;
     skin   = "base";
 
@@ -57,6 +54,7 @@ void Player::update_player
     std::vector<DamageMap> &damageMap,
     std::vector<Command> &commands,
     ScreenAnimations &screenAnimations,
+    const LevelStateData &ld,
     kb::Keys &keys,
     UserData &userData,
     bool lockInput
@@ -73,13 +71,7 @@ void Player::update_player
 
     if (!lockInput) {
         get_input(keys, userData, enter, escape, up, down, left, right, use, drop);
-
-        // Inventory selection
-        if (keys.key_clicked(userData.keyBindings.ITEM_1)) if (items[0].name != "") currentlySelectedItem = 0;
-        if (keys.key_clicked(userData.keyBindings.ITEM_2)) if (items[1].name != "") currentlySelectedItem = 1;
-        if (keys.key_clicked(userData.keyBindings.ITEM_3)) if (items[2].name != "") currentlySelectedItem = 2;
-        if (keys.key_clicked(userData.keyBindings.ITEM_4)) if (items[3].name != "") currentlySelectedItem = 3;
-        if (keys.key_clicked(userData.keyBindings.ITEM_5)) if (items[4].name != "") currentlySelectedItem = 4;
+        inventory.update(gPos, facing, ld, keys, userData);
     }
 
     if (!inMA) {
