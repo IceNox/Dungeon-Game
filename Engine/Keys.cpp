@@ -186,11 +186,13 @@ namespace kb
     void SmartText::clear_text()
     {
         _text.clear();
+        _cursor = 0;
     }
 
     void SmartText::set_text(std::string text)
     {
         _text = text;
+        _cursor = text.length();
     }
 
     void SmartText::clear_prefix()
