@@ -44,7 +44,7 @@ Game::Game(MainWindow& wnd)
     load_menu();
     read_textures();
     //ReadLevels();
-    //load_items();
+    load_items();
     load_objects();
 
 

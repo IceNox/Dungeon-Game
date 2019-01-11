@@ -3,10 +3,11 @@
 #include "Constants.h"
 
 #include "Tile.h"
-#include "Item.h"
 #include "ScreenAnimations.h"
 #include "Animation.h"
 #include "StatusEffects.h"
+
+#include "Inventory.h"
 
 #include "Keys.h"
 #include "KeyBindings.h"
@@ -73,8 +74,7 @@ public:
     StatusEffects statusEffects;
 
     // Inventory
-    Item items[5];
-    int currentlySelectedItem;
+    Inventory inventory;
 
     // Sprite variables
     Direction facing;
@@ -83,7 +83,7 @@ public:
     //Sprite baseDirectionArrowSprite;
     
     Direction spriteFacing;
-    int          spriteNumber;
+    int spriteNumber;
     
     PlayerAction currentAction;
 
@@ -117,7 +117,9 @@ public:
         std::vector<Tile> tiles,
         std::vector<DamageMap> &damageMap,
         std::vector<Command> &commands,
+        std::vector<LevelMessage> &messages,
         ScreenAnimations &screenAnimations,
+        const LevelStateData &ld,
         kb::Keys &keys,
         UserData &userData,
         bool lockInput = false

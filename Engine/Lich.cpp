@@ -290,7 +290,7 @@ void Lich::spawn_zombie
         actionCooldown = 1.0f;
         lastAction       = system_clock::now();
 
-        srand(gX * gY * player.gX * player.gY + player.health + player.armor + player.cX * player.cY * player.currentlySelectedItem);
+        //srand(gX * gY * player.gX * player.gY + player.health + player.armor + player.cX * player.cY * player.currentlySelectedItem);
 
         for (int i = 0; i < 100; i++) {
             int x = player.gX - 2 + (rand() % 5);

@@ -624,7 +624,9 @@ void Level::update_level(std::vector<GameMessage*> &msg, ScreenAnimations &scree
         tiles,
         damageMap,
         commands,
+        messages,
         screenAnimations,
+        levelStateData,
         keys,
         userData,
         console.is_opened()?true:false

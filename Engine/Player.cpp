@@ -53,6 +53,7 @@ void Player::update_player
     std::vector<Tile> tiles,
     std::vector<DamageMap> &damageMap,
     std::vector<Command> &commands,
+    std::vector<LevelMessage> &messages,
     ScreenAnimations &screenAnimations,
     const LevelStateData &ld,
     kb::Keys &keys,
@@ -71,7 +72,7 @@ void Player::update_player
 
     if (!lockInput) {
         get_input(keys, userData, enter, escape, up, down, left, right, use, drop);
-        inventory.update(gPos, facing, ld, keys, userData);
+        inventory.update(messages, cPos, facing, ld, keys, userData);
     }
 
     if (!inMA) {
@@ -456,7 +457,7 @@ void Player::use_items
 {
     if (!inMA) {
         if (useItem) {
-            items[currentlySelectedItem].use_item(damageMap, commands, screenAnimations, gPos, facing);
+            //items[currentlySelectedItem].use_item(damageMap, commands, screenAnimations, gPos, facing);
         }
     }
 }
