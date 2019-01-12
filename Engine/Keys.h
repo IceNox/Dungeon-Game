@@ -5,7 +5,7 @@
 
 // Constants
 const int MAX_INT = 2147483647;
-const int KEY_COUNT = 105;
+const int KEY_COUNT = 121;
 const int CYCLES_HELD = 20;
 const int TEXT_RESERVE = 30;
 
@@ -22,8 +22,10 @@ namespace kb
             KC_XBUTTON2 = 0x06,
             KC_BACKSPACE = 0x08,
             KC_TAB = 0x09,
+            KC_CLEAR = 0x0C,
             KC_ENTER = 0x0D,
-            KC_ALT = 0x12,
+            KC_RIGHT_ALT = 0x11,
+            KC_LEFT_ALT = 0x12,
             KC_PAUSE = 0x13,
             KC_CAPS_LOCK = 0x14,
             KC_ESC = 0x1B,
@@ -77,6 +79,7 @@ namespace kb
             KC_Z = 0x5A,
             KC_LEFT_WIN = 0x5B,
             KC_RIGHT_WIN = 0x5C,
+            KC_MENU = 0x5D,
             KC_NUM_0 = 0x60,
             KC_NUM_1 = 0x61,
             KC_NUM_2 = 0x62,
@@ -116,10 +119,23 @@ namespace kb
             KC_FUN_22 = 0x85,
             KC_FUN_23 = 0x86,
             KC_FUN_24 = 0x87,
+            KC_NUM_LOCK = 0x90,
+            KC_SCROLL_LOCK = 0x91,
             KC_LEFT_SHIFT = 0xA0,
             KC_RIGHT_SHIFT = 0xA1,
             KC_LEFT_CTRL = 0xA2,
-            KC_RIGHT_CTRL = 0xA3
+            KC_RIGHT_CTRL = 0xA3,
+            KC_SEMICOLON = 0xBA,
+            KC_EQUALS = 0xBB,
+            KC_COMMA = 0xBC,
+            KC_HYPHEN = 0xBD,
+            KC_DOT = 0xBE,
+            KC_FORWARD_SLASH = 0xBF,
+            KC_OPEN_BRACKET = 0xDB,
+            KC_BACKWARD_SLASH = 0xDC,
+            KC_CLOSE_BRACKET = 0xDD,
+            KC_NUMBER_SIGN = 0xDE,
+            KC_APOSTROPHE = 0xDF
         };
 
         const int keyCodes[KEY_COUNT] =
@@ -131,7 +147,9 @@ namespace kb
             0x06,
             0x08,
             0x09,
+            0x0C,
             0x0D,
+            0x11,
             0x12,
             0x13,
             0x14,
@@ -186,6 +204,7 @@ namespace kb
             0x5A,
             0x5B,
             0x5C,
+            0x5D,
             0x60,
             0x61,
             0x62,
@@ -225,10 +244,23 @@ namespace kb
             0x85,
             0x86,
             0x87,
+            0x90,
+            0x91,
             0xA0,
             0xA1,
             0xA2,
-            0xA3
+            0xA3,
+            0xBA,
+            0xBB,
+            0xBC,
+            0xBD,
+            0xBE,
+            0xBF,
+            0xDB,
+            0xDC,
+            0xDD,
+            0xDE,
+            0xDF
         };
 
         const std::string keyNames[KEY_COUNT] =
@@ -240,8 +272,10 @@ namespace kb
             "mouse 5",
             "backspace",
             "tab",
+            "clear",
             "enter",
-            "alt",
+            "right alt",
+            "left alt",
             "pause",
             "caps lock",
             "esc",
@@ -295,6 +329,7 @@ namespace kb
             "z",
             "left win key",
             "right win key",
+            "menu",
             "num 0",
             "num 1",
             "num 2",
@@ -334,14 +369,29 @@ namespace kb
             "f22",
             "f23",
             "f24",
+            "num lock",
+            "scroll lock",
             "left shift",
             "right shift",
             "left ctrl",
-            "right ctrl"
+            "right ctrl",
+            ";",
+            "=",
+            ",",
+            "-",
+            ".",
+            "/",
+            "[",
+            "\\",
+            "]",
+            "#",
+            "`"
         };
 
         const char keyCharacters[KEY_COUNT] =
         {
+            0,
+            0,
             0,
             0,
             0,
@@ -404,6 +454,7 @@ namespace kb
             'z',
             0,
             0,
+            0,
             '0',
             '1',
             '2',
@@ -446,7 +497,20 @@ namespace kb
             0,
             0,
             0,
-            0
+            0,
+            0,
+            0,
+            ';',
+            '=',
+            ',',
+            '-',
+            '.',
+            '/',
+            '[',
+            '\\',
+            ']',
+            '#',
+            '`'
         };
     }
 
