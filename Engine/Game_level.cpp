@@ -163,9 +163,14 @@ void Game::ComposeGame()
         }
 
         // Objects
-        for (auto it : level.levelObjects) {
-            if (it->gPos.y == y && it->visible) {
-                send_draw_info(startPos + it->sPos, 1.0f, sprites[it->currentSprite]);
+        for (unsigned i = 0; i < level.staticObjects.size(); i++) {
+            if (level.staticObjects[i].gPos.y == y && level.staticObjects[i].visible) {
+                send_draw_info(startPos + level.staticObjects[i].sPos, 1.0f, sprites[level.staticObjects[i].currentSprite]);
+            }
+        }
+        for (unsigned i = 0; i < level.dynamicObjects.size(); i++) {
+            if (level.dynamicObjects[i].gPos.y == y && level.dynamicObjects[i].visible) {
+                send_draw_info(startPos + level.dynamicObjects[i].sPos, 1.0f, sprites[level.dynamicObjects[i].currentSprite]);
             }
         }
 
