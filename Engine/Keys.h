@@ -5,7 +5,7 @@
 
 // Constants
 const int MAX_INT = 2147483647;
-const int KEY_COUNT = 121;
+const int KEY_COUNT = 123;
 const int CYCLES_HELD = 20;
 const int TEXT_RESERVE = 30;
 
@@ -24,8 +24,8 @@ namespace kb
             KC_TAB = 0x09,
             KC_CLEAR = 0x0C,
             KC_ENTER = 0x0D,
-            KC_RIGHT_ALT = 0x11,
-            KC_LEFT_ALT = 0x12,
+            KC_CTRL = 0x11,
+            KC_ALT = 0x12,
             KC_PAUSE = 0x13,
             KC_CAPS_LOCK = 0x14,
             KC_ESC = 0x1B,
@@ -125,6 +125,8 @@ namespace kb
             KC_RIGHT_SHIFT = 0xA1,
             KC_LEFT_CTRL = 0xA2,
             KC_RIGHT_CTRL = 0xA3,
+            KC_LEFT_ALT = 0xA4,
+            KC_RIGHT_ALT = 0xA5,
             KC_SEMICOLON = 0xBA,
             KC_EQUALS = 0xBB,
             KC_COMMA = 0xBC,
@@ -250,6 +252,8 @@ namespace kb
             0xA1,
             0xA2,
             0xA3,
+            0xA4,
+            0xA5,
             0xBA,
             0xBB,
             0xBC,
@@ -274,8 +278,8 @@ namespace kb
             "tab",
             "clear",
             "enter",
-            "right alt",
-            "left alt",
+            "ctrl",
+            "alt",
             "pause",
             "caps lock",
             "esc",
@@ -375,6 +379,8 @@ namespace kb
             "right shift",
             "left ctrl",
             "right ctrl",
+            "left alt",
+            "right alt",
             ";",
             "=",
             ",",
@@ -470,6 +476,8 @@ namespace kb
             '-',
             '.',
             '/',
+            0,
+            0,
             0,
             0,
             0,
