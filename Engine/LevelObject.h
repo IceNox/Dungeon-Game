@@ -72,6 +72,7 @@ public:
     Direction moveDirection;
 
     // FUNCTIONS
+    LevelObject() = default;
     ~LevelObject() = default;
 
     virtual ObjectType get_type() { return OBJECT_BASE; }
@@ -94,12 +95,31 @@ private:
 
 class StaticObject : public LevelObject
 {
-
 public:
     StaticObject(int id, Pos2D gPos, bool setup = true);
+    StaticObject(const StaticObject &) = default;
 
     virtual ObjectType get_type() { return OBJECT_STATIC; }
 
     virtual void update(const LevelStateData &ld, long int curTime);
     virtual void damage(const DamageInfo &di);
+};
+
+class DynamicObject : public LevelObject
+{
+public:
+    int maxHealth;
+    int health;
+    int armor;
+
+    int healthbarHeight;
+    bool healthbarVisible = false;
+
+    DynamicObject(int id, Pos2D gPos);
+    DynamicObject(const DynamicObject &) = default;
+
+    virtual ObjectType get_type() { return OBJECT_DYNAMIC; }
+
+    virtual void update(std::vector<LevelMessage> &messages, const LevelStateData &ld, long int curtime);
+    virtual void damage(std::vector<LevelMessage> &messages, const DamageInfo &di);
 };

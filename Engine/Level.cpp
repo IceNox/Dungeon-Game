@@ -43,7 +43,8 @@ void Level::load_save_file(std::string saveName)
     portals.clear();
     tiles.clear();
     wires.clear();
-    levelObjects.clear();
+    staticObjects.clear();
+    dynamicObjects.clear();
 
     crates.clear();
     pressurePlates.clear();
@@ -241,10 +242,20 @@ void Level::load_save_file(std::string saveName)
 
     // Read static objects
     for (int i = 0; i < sObjectCount; i++) {
-        levelObjects.push_back(
-            new StaticObject(
+        staticObjects.push_back(
+            StaticObject(
                 saveData.levelData[sl_index].sObjectID[i],
                 saveData.levelData[sl_index].sObjectPos[i]
+            )
+        );
+    }
+
+    // Read dynamic objects
+    for (int i = 0; i < dObjectCount; i++) {
+        dynamicObjects.push_back(
+            DynamicObject(
+                saveData.levelData[sl_index].dObjectID[i],
+                saveData.levelData[sl_index].dObjectPos[i]
             )
         );
     }
@@ -635,8 +646,11 @@ void Level::update_level(std::vector<GameMessage*> &msg, ScreenAnimations &scree
     for (int i = 0; i < _LEVEL_WIDTH * _LEVEL_HEIGHT; i++) {
         tiles[i].update_tile(wires, baseFloorVariant, damageMap);
     }
-    for (auto it : levelObjects) {
-        it->update(levelStateData, maintime::currentGameTime);
+    for (int i = 0; i < staticObjects.size(); i++) {
+        staticObjects[i].update(levelStateData, maintime::currentGameTime);
+    }
+    for (int i = 0; i < dynamicObjects.size(); i++) {
+        dynamicObjects[i].update(messages, levelStateData, maintime::currentGameTime);
     }
     for (auto it : entities) {
         it->update();
@@ -727,20 +741,19 @@ void Level::set_game_state_data()
         levelStateData.tiles[i].directlyLit = tiles[i].directlyLit;
     }
 
-    for (unsigned i = 0; i < levelObjects.size(); i++) {
+    for (unsigned i = 0; i < staticObjects.size(); i++) {
         // Set object occupation
-        if (levelObjects[i]->obstructive) {
-            int index = levelObjects[i]->gPos.index(_LEVEL_WIDTH);
+        if (staticObjects[i].obstructive) {
+            int index = staticObjects[i].gPos.index(_LEVEL_WIDTH);
 
             levelStateData.tiles[index].object = true;
         }
-
+    }
+    for (unsigned i = 0; i < dynamicObjects.size(); i++) {
         // Set enemies
-        if (levelObjects[i]->get_type() == OBJECT_DYNAMIC) {
-            int index = levelObjects[i]->gPos.index(_LEVEL_WIDTH);
+        int index = dynamicObjects[i].gPos.index(_LEVEL_WIDTH);
 
-            levelStateData.tiles[index].enemy = true;
-        }
+        levelStateData.tiles[index].enemy = true;
     }
 
     for (unsigned i = 0; i < players.size(); i++) {
@@ -1123,11 +1136,9 @@ void Level::collide_entities(ScreenAnimations &screenAnimations)
     { // Collide objects
         std::vector<Hitbox> hitboxes;
 
-        for (int i = 0; i < levelObjects.size(); i++) {
-            if (levelObjects[i]->get_type() == OBJECT_DYNAMIC) {
-                if (levelObjects[i]->hitbox.active) {
-                    hitboxes.push_back(levelObjects[i]->hitbox);
-                }
+        for (int i = 0; i < dynamicObjects.size(); i++) {
+            if (dynamicObjects[i].hitbox.active) {
+                hitboxes.push_back(dynamicObjects[i].hitbox);
             }
         }
 
@@ -1315,13 +1326,23 @@ void Level::deal_damage(ScreenAnimations &screenAnimations)
     // Player damage
 
 
-    // Level objects
-    for (int it = 0; it < levelObjects.size(); it++) {
-        int index = levelObjects[it]->gPos.index(width);
+    // Static objects
+    for (int i = 0; i < staticObjects.size(); i++) {
+        int index = staticObjects[i].gPos.index(width);
         if (!healthMap[index].active) continue;
 
         for (unsigned i = 0; i < healthMap[index].dInfo.size(); i++) {
-            levelObjects[it]->damage(healthMap[index].dInfo[i]);
+            staticObjects[i].damage(healthMap[index].dInfo[i]);
+        }
+    }
+
+    // Dynamic objects
+    for (int i = 0; i < dynamicObjects.size(); i++) {
+        int index = dynamicObjects[i].gPos.index(width);
+        if (!healthMap[index].active) continue;
+
+        for (unsigned i = 0; i < healthMap[index].dInfo.size(); i++) {
+            dynamicObjects[i].damage(messages, healthMap[index].dInfo[i]);
         }
     }
 
@@ -1426,9 +1447,16 @@ void Level::deal_damage(ScreenAnimations &screenAnimations)
 
 void Level::remove_destroyed_objects()
 {
-    for (unsigned i = 0; i < levelObjects.size(); i++) {
-        if (levelObjects[i]->destroyed) {
-            levelObjects.erase(levelObjects.begin() + i);
+    for (unsigned i = 0; i < staticObjects.size(); i++) {
+        if (staticObjects[i].destroyed) {
+            staticObjects.erase(staticObjects.begin() + i);
+            i--;
+        }
+    }
+
+    for (unsigned i = 0; i < dynamicObjects.size(); i++) {
+        if (dynamicObjects[i].destroyed) {
+            dynamicObjects.erase(dynamicObjects.begin() + i);
             i--;
         }
     }
@@ -1676,8 +1704,11 @@ void Level::update_tile_info()
         tiles[players[0].sgPos.index(_LEVEL_WIDTH, players[0].MAdirection, 1)].occupied = true;
 
     // Objects
-    for (auto it : levelObjects) {
-        tiles[it->gPos.index(width)].occupied = it->obstructive;
+    for (unsigned i = 0; i < staticObjects.size(); i++) {
+        tiles[staticObjects[i].gPos.index(width)].occupied = staticObjects[i].obstructive;
+    }
+    for (unsigned i = 0; i < dynamicObjects.size(); i++) {
+        tiles[dynamicObjects[i].gPos.index(width)].occupied = dynamicObjects[i].obstructive;
     }
 
     // Crates
@@ -2211,15 +2242,26 @@ void Level::update_visibility()
     }
 
     // Objects
-    for (auto it : levelObjects) {
-        int arrayPos = it->gPos.index(width);
+    for (unsigned i = 0; i < staticObjects.size(); i++) {
+        int arrayPos = staticObjects[i].gPos.index(width);
 
         if (tiles[arrayPos].visible) {
-            it->visible = true;
-            it->revealed = true;
+            staticObjects[i].visible = true;
+            staticObjects[i].revealed = true;
         }
         else {
-            it->visible = false;
+            staticObjects[i].visible = false;
+        }
+    }
+    for (unsigned i = 0; i < dynamicObjects.size(); i++) {
+        int arrayPos = dynamicObjects[i].gPos.index(width);
+
+        if (tiles[arrayPos].visible) {
+            dynamicObjects[i].visible = true;
+            dynamicObjects[i].revealed = true;
+        }
+        else {
+            dynamicObjects[i].visible = false;
         }
     }
 

@@ -292,3 +292,221 @@ void StaticObject::damage(const DamageInfo &di)
         }
     }
 }
+
+DynamicObject::DynamicObject(int id, Pos2D gPos)
+{
+    // Set essential data
+    this->oid = id;
+    this->ID = oid / 1000;
+    this->VR = oid % 1000;
+
+    this->gPos = gPos;
+
+    cPos = gPos * cellSize + Pos2D(cellSize / 2);
+
+    // Set up script state
+    script.open_libraries(sol::lib::base);
+    script.open_libraries(sol::lib::math);
+
+    script.new_usertype<Pos2D>
+    (
+        "position",
+        sol::constructors<>(),
+        "x", &Pos2D::x,
+        "y", &Pos2D::y
+    );
+
+    script.new_usertype<TileData>
+    (
+        "tileData",
+        sol::constructors<>(),
+        "pressuredW" , sol::readonly(&TileData::pressuredW),
+        "pressuredS" , sol::readonly(&TileData::pressuredS),
+        "pressuredG" , sol::readonly(&TileData::pressuredG),
+        "pressuredB" , sol::readonly(&TileData::pressuredB),
+        "pressured"  , sol::readonly(&TileData::pressured),
+        "powered"    , sol::readonly(&TileData::powered),
+        "terrain"    , sol::readonly(&TileData::terrain),
+        "object"     , sol::readonly(&TileData::object),
+        "player"     , sol::readonly(&TileData::player),
+        "enemy"      , sol::readonly(&TileData::enemy),
+        "directlyLit", sol::readonly(&TileData::directlyLit)
+    );
+
+    script.new_usertype<LevelStateData>
+    (
+        "levelData",
+        sol::constructors<>(),
+        "width" , sol::readonly(&LevelStateData::width),
+        "height", sol::readonly(&LevelStateData::height),
+        "tiles" , sol::readonly(&LevelStateData::tiles)
+    );
+
+    script.new_usertype<DamageInfo>
+    (
+        "damageInfo",
+        sol::constructors<>(),
+        "amount"       , sol::readonly(&DamageInfo::amount),
+        "type"         , sol::readonly(&DamageInfo::type),
+        "players"      , sol::readonly(&DamageInfo::players),
+        "enemies"      , sol::readonly(&DamageInfo::enemies),
+        "terrain"      , sol::readonly(&DamageInfo::terrain),
+        "direction"    , sol::readonly(&DamageInfo::dir),
+        "ground"       , sol::readonly(&DamageInfo::ground),
+        "precise"      , sol::readonly(&DamageInfo::precise),
+        "knockbackStr" , sol::readonly(&DamageInfo::knockbackStr),
+        "statusEffects", sol::readonly(&DamageInfo::statusEffects)
+    );
+
+    script.new_usertype<LevelMessage>
+    (
+        "levelMessage",
+        sol::constructors<>(),
+        "source"    , &LevelMessage::source,
+        "message"   , &LevelMessage::message,
+        "argKeys"   , &LevelMessage::argKeys,
+        "argValsInt", &LevelMessage::argValsInt,
+        "argValsStr", &LevelMessage::argValsStr
+    );
+
+    // Link object to apropriate script
+    int linked = false;
+    for (int i = 0; i < _OBJECT_SCRIPTS.size(); i++) {
+        if (id / 1000 == _OBJECT_SCRIPTS[i].id) {
+            // Open script file
+            script.script_file(_OBJECT_SCRIPTS[i].filePath);
+
+            // Set sprites
+            for (int j = 0; j < _OBJECT_SCRIPTS[i].spriteIndexes.size(); j++) {
+                script["spriteindexes"][j + 1] = _OBJECT_SCRIPTS[i].spriteIndexes[j];
+            }
+
+            linked = true;
+            break;
+        }
+    }
+
+
+    // Destroy object if no script is found
+    if (!linked) {
+        destroyed = true;
+        return;
+    }
+
+    // Set health variables
+    maxHealth = script["maxHealth"];
+    health = script["health"];
+    armor = script["armor"];
+
+    healthbarHeight = script["healthbarheight"];
+    healthbarVisible = false;
+
+    // Set sprite variables
+    currentSprite = EMPTY_SPRITE;
+    sOffset = { -sprites[currentSprite].GetCenterX(), -sprites[currentSprite].GetCenterY() };
+
+    // Set hitbox
+    sol::optional<int> hType = script["hitbox"]["shape"];
+    hitbox.type = hType.value();
+
+    sol::optional<int> w = script["hitbox"]["size"]["w"];
+    sol::optional<int> h = script["hitbox"]["size"]["h"];
+    sol::optional<int> r = script["hitbox"]["size"]["r"];
+
+    hitbox.width = w.value();
+    hitbox.height = h.value();
+    hitbox.radius = r.value();
+
+    sol::optional<int> hox = script["hitbox"]["offset"]["x"];
+    sol::optional<int> hoy = script["hitbox"]["offset"]["y"];
+
+    hOffset = { hox.value(), hoy.value() };
+
+    // Set light source
+    sol::optional<int> isLS = script["lightsourcecount"];
+    lightSource = isLS.value();
+
+    for (int i = 0; i < isLS.value(); i++) {
+        sol::optional<int> lsX = script["lightsources"][i]["offset"]["x"];
+        sol::optional<int> lsY = script["lightsources"][i]["offset"]["y"];
+        lightSourcePos.push_back(Pos2D(lsX.value(), lsY.value()));
+
+        sol::optional<int> str = script["lightsources"][i]["strength"];
+    }
+}
+
+void DynamicObject::update(std::vector<LevelMessage> &messages, const LevelStateData &ld, long int curtime)
+{
+    if (!moveState.ongoing) {
+        // Run logic
+        script["update"](cPos, ld, maintime::currentGameTime);
+
+        // Check for a movement call
+        if (script["startmovement"] == true) {
+            if (script["movement"]["relative"] == true) {
+                move_by_(
+                    script["movement"]["x"],
+                    script["movement"]["y"],
+                    script["movement"]["duration"]
+                );
+            }
+            else {
+                move_to_(
+                    script["movement"]["x"],
+                    script["movement"]["y"],
+                    script["movement"]["duration"]
+                );
+            }
+        }
+    }
+    else {
+        update_movement();
+    }
+
+    // Set grid position
+    gPos = cPos / cellSize;
+
+    // Set sprite
+    currentSprite = script["select_sprite"](facing, moveState.ongoing, moveState.progress);
+    sOffset = { -sprites[currentSprite].GetCenterX(), -sprites[currentSprite].GetCenterY() };
+    sPos = cPos + sOffset;
+    sPos.y -= height;
+
+    // Set hitbox
+    hitbox.cPos = cPos;
+
+    // Set other variables
+    sol::optional<int> obs = script["obstructive"];
+    sol::optional<int> pre = script["pressuring"];
+    sol::optional<int> pwr = script["powering"];
+    obstructive = obs.value();
+    pressuring = pre.value();
+    powering = pwr.value();
+
+    return;
+}
+
+void DynamicObject::damage(std::vector<LevelMessage> &messages, const DamageInfo &di)
+{
+    destroyed = script["damage"](di);
+
+    if (!moveState.ongoing) {
+        // Check for a movement call
+        if (script["startmovement"] == true) {
+            if (script["movement"]["relative"] == true) {
+                move_by_(
+                    script["movement"]["x"],
+                    script["movement"]["y"],
+                    script["movement"]["duration"]
+                );
+            }
+            else {
+                move_to_(
+                    script["movement"]["x"],
+                    script["movement"]["y"],
+                    script["movement"]["duration"]
+                );
+            }
+        }
+    }
+}

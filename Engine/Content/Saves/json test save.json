@@ -36,7 +36,8 @@
 		"floors": [],
 		"sObjects": [
 			{"id": 101000, "pos": {"x": 5, "y": 8}}
-		]
+		],
+		"dObjects": []
 	},
 	{
 		"width": 11,
@@ -57,7 +58,8 @@
 		"floors": [],
 		"sObjects": [
 			{"id": 101000, "pos": {"x": 5, "y": 8}}
-		]
+		],
+		"dObjects": []
 	}
 	]
 }

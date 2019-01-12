@@ -96,7 +96,8 @@ public:
 
     int sObjectCount;
     int dObjectCount;
-    std::vector<LevelObject*> levelObjects;
+    std::vector<StaticObject> staticObjects;
+    std::vector<DynamicObject> dynamicObjects;
 
     // UNNESCESSARY
     int crateCount;
