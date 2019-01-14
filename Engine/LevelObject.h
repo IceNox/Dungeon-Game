@@ -73,6 +73,8 @@ public:
 
     // FUNCTIONS
     LevelObject() = default;
+    LevelObject(const LevelObject &) = default;
+    LevelObject& operator=(const LevelObject &) = default;
     ~LevelObject() = default;
 
     virtual ObjectType get_type() { return OBJECT_BASE; }
@@ -97,7 +99,8 @@ class StaticObject : public LevelObject
 {
 public:
     StaticObject(int id, Pos2D gPos, bool setup = true);
-    StaticObject(const StaticObject &) = default;
+    StaticObject(const StaticObject &);
+    StaticObject& operator=(const StaticObject &);
 
     virtual ObjectType get_type() { return OBJECT_STATIC; }
 
@@ -116,7 +119,8 @@ public:
     bool healthbarVisible = false;
 
     DynamicObject(int id, Pos2D gPos);
-    DynamicObject(const DynamicObject &) = default;
+    DynamicObject(const DynamicObject &);
+    DynamicObject& operator=(const DynamicObject &);
 
     virtual ObjectType get_type() { return OBJECT_DYNAMIC; }
 
