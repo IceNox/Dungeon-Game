@@ -81,6 +81,15 @@ void LevelObject::update_movement()
     height = ceil(mheight);
 }
 
+StaticObject::StaticObject(const StaticObject &o)
+    : StaticObject(o.oid, o.gPos)
+{}
+
+StaticObject& StaticObject::operator=(const StaticObject &o)
+{
+    return *this;
+}
+
 StaticObject::StaticObject(int id, Pos2D gPos, bool setup)
 {
     if (!setup) return;
@@ -293,6 +302,15 @@ void StaticObject::damage(const DamageInfo &di)
     }
 }
 
+DynamicObject::DynamicObject(const DynamicObject &o)
+    : DynamicObject(o.oid, o.gPos)
+{}
+
+DynamicObject& DynamicObject::operator=(const DynamicObject &o)
+{
+    return *this;
+}
+
 DynamicObject::DynamicObject(int id, Pos2D gPos)
 {
     // Set essential data
@@ -394,7 +412,7 @@ DynamicObject::DynamicObject(int id, Pos2D gPos)
     }
 
     // Set health variables
-    maxHealth = script["maxHealth"];
+    maxHealth = script["maxhealth"];
     health = script["health"];
     armor = script["armor"];
 
@@ -461,6 +479,12 @@ void DynamicObject::update(std::vector<LevelMessage> &messages, const LevelState
     }
     else {
         update_movement();
+    }
+
+    // Get messages
+    int count = script["messagecount"].get<int>();
+    for (int i = 0; i < count; i++) {
+        messages.push_back(script["get_message"](i));
     }
 
     // Set grid position
