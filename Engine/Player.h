@@ -9,7 +9,6 @@
 
 #include "Inventory.h"
 
-#include "Keys.h"
 #include "KeyBindings.h"
 
 #include "UserData.h"
@@ -120,14 +119,14 @@ public:
         std::vector<LevelMessage> &messages,
         ScreenAnimations &screenAnimations,
         const LevelStateData &ld,
-        kb::Keys &keys,
+        Key &k,
         UserData &userData,
         bool lockInput = false
     );
 
     void get_input
     (
-        kb::Keys &keys,
+        Key &k,
         UserData &userData,
         bool &enter,
         bool &escape,
@@ -146,7 +145,7 @@ public:
 
     void move
     (
-        kb::Keys &keys,
+        Key &k,
         UserData &userData,
         bool up,
         bool down,

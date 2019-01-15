@@ -7,7 +7,6 @@
 
 #include "GameMessage.h"
 
-#include "Keys.h"
 #include "KeyBindings.h"
 
 #include "UserData.h"
@@ -81,6 +80,6 @@ public:
     void exit_menu(GameMessage* msg);
     //void enter_game(std::string newMode, LevelType type, std::string name);
 
-    void update_menu(std::vector<GameMessage*> &msg, kb::Keys &keys, UserData &userData);
-    void menu_control(std::vector<GameMessage*> &msg, std::string action, UserData &userData, kb::Keys &keys);
+    void update_menu(std::vector<GameMessage*> &msg, Key &k, UserData &userData);
+    void menu_control(std::vector<GameMessage*> &msg, std::string action, UserData &userData, Key &k);
 };

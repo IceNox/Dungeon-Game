@@ -40,7 +40,7 @@
 #include "Font.h"
 
 // Key bindings/keyboard
-#include "Keys.h"
+#include "KeyReader.h"
 #include "KeyBindings.h"
 
 // Loaded data
@@ -69,17 +69,21 @@ public:
     void load_objects();
     int load_sprite(std::string fileDir);
     //void ReadLevels();
+
 private:
     void ComposeFrame();
     void ComposeMenu();
     void ComposeGame();
     void UpdateModel();
+
 private:
     MainWindow& wnd;
     Graphics gfx;
+
 public:
     // Variables
-    kb::Keys keys;
+    KeyReader keyReader;
+    Key k;
 
     UserData userData;
 

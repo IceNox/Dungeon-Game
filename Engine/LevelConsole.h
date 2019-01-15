@@ -1,8 +1,7 @@
 #pragma once
 
-#include "Keys.h"
-
 #include "LevelMessage.h"
+#include "SmartText.h"
 
 #include <vector>
 #include <string>
@@ -10,10 +9,13 @@
 // Constants
 const std::string PREFIX = "> ";
 
+// Macros
+const Key SUBMIT = Key(VK_RETURN);
+
 class LevelConsole
 {
 private:
-    kb::SmartText text;
+    SmartText text;
     bool opened;
 
 public:
@@ -25,13 +27,13 @@ public:
         text.setWhitelist();
     }
 
-    void update_console(kb::Keys &k, std::vector<LevelMessage> &messages)
+    void update_console(Key &k, std::vector<LevelMessage> &messages)
     {
         if (!opened) return;
 
         text.update_text(k);
 
-        if (k.key_clicked(kb::KC_ENTER))
+        if (k == SUBMIT)
         {
             messages.push_back(LevelMessage("console " + text.get_content()));
             text.clear_text();

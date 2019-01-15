@@ -42,7 +42,6 @@
 #include "Animation.h"
 #include "Particle.h"
 
-#include "Keys.h"
 #include "KeyBindings.h"
 
 #include "LevelData.h"
@@ -180,7 +179,7 @@ public:
     void load_save_file(std::string saveName);
     void save_save_file() {};
 
-    void update_level(std::vector<GameMessage*> &msg, ScreenAnimations &screenAnimations, kb::Keys &keys, UserData &userData);
+    void update_level(std::vector<GameMessage*> &msg, ScreenAnimations &screenAnimations, Key &k, UserData &userData);
     void set_game_state_data();
     void handle_messages();
 
@@ -193,7 +192,7 @@ public:
 
     void merge_gold_on_ground();
 
-    void update_minimap(kb::Keys &keys, UserData &userData);
+    void update_minimap(Key &k, UserData &userData);
     void update_tile_info();
     void update_wires();
     void update_lighting();

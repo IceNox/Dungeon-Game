@@ -1,13 +1,16 @@
 #pragma once
-#ifndef min
-#include <algorithm>
+
+#ifdef min
+#undef min
+#endif
+
+#ifdef max
+#undef max
 #endif
 
 #include "Key.h"
 
-#include <WinUser.h>
-
-
+#include <algorithm>
 #include <unordered_map>
 
 const int MAX_INT2 = 2147483647;
@@ -15,7 +18,7 @@ const int STATE_SHIFT = 0x8000;
 const int KEY_TOTAL = 256;
 const int CYCLES_HELD = 20;
 
-const std::unordered_map<int, std::string> MODIFYER = {
+const std::unordered_map<int, std::string> MODIFIER_KEYS = {
     { VK_LSHIFT   , "left shift"    },
     { VK_RSHIFT   , "right shift"   },
     { VK_SHIFT    , "shift"         },
@@ -29,7 +32,7 @@ const std::unordered_map<int, std::string> MODIFYER = {
     { VK_RWIN     , "right win"     }
 };
 
-const std::unordered_map<int, std::string> SPECIAL = {
+const std::unordered_map<int, std::string> SPECIAL_KEYS = {
     { VK_LBUTTON  , "mouse 1"       },
     { VK_RBUTTON  , "mouse 2"       },
     { VK_MBUTTON  , "mouse 3"       },
@@ -97,7 +100,6 @@ const std::unordered_map<int, std::string> SPECIAL = {
     { VK_NUMLOCK  , "num lock"      },
     { VK_SCROLL   , "scroll lock"   }
 };
- 
 
 class KeyReader
 {
@@ -147,7 +149,7 @@ private:
     // Key code of last pressed button
     int _last_button() {
         int last = _last_modifier();
-        int btn;
+        int btn = 0;
 
         for (int i = 0; i < VK_SHIFT; i++) {
             if (_state[i] != 0 && _state[i] < last) {
@@ -198,12 +200,8 @@ public:
         }
     }
 
-    int* get_states() {
-        return _state;
-    }
-
     Key get_key()
-    {
+    { 
         int last = _last_button();
         int output = last * (_state[last] == 1 || _state[last] > CYCLES_HELD);
 
@@ -213,7 +211,11 @@ public:
             (bool)_modifier_ticks(VK_LMENU, VK_RMENU),
             (bool)_modifier_ticks(VK_LWIN, VK_RWIN),
             output,
-            '1'
+            '\0'
         );
+    }
+
+    int* get_states() {
+        return _state;
     }
 };

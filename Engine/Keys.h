@@ -599,37 +599,4 @@ namespace kb
     char code_to_char(int code);
     std::string code_to_name(int code);
     int name_to_code(std::string name);
-
-    // Class for entering text in real-time
-    class SmartText
-    {
-    private:
-        std::string _text;
-        std::string _prefix;
-        std::string _whitelist;
-        int _cursor;
-        bool _locked;
-
-    public:
-        static const std::string spaces;
-        static const std::string numbers;
-        static const std::string letters;
-        static const std::string special;
-
-        SmartText();
-        SmartText(std::string prefix);
-        SmartText(std::string text, std::string prefix);
-        std::string get_text();
-        std::string get_prefix();
-        std::string get_content();
-        void setWhitelist();
-        void setWhitelist(bool allowSpaces, bool allowNumbers, bool allowLetters, bool allowSpecial);
-        void setWhitelist(std::string whitelist);
-        void update_text(Keys &k);
-        void clear_text();
-        void set_text(std::string text);
-        void clear_prefix();
-        void set_prefix(std::string prefix);
-        void toggle_lock();
-    };
 }

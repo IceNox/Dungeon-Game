@@ -38,7 +38,7 @@ void Menu::enter_game(std::string newMode, LevelType lType, std::string lName)
     this->lName   = lName;
 }
 */
-void Menu::update_menu(std::vector<GameMessage*> &msg, kb::Keys &keys, UserData &userData)
+void Menu::update_menu(std::vector<GameMessage*> &msg, Key &k, UserData &userData)
 {
     using namespace std::chrono;
 
@@ -76,15 +76,15 @@ void Menu::update_menu(std::vector<GameMessage*> &msg, kb::Keys &keys, UserData 
     bool left   = false;
     bool right  = false;
 
-    if (keys.key_clicked(userData.keyBindings.ENTER )) enter  = true;
-    if (keys.key_clicked(userData.keyBindings.ESCAPE)) escape = true;
-    if (keys.key_clicked(userData.keyBindings.UP    )) up     = true;
-    if (keys.key_clicked(userData.keyBindings.DOWN  )) down   = true;
-    if (keys.key_clicked(userData.keyBindings.LEFT  )) left   = true;
-    if (keys.key_clicked(userData.keyBindings.RIGHT )) right  = true;
+    if      (k == userData.keyBindings.ENTER  ) enter  = true;
+    else if (k == userData.keyBindings.ESCAPE ) escape = true;
+    else if (k == userData.keyBindings.UP     ) up     = true;
+    else if (k == userData.keyBindings.DOWN   ) down   = true;
+    else if (k == userData.keyBindings.LEFT   ) left = true;
+    else if (k == userData.keyBindings.RIGHT  ) right  = true;
 
     if (locked) {
-        menu_control(msg, "", userData, keys);
+        menu_control(msg, "", userData, k);
         enter  = false;
         escape = false;
         up     = false;
@@ -98,7 +98,7 @@ void Menu::update_menu(std::vector<GameMessage*> &msg, kb::Keys &keys, UserData 
             if (scenes[cScene].elements[cElement].active) {
                 SCAscene1 = cScene;
                 SCAelement1 = cElement;
-                menu_control(msg, "enter", userData, keys);
+                menu_control(msg, "enter", userData, k);
                 SCAscene2 = cScene;
                 SCAelement2 = cElement;
 
@@ -116,7 +116,7 @@ void Menu::update_menu(std::vector<GameMessage*> &msg, kb::Keys &keys, UserData 
         else if (escape) {
             SCAscene1    = cScene;
             SCAelement1 = cElement;
-            menu_control(msg, "back", userData, keys);
+            menu_control(msg, "back", userData, k);
             SCAscene2    = cScene;
             SCAelement2 = cElement;
 
@@ -170,10 +170,10 @@ void Menu::update_menu(std::vector<GameMessage*> &msg, kb::Keys &keys, UserData 
             }
         }
         else if (left) {
-            menu_control(msg, "left", userData, keys);
+            menu_control(msg, "left", userData, k);
         }
         else if (right) {
-            menu_control(msg, "right", userData, keys);
+            menu_control(msg, "right", userData, k);
         }
     }
 
@@ -210,7 +210,7 @@ void Menu::update_menu(std::vector<GameMessage*> &msg, kb::Keys &keys, UserData 
     }
 }
 
-void Menu::menu_control(std::vector<GameMessage*> &msg, std::string action, UserData &userData, kb::Keys &keys)
+void Menu::menu_control(std::vector<GameMessage*> &msg, std::string action, UserData &userData, Key &k)
 {
     std::ofstream debug("debug.txt");
 
@@ -451,24 +451,23 @@ void Menu::menu_control(std::vector<GameMessage*> &msg, std::string action, User
         }
 
         if (locked) {
-            int code;
-            if (keys.pressed_key_code(code)) {
-                if      (cElement == 0)  userData.keyBindings.MOVE_UP          = code;
-                else if (cElement == 1)  userData.keyBindings.MOVE_DOWN        = code;
-                else if (cElement == 2)  userData.keyBindings.MOVE_LEFT        = code;
-                else if (cElement == 3)  userData.keyBindings.MOVE_RIGHT       = code;
-                else if (cElement == 4)  userData.keyBindings.CHANGE_DIRECTION = code;
-                else if (cElement == 5)  userData.keyBindings.CHANGE_MAP_SIZE  = code;
-                else if (cElement == 6)  userData.keyBindings.PAUSE            = code;
-                else if (cElement == 7)  userData.keyBindings.USE_ITEM         = code;
-                else if (cElement == 8)  userData.keyBindings.DROP_ITEM        = code;
-                else if (cElement == 9)  userData.keyBindings.ITEM_1           = code;
-                else if (cElement == 10) userData.keyBindings.ITEM_2           = code;
-                else if (cElement == 11) userData.keyBindings.ITEM_3           = code;
-                else if (cElement == 12) userData.keyBindings.ITEM_4           = code;
-                else if (cElement == 13) userData.keyBindings.ITEM_5           = code;
+            if (k.get_key_code()) {
+                if      (cElement == 0)  userData.keyBindings.MOVE_UP          = k;
+                else if (cElement == 1)  userData.keyBindings.MOVE_DOWN        = k;
+                else if (cElement == 2)  userData.keyBindings.MOVE_LEFT        = k;
+                else if (cElement == 3)  userData.keyBindings.MOVE_RIGHT       = k;
+                else if (cElement == 4)  userData.keyBindings.CHANGE_DIRECTION = k;
+                else if (cElement == 5)  userData.keyBindings.CHANGE_MAP_SIZE  = k;
+                else if (cElement == 6)  userData.keyBindings.PAUSE            = k;
+                else if (cElement == 7)  userData.keyBindings.USE_ITEM         = k;
+                else if (cElement == 8)  userData.keyBindings.DROP_ITEM        = k;
+                else if (cElement == 9)  userData.keyBindings.ITEM_1           = k;
+                else if (cElement == 10) userData.keyBindings.ITEM_2           = k;
+                else if (cElement == 11) userData.keyBindings.ITEM_3           = k;
+                else if (cElement == 12) userData.keyBindings.ITEM_4           = k;
+                else if (cElement == 13) userData.keyBindings.ITEM_5           = k;
 
-                scenes[cScene].elements[cElement].text = kb::code_to_name(code);
+                scenes[cScene].elements[cElement].text = k.get_key_name();
 
                 userData.save_data();
                 locked = false;

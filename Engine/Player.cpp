@@ -56,7 +56,7 @@ void Player::update_player
     std::vector<LevelMessage> &messages,
     ScreenAnimations &screenAnimations,
     const LevelStateData &ld,
-    kb::Keys &keys,
+    Key &k,
     UserData &userData,
     bool lockInput
 )
@@ -71,8 +71,8 @@ void Player::update_player
     bool drop    = false;
 
     if (!lockInput) {
-        get_input(keys, userData, enter, escape, up, down, left, right, use, drop);
-        inventory.update(messages, cPos, facing, ld, keys, userData);
+        get_input(k, userData, enter, escape, up, down, left, right, use, drop);
+        inventory.update(messages, cPos, facing, ld, k, userData);
     }
 
     if (!inMA) {
@@ -112,14 +112,14 @@ void Player::update_player
 
     if (statusEffects.stunned) return;
 
-    move(keys, userData, up, down, left, right, use, tiles, damageMap, commands);
+    move(k, userData, up, down, left, right, use, tiles, damageMap, commands);
     use_items(use, damageMap, commands, screenAnimations);
 
     evaluate_sprite_name(this);
 }
 
 void Player::get_input(
-    kb::Keys &keys,
+    Key &k,
     UserData &userData,
     bool &enter,
     bool &escape,
@@ -131,14 +131,14 @@ void Player::get_input(
     bool &dropItem
 )
 {
-    if (keys.key_clicked(userData.keyBindings.ENTER     )) enter    = true;
-    if (keys.key_clicked(userData.keyBindings.ESCAPE    )) escape   = true;
-    if (keys.key_clicked(userData.keyBindings.MOVE_UP   )) up       = true;
-    if (keys.key_clicked(userData.keyBindings.MOVE_DOWN )) down     = true;
-    if (keys.key_clicked(userData.keyBindings.MOVE_LEFT )) left     = true;
-    if (keys.key_clicked(userData.keyBindings.MOVE_RIGHT)) right    = true;
-    if (keys.key_clicked(userData.keyBindings.USE_ITEM  )) useItem  = true;
-    if (keys.key_clicked(userData.keyBindings.DROP_ITEM )) dropItem = true;
+    if      (k == userData.keyBindings.ENTER)      enter    = true;
+    else if (k == userData.keyBindings.ESCAPE)     escape   = true;
+    else if (k == userData.keyBindings.MOVE_UP)    up       = true;
+    else if (k == userData.keyBindings.MOVE_DOWN)  down     = true;
+    else if (k == userData.keyBindings.MOVE_LEFT)  left     = true;
+    else if (k == userData.keyBindings.MOVE_RIGHT) right    = true;
+    else if (k == userData.keyBindings.USE_ITEM)   useItem  = true;
+    else if (k == userData.keyBindings.DROP_ITEM)  dropItem = true;
 
     /*
     if (paused) {
@@ -228,7 +228,7 @@ void Player::apply_effects
 
 void Player::move
 (
-    kb::Keys &keys,
+    Key &k,
     UserData &userData,
     bool up,
     bool down,
@@ -263,7 +263,7 @@ void Player::move
             moved = true;
         }
 
-        if (keys.key_clicked(userData.keyBindings.CHANGE_DIRECTION)) {
+        if (k == userData.keyBindings.CHANGE_DIRECTION) {
             Direction dir = facing;
 
             if        (up)    facing = UP;

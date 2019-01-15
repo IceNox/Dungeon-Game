@@ -166,6 +166,9 @@
     <ClInclude Include="Crate.h" />
     <ClInclude Include="GameMessage.h" />
     <ClInclude Include="GameTime.h" />
+    <ClInclude Include="Key.h" />
+    <ClInclude Include="KeyReader.h" />
+    <ClInclude Include="SmartText.h" />
     <ClInclude Include="HealthMap.h" />
     <ClInclude Include="Door.h" />
     <ClInclude Include="DXErr.h" />
@@ -324,6 +327,7 @@
     <ClCompile Include="SaveData.cpp" />
     <ClCompile Include="ScreenAnimations.cpp" />
     <ClCompile Include="Sign.cpp" />
+    <ClCompile Include="SmartText.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="SpriteSelection.cpp" />
     <ClCompile Include="StatusEffects.cpp" />
@@ -419,6 +423,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\User\config.json" />
+    <None Include="cpp.hint" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

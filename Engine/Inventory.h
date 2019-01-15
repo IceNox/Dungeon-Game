@@ -1,8 +1,6 @@
 #pragma once
 
 #include "Item.h"
-
-#include "Keys.h"
 #include "UserData.h"
 
 class Inventory
@@ -17,5 +15,5 @@ public:
 
 
     Inventory();
-    void update(std::vector<LevelMessage> &messages, Pos2D pos, Direction dir, const LevelStateData &ld, kb::Keys &k, UserData &u);
+    void update(std::vector<LevelMessage> &messages, Pos2D pos, Direction dir, const LevelStateData &ld, Key &k, UserData &u);
 };

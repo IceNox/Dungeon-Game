@@ -303,6 +303,15 @@
     <ClInclude Include="KeyReader\KeyReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SmartText.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Key.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXErr.cpp">
@@ -557,6 +566,9 @@
     <ClCompile Include="Inventory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SmartText.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="FramebufferPS.hlsl">
@@ -586,5 +598,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\User\config.json" />
+    <None Include="cpp.hint" />
   </ItemGroup>
 </Project>

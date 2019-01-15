@@ -557,7 +557,7 @@ void Level::load_level(std::string levelName, std::vector<LevelData> &levelData)
 }
 */
 
-void Level::update_level(std::vector<GameMessage*> &msg, ScreenAnimations &screenAnimations, kb::Keys &keys, UserData &userData)
+void Level::update_level(std::vector<GameMessage*> &msg, ScreenAnimations &screenAnimations, Key &k, UserData &userData)
 {
     if (inFA) {
         //duration<float> elapsed_seconds = system_clock::now() - FAstart;
@@ -581,7 +581,7 @@ void Level::update_level(std::vector<GameMessage*> &msg, ScreenAnimations &scree
     if (inDeathScreen || inEndScreen) return;
 
     // Pause/unpause 
-    if (keys.key_clicked(userData.keyBindings.PAUSE)) toggle_pause();
+    if (k == userData.keyBindings.PAUSE) toggle_pause();
 
     // Open/close console
     if ((GetKeyState(0xC0) & 0x8000) && !tildeIsPressed) {
@@ -599,7 +599,7 @@ void Level::update_level(std::vector<GameMessage*> &msg, ScreenAnimations &scree
     }
 
     // Update console
-    console.update_console(keys, messages);
+    console.update_console(k, messages);
 
     if (paused) return;
 
@@ -627,7 +627,7 @@ void Level::update_level(std::vector<GameMessage*> &msg, ScreenAnimations &scree
         messages,
         screenAnimations,
         levelStateData,
-        keys,
+        k,
         userData,
         console.is_opened()?true:false
     );
@@ -702,7 +702,7 @@ void Level::update_level(std::vector<GameMessage*> &msg, ScreenAnimations &scree
     update_tile_info();
     update_wires();
     update_lighting();
-    update_minimap(keys, userData);
+    update_minimap(k, userData);
 
     finish_level();
 }
@@ -1542,13 +1542,13 @@ void Level::merge_gold_on_ground()
     */
 }
 
-void Level::update_minimap(kb::Keys &keys, UserData &userData)
+void Level::update_minimap(Key &k, UserData &userData)
 {
     for (unsigned i = 0; i < minimap.grid.size(); i++) {
         minimap.grid[i] = 0;
     }
 
-    if (keys.key_clicked(userData.keyBindings.CHANGE_MAP_SIZE)) minimap.change_size();
+    if (k == userData.keyBindings.CHANGE_MAP_SIZE) minimap.change_size();
 
     // Tiles
     for (int i = 0; i < _LEVEL_WIDTH * _LEVEL_HEIGHT; i++) {
