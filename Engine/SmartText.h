@@ -12,9 +12,9 @@ const std::string LETTERS = "abcdefghijklmnopqrstuvwxyz";
 const std::string SPECIAL = "\\,./#;[]`-=+*";
 
 // Macros
-const Key MACRO_BACK  = Key(VK_BACK);
-const Key MACRO_LEFT  = Key(VK_LEFT);
-const Key MACRO_RIGHT = Key(VK_RIGHT);
+const Key MACRO_BACK  = Key(VK_BACK  , HELD);
+const Key MACRO_LEFT  = Key(VK_LEFT  , HELD);
+const Key MACRO_RIGHT = Key(VK_RIGHT , HELD);
 
 // Class for entering text in real-time
 class SmartText

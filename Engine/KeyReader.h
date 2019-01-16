@@ -211,6 +211,7 @@ public:
             (bool)_modifier_ticks(VK_LMENU, VK_RMENU),
             (bool)_modifier_ticks(VK_LWIN, VK_RWIN),
             output,
+            _state[last] > CYCLES_HELD,
             '\0'
         );
     }

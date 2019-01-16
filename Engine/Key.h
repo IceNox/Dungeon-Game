@@ -5,44 +5,61 @@
 #include <bitset>
 #include <string>
 
+#define CLICKED false
+#define HELD true
+
 class Key {
 private:
     enum ModifierKeys { SHIFT, CTRL, ALT, WIN, _SIZE_ };
     std::bitset<ModifierKeys::_SIZE_> _modifier_keys;
     int _key = 0;
-    // TODO HELD
+    bool _held = false;
     char _c = '\0';
     
 
 public:
     constexpr Key() {}
 
-    Key(int key, char c)
-        :
-        _key(key),
-        _c(c)
-    {}
-
-    Key(bool shift, bool ctrl, bool alt, bool win, int key, char c)
-        :
-        _key(key),
-        _c(c)
-    {
-        _modifier_keys[SHIFT] = shift;
-        _modifier_keys[CTRL]  = ctrl;
-        _modifier_keys[ALT]   = alt;
-        _modifier_keys[WIN]   = win;
-    }
-
-    // Not a constexpr because the integer could've been read from a file
-    Key(int key)
+    constexpr Key(int key)
         :
         _key(key)
     {}
 
+    constexpr Key(int key, bool click)
+        :
+        _key(key),
+        _held(click)
+    {}
+
+    constexpr Key(int key, char c)
+        :
+        _key(key),
+        _c(c)
+    {}
+
+    constexpr Key(int key, bool click, char c)
+        :
+        _key(key),
+        _held(click),
+        _c(c)
+    {}
+
+    // Not a constexpr because the integer could've been read from a file
+    Key(bool shift, bool ctrl, bool alt, bool win, int key, bool click, char c)
+        :
+        _key(key),
+        _held(click),
+        _c(c)
+    {
+        _modifier_keys[SHIFT] = shift;
+        _modifier_keys[CTRL] = ctrl;
+        _modifier_keys[ALT] = alt;
+        _modifier_keys[WIN] = win;
+    }
+
     bool operator== (const Key& key) const
     {
-        return (_modifier_keys == key._modifier_keys && _key == key._key && _c == key._c);
+        return (_modifier_keys == key._modifier_keys && _key == key._key && (!_held || key._held));
     }
 
     bool operator!= (const Key& key) const

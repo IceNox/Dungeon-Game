@@ -583,19 +583,14 @@ void Level::update_level(std::vector<GameMessage*> &msg, ScreenAnimations &scree
     // Pause/unpause 
     if (k == userData.keyBindings.PAUSE) toggle_pause();
 
-    // Open/close console
-    if ((GetKeyState(0xC0) & 0x8000) && !tildeIsPressed) {
+    // Open/close console (~)
+    if (k == Key(VK_OEM_3, CLICKED)) {
         if (!console.is_opened()) {
             console.open();
         }
         else {
             console.close();
         }
-
-        tildeIsPressed = true;
-    }
-    else if (!(GetKeyState(0xC0) & 0x8000) && tildeIsPressed) {
-        tildeIsPressed = false;
     }
 
     // Update console

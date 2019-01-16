@@ -10,7 +10,7 @@
 const std::string PREFIX = "> ";
 
 // Macros
-const Key SUBMIT = Key(VK_RETURN);
+const Key SUBMIT = Key(VK_RETURN, HELD);
 
 class LevelConsole
 {
