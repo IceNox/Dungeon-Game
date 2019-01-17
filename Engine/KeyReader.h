@@ -10,101 +10,41 @@
 
 #include "Key.h"
 
+#include <fstream>
+#include <vector>
 #include <algorithm>
-#include <unordered_map>
 
-const int MAX_INT2 = 2147483647;
+// Constants
+const int MAX_INT = 2147483647;
 const int STATE_SHIFT = 0x8000;
-const int KEY_TOTAL = 256;
 const int CYCLES_HELD = 20;
+const int KEY_TOTAL = 256;
 
-const std::unordered_map<int, std::string> MODIFIER_KEYS = {
-    { VK_LSHIFT   , "left shift"    },
-    { VK_RSHIFT   , "right shift"   },
-    { VK_SHIFT    , "shift"         },
-    { VK_LCONTROL , "left control"  },
-    { VK_RCONTROL , "right control" },
-    { VK_CONTROL  , "control"       },
-    { VK_LMENU    , "left alt"      },
-    { VK_RMENU    , "right alt"     },
-    { VK_MENU     , "alt"           },
-    { VK_LWIN     , "left win"      },
-    { VK_RWIN     , "right win"     }
-};
-
-const std::unordered_map<int, std::string> SPECIAL_KEYS = {
-    { VK_LBUTTON  , "mouse 1"       },
-    { VK_RBUTTON  , "mouse 2"       },
-    { VK_MBUTTON  , "mouse 3"       },
-    { VK_XBUTTON1 , "mouse 4"       },
-    { VK_XBUTTON2 , "mouse 5"       },
-    { VK_BACK     , "backspace"     },
-    { VK_TAB      , "tab"           },
-    { VK_CLEAR    , "clear"         },
-    { VK_RETURN   , "enter"         },
-    { VK_PAUSE    , "pause"         },
-    { VK_CAPITAL  , "caps lock"     },
-    { VK_ESCAPE   , "esc"           },
-    { VK_SPACE    , "spacebar"      },
-    { VK_PRIOR    , "page up"       },
-    { VK_NEXT     , "page down"     },
-    { VK_END      , "end"           },
-    { VK_HOME     , "home"          },
-    { VK_LEFT     , "left arrow"    },
-    { VK_UP       , "up arrow"      },
-    { VK_RIGHT    , "right arrow"   },
-    { VK_DOWN     , "down arrow"    },
-    { VK_SNAPSHOT , "print screen"  },
-    { VK_INSERT   , "insert"        },
-    { VK_DELETE   , "delete"        },
-    { VK_APPS     , "menu"          },
-    { VK_NUMPAD0  , "num 0"         },
-    { VK_NUMPAD1  , "num 1"         },
-    { VK_NUMPAD2  , "num 2"         },
-    { VK_NUMPAD3  , "num 3"         },
-    { VK_NUMPAD4  , "num 4"         },
-    { VK_NUMPAD5  , "num 5"         },
-    { VK_NUMPAD6  , "num 6"         },
-    { VK_NUMPAD7  , "num 7"         },
-    { VK_NUMPAD8  , "num 8"         },
-    { VK_NUMPAD9  , "num 9"         },
-    { VK_MULTIPLY , "multiply"      },
-    { VK_ADD      , "add"           },
-    { VK_SUBTRACT , "subtract"      },
-    { VK_DECIMAL  , "decimal"       },
-    { VK_DIVIDE   , "divide"        },
-    { VK_F1       , "f1"            },
-    { VK_F2       , "f2"            },
-    { VK_F3       , "f3"            },
-    { VK_F4       , "f4"            },
-    { VK_F5       , "f5"            },
-    { VK_F6       , "f6"            },
-    { VK_F7       , "f7"            },
-    { VK_F8       , "f8"            },
-    { VK_F9       , "f9"            },
-    { VK_F10      , "f10"           },
-    { VK_F11      , "f11"           },
-    { VK_F12      , "f12"           },
-    { VK_F13      , "f13"           },
-    { VK_F14      , "f14"           },
-    { VK_F15      , "f15"           },
-    { VK_F16      , "f16"           },
-    { VK_F17      , "f17"           },
-    { VK_F18      , "f18"           },
-    { VK_F19      , "f19"           },
-    { VK_F20      , "f20"           },
-    { VK_F21      , "f21"           },
-    { VK_F22      , "f22"           },
-    { VK_F23      , "f23"           },
-    { VK_F24      , "f24"           },
-    { VK_NUMLOCK  , "num lock"      },
-    { VK_SCROLL   , "scroll lock"   }
-};
+const std::string LAYOUT = "Content/Misc/Layouts/UK-Layout.bin2";
+const std::bitset<KEY_TOTAL> IS_SPECIAL(
+    "0000000000000000"
+    "0000000000000000"
+    "0000000000000000"
+    "0000000000000000"
+    "0000000000000000"
+    "0000000000111111"
+    "0000000000000011"
+    "0000000011111111"
+    "1111111111111111"
+    "1110111111111111"
+    "0011100000000000"
+    "0000000000000000"
+    "0000000000000000"
+    "0111000111111111"
+    "0000100000011111"
+    "0011001101110110"
+);
 
 class KeyReader
 {
 private:
     int _state[KEY_TOTAL];
+    char _layout[KEY_TOTAL][2][2][2];
 
     // Calculates the amount of ticks a mofier has been pressed down
     int _modifier_ticks(int left, int right) {
@@ -124,8 +64,7 @@ private:
         int shift = _modifier_ticks(VK_LSHIFT, VK_RSHIFT);
         int control = _modifier_ticks(VK_LCONTROL, VK_RCONTROL);
         int menu = _modifier_ticks(VK_LMENU, VK_RMENU);
-        int win = _modifier_ticks(VK_LWIN, VK_RWIN);
-        int last = MAX_INT2;
+        int last = MAX_INT;
 
         if (shift != 0 && shift < last) {
             last = shift;
@@ -139,10 +78,6 @@ private:
             last = menu;
         }
 
-        if (win != 0 && win < last) {
-            last = win;
-        }
-
         return last;
     }
 
@@ -152,28 +87,28 @@ private:
         int btn = 0;
 
         for (int i = 0; i < VK_SHIFT; i++) {
-            if (_state[i] != 0 && _state[i] < last) {
+            if (_state[i] != 0 && _state[i] <= last) {
                 last = last;
                 btn = i;
             }
         }
 
         for (int i = 1 + VK_MENU; i < VK_LWIN; i++) {
-            if (_state[i] != 0 && _state[i] < last) {
+            if (_state[i] != 0 && _state[i] <= last) {
                 last = last;
                 btn = i;
             }
         }
 
         for (int i = 1 + VK_RWIN; i < VK_LSHIFT; i++) {
-            if (_state[i] != 0 && _state[i] < last) {
+            if (_state[i] != 0 && _state[i] <= last) {
                 last = last;
                 btn = i;
             }
         }
 
         for (int i = 1 + VK_RMENU; i < KEY_TOTAL; i++) {
-            if (_state[i] != 0 && _state[i] < last) {
+            if (_state[i] != 0 && _state[i] <= last) {
                 last = last;
                 btn = i;
             }
@@ -183,10 +118,26 @@ private:
     }
 
 public:
-    constexpr KeyReader()
+    KeyReader()
         :
         _state()
-    {}
+    {
+        std::string line;
+        std::ifstream layout(LAYOUT);
+
+        if (layout.is_open()) {
+            while (getline(layout, line)) {
+                bool shift = (bool) std::stoi(line.substr(0 , 1), nullptr, 2);
+                bool ctrl  = (bool) std::stoi(line.substr(1 , 1), nullptr, 2);
+                bool alt   = (bool) std::stoi(line.substr(2 , 1), nullptr, 2);
+                int  vk    = (int)  std::stoi(line.substr(3 , 8), nullptr, 2);
+                char c     = (char) std::stoi(line.substr(11, 8), nullptr, 2);
+                _layout[vk][shift][ctrl][alt] = c;
+            }
+        }
+
+        layout.close();
+    }
 
     void update_key_states()
     {
@@ -201,22 +152,46 @@ public:
     }
 
     Key get_key()
-    { 
-        int last = _last_button();
-        int output = last * (_state[last] == 1 || _state[last] > CYCLES_HELD);
+    {
+        int key_count = 0;
+        int last = MAX_INT;
+        int key = 0;
 
-        return Key(
-            (bool)_modifier_ticks(VK_LSHIFT, VK_RSHIFT),
-            (bool)_modifier_ticks(VK_LCONTROL, VK_RCONTROL),
-            (bool)_modifier_ticks(VK_LMENU, VK_RMENU),
-            (bool)_modifier_ticks(VK_LWIN, VK_RWIN),
-            output,
-            _state[last] > CYCLES_HELD,
-            '\0'
-        );
-    }
+        // Intentional decrementation since single modifier key
+        // VK codes are higher than shared modifier VK codes
+        for (int i = KEY_TOTAL - 1; i > 0; i--) {
+            int state_ticks = _state[i];
+            if (state_ticks) {
+                key_count++;
 
-    int* get_states() {
-        return _state;
+                if (state_ticks < last) {
+                    last = state_ticks;
+                    key = i;
+                }
+            }
+        }
+
+        if (key_count > 2) {
+            key = _last_button();
+
+            int  key_code = key * (int)(_state[key] == 1 || _state[key] > CYCLES_HELD);
+            bool key_held = _state[key] > CYCLES_HELD;
+            bool shift    = (bool)_modifier_ticks(VK_LSHIFT, VK_RSHIFT);
+            bool ctrl     = (bool)_modifier_ticks(VK_LCONTROL, VK_RCONTROL);
+            bool alt      = (bool)_modifier_ticks(VK_LMENU, VK_RMENU);
+
+            return Key(
+                shift, ctrl, alt, key_code, key_held,
+                _layout[key_code][shift][ctrl][alt],
+                _layout[key_code][false][false][false]
+            );
+        }
+        else {
+            int  key_code = key * (int)(_state[key] == 1 || _state[key] > CYCLES_HELD);
+            bool key_held = _state[key] > CYCLES_HELD;
+            char key_char = _layout[key_code][false][false][false];
+
+            return Key(false, false, false, key_code, key_held, key_char, key_char);
+        }
     }
 };

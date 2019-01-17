@@ -4,18 +4,103 @@
 
 #include <bitset>
 #include <string>
+#include <unordered_map>
 
+// Definitions
 #define CLICKED false
 #define HELD true
 
+const std::unordered_map<int, std::string> MODIFIER_KEYS = {
+    { VK_LSHIFT   , "left shift"    },
+    { VK_RSHIFT   , "right shift"   },
+    { VK_SHIFT    , "shift"         },
+    { VK_LCONTROL , "left control"  },
+    { VK_RCONTROL , "right control" },
+    { VK_CONTROL  , "control"       },
+    { VK_LMENU    , "left alt"      },
+    { VK_RMENU    , "right alt"     },
+    { VK_MENU     , "alt"           }
+};
+
+const std::unordered_map<int, std::string> SPECIAL_KEYS = {
+    { VK_LBUTTON  , "mouse 1"       },
+    { VK_RBUTTON  , "mouse 2"       },
+    { VK_MBUTTON  , "mouse 3"       },
+    { VK_XBUTTON1 , "mouse 4"       },
+    { VK_XBUTTON2 , "mouse 5"       },
+    { VK_BACK     , "backspace"     },
+    { VK_TAB      , "tab"           },
+    { VK_CLEAR    , "clear"         },
+    { VK_RETURN   , "enter"         },
+    { VK_PAUSE    , "pause"         },
+    { VK_CAPITAL  , "caps lock"     },
+    { VK_ESCAPE   , "esc"           },
+    { VK_SPACE    , "spacebar"      },
+    { VK_PRIOR    , "page up"       },
+    { VK_NEXT     , "page down"     },
+    { VK_END      , "end"           },
+    { VK_HOME     , "home"          },
+    { VK_LEFT     , "left arrow"    },
+    { VK_UP       , "up arrow"      },
+    { VK_RIGHT    , "right arrow"   },
+    { VK_DOWN     , "down arrow"    },
+    { VK_SNAPSHOT , "print screen"  },
+    { VK_INSERT   , "insert"        },
+    { VK_DELETE   , "delete"        },
+    { VK_LWIN     , "left win"      },
+    { VK_RWIN     , "right win"     },
+    { VK_APPS     , "menu"          },
+    { VK_NUMPAD0  , "num 0"         },
+    { VK_NUMPAD1  , "num 1"         },
+    { VK_NUMPAD2  , "num 2"         },
+    { VK_NUMPAD3  , "num 3"         },
+    { VK_NUMPAD4  , "num 4"         },
+    { VK_NUMPAD5  , "num 5"         },
+    { VK_NUMPAD6  , "num 6"         },
+    { VK_NUMPAD7  , "num 7"         },
+    { VK_NUMPAD8  , "num 8"         },
+    { VK_NUMPAD9  , "num 9"         },
+    { VK_MULTIPLY , "multiply"      },
+    { VK_ADD      , "add"           },
+    { VK_SUBTRACT , "subtract"      },
+    { VK_DECIMAL  , "decimal"       },
+    { VK_DIVIDE   , "divide"        },
+    { VK_F1       , "f1"            },
+    { VK_F2       , "f2"            },
+    { VK_F3       , "f3"            },
+    { VK_F4       , "f4"            },
+    { VK_F5       , "f5"            },
+    { VK_F6       , "f6"            },
+    { VK_F7       , "f7"            },
+    { VK_F8       , "f8"            },
+    { VK_F9       , "f9"            },
+    { VK_F10      , "f10"           },
+    { VK_F11      , "f11"           },
+    { VK_F12      , "f12"           },
+    { VK_F13      , "f13"           },
+    { VK_F14      , "f14"           },
+    { VK_F15      , "f15"           },
+    { VK_F16      , "f16"           },
+    { VK_F17      , "f17"           },
+    { VK_F18      , "f18"           },
+    { VK_F19      , "f19"           },
+    { VK_F20      , "f20"           },
+    { VK_F21      , "f21"           },
+    { VK_F22      , "f22"           },
+    { VK_F23      , "f23"           },
+    { VK_F24      , "f24"           },
+    { VK_NUMLOCK  , "num lock"      },
+    { VK_SCROLL   , "scroll lock"   }
+};
+
 class Key {
 private:
-    enum ModifierKeys { SHIFT, CTRL, ALT, WIN, _SIZE_ };
+    enum ModifierKeys { SHIFT, CTRL, ALT, _SIZE_ };
     std::bitset<ModifierKeys::_SIZE_> _modifier_keys;
     int _key = 0;
     bool _held = false;
     char _c = '\0';
-    
+    char _c_parent = '\0';
 
 public:
     constexpr Key() {}
@@ -45,16 +130,16 @@ public:
     {}
 
     // Not a constexpr because the integer could've been read from a file
-    Key(bool shift, bool ctrl, bool alt, bool win, int key, bool click, char c)
+    Key(bool shift, bool ctrl, bool alt, int key, bool click, char c, char c_parent)
         :
         _key(key),
         _held(click),
-        _c(c)
+        _c(c),
+        _c_parent(c_parent)
     {
         _modifier_keys[SHIFT] = shift;
         _modifier_keys[CTRL] = ctrl;
         _modifier_keys[ALT] = alt;
-        _modifier_keys[WIN] = win;
     }
 
     bool operator== (const Key& key) const
@@ -89,44 +174,66 @@ public:
         std::string key_name;
         bool delimeter = false;
 
-        if (_modifier_keys[SHIFT]) {
-            delimeter = true;
-            key_name = key_name + "shift";
-        }
-
-        if (_modifier_keys[CTRL]) {
-            if (delimeter) {
-                key_name = key_name + DELIMETER;
+        if (_modifier_keys.any()) {
+            if (_modifier_keys[SHIFT]) {
+                delimeter = true;
+                key_name = key_name + "shift";
             }
 
-            delimeter = true;
-            key_name = key_name + "ctrl";
-        }
+            if (_modifier_keys[CTRL]) {
+                if (delimeter) {
+                    key_name = key_name + DELIMETER;
+                }
 
-        if (_modifier_keys[ALT]) {
-            if (delimeter) {
-                key_name = key_name + DELIMETER;
+                delimeter = true;
+                key_name = key_name + "ctrl";
             }
 
-            delimeter = true;
-            key_name = key_name + "alt";
-        }
+            if (_modifier_keys[ALT]) {
+                if (delimeter) {
+                    key_name = key_name + DELIMETER;
+                }
 
-        if (_modifier_keys[WIN]) {
-            if (delimeter) {
-                key_name = key_name + DELIMETER;
+                delimeter = true;
+                key_name = key_name + "alt";
             }
 
-            delimeter = true;
-            key_name = key_name + "win";
-        }
-
-        if (_c != '\0') {
-            if (delimeter) {
-                key_name = key_name + DELIMETER;
+            if (_c == '\0') {
+                for (std::unordered_map<int, std::string>::const_iterator it = SPECIAL_KEYS.begin(); it != SPECIAL_KEYS.end(); ++it) {
+                    if (_key == it->first) {
+                        key_name = key_name + DELIMETER + it->second;
+                        break;
+                    }
+                }
             }
+            else {
+                key_name = key_name + DELIMETER + _c;
+            }
+        }
+        else {
+            if (_c == '\0') {
+                bool found = false;
 
-            key_name = key_name + _c;
+                for (std::unordered_map<int, std::string>::const_iterator it = MODIFIER_KEYS.begin(); it != MODIFIER_KEYS.end(); ++it) {
+                    if (_key == it->first) {
+                        key_name = key_name + it->second;
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found) {
+                    for (std::unordered_map<int, std::string>::const_iterator it = SPECIAL_KEYS.begin(); it != SPECIAL_KEYS.end(); ++it) {
+                        if (_key == it->first) {
+                            key_name = key_name + it->second;
+                            break;
+                        }
+                    }
+                }
+            }
+            else {
+                key_name = key_name + _c;
+            }
         }
 
         return key_name;

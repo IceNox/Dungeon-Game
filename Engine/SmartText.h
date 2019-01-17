@@ -8,8 +8,8 @@ const int TEXT_RESERVE = 30;
 // SmartText class implementation
 const std::string SPACES  = " ";
 const std::string NUMBERS = "0123456789";
-const std::string LETTERS = "abcdefghijklmnopqrstuvwxyz";
-const std::string SPECIAL = "\\,./#;[]`-=+*";
+const std::string LETTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const std::string SPECIAL = "`-=[];'#\\,./!\"$%^&*()_+{}:@~|<>?";
 
 // Macros
 const Key MACRO_BACK  = Key(VK_BACK  , HELD);
