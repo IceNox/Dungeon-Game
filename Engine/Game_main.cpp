@@ -446,20 +446,20 @@ void Game::load_menu()
         std::string kName;
 
         // Buttons
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, userData.keyBindings.MOVE_UP.get_key_name()          , true, true, SM_LINE, -350 + 150, 128));
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, userData.keyBindings.MOVE_DOWN.get_key_name()        , true, true, SM_LINE, -350 + 150, 192));
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, userData.keyBindings.MOVE_LEFT.get_key_name()        , true, true, SM_LINE, -350 + 150, 256));
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, userData.keyBindings.MOVE_RIGHT.get_key_name()       , true, true, SM_LINE, -350 + 150, 320));
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, userData.keyBindings.CHANGE_DIRECTION.get_key_name() , true, true, SM_LINE, -350 + 150, 384));
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, userData.keyBindings.CHANGE_MAP_SIZE.get_key_name()  , true, true, SM_LINE, -350 + 150, 448));
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, userData.keyBindings.PAUSE.get_key_name()            , true, true, SM_LINE, -350 + 150, 512));
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, userData.keyBindings.USE_ITEM.get_key_name()         , true, true, SM_LINE, 250 + 150, 128));
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, userData.keyBindings.DROP_ITEM.get_key_name()        , true, true, SM_LINE, 250 + 150, 192));
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, userData.keyBindings.ITEM_1.get_key_name()           , true, true, SM_LINE, 250 + 150, 256));
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, userData.keyBindings.ITEM_2.get_key_name()           , true, true, SM_LINE, 250 + 150, 320));
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, userData.keyBindings.ITEM_3.get_key_name()           , true, true, SM_LINE, 250 + 150, 384));
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, userData.keyBindings.ITEM_4.get_key_name()           , true, true, SM_LINE, 250 + 150, 448));
-        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, userData.keyBindings.ITEM_5.get_key_name()           , true, true, SM_LINE, 250 + 150, 512));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, userData.keyBindings.MOVE_UP.get_key_name(PARENT)          , true, true, SM_LINE, -350 + 150, 128));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, userData.keyBindings.MOVE_DOWN.get_key_name(PARENT)        , true, true, SM_LINE, -350 + 150, 192));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, userData.keyBindings.MOVE_LEFT.get_key_name(PARENT)        , true, true, SM_LINE, -350 + 150, 256));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, userData.keyBindings.MOVE_RIGHT.get_key_name(PARENT)       , true, true, SM_LINE, -350 + 150, 320));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, userData.keyBindings.CHANGE_DIRECTION.get_key_name(PARENT) , true, true, SM_LINE, -350 + 150, 384));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, userData.keyBindings.CHANGE_MAP_SIZE.get_key_name(PARENT)  , true, true, SM_LINE, -350 + 150, 448));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, userData.keyBindings.PAUSE.get_key_name(PARENT)            , true, true, SM_LINE, -350 + 150, 512));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, userData.keyBindings.USE_ITEM.get_key_name(PARENT)         , true, true, SM_LINE, 250 + 150, 128));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, userData.keyBindings.DROP_ITEM.get_key_name(PARENT)        , true, true, SM_LINE, 250 + 150, 192));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, userData.keyBindings.ITEM_1.get_key_name(PARENT)           , true, true, SM_LINE, 250 + 150, 256));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, userData.keyBindings.ITEM_2.get_key_name(PARENT)           , true, true, SM_LINE, 250 + 150, 320));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, userData.keyBindings.ITEM_3.get_key_name(PARENT)           , true, true, SM_LINE, 250 + 150, 384));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, userData.keyBindings.ITEM_4.get_key_name(PARENT)           , true, true, SM_LINE, 250 + 150, 448));
+        menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_BUTTON, userData.keyBindings.ITEM_5.get_key_name(PARENT)           , true, true, SM_LINE, 250 + 150, 512));
 
         // Descriptions
         menu.scenes[SCENE_CONTROLS].elements.push_back(Element(ME_TEXT, "move up:"    , true, false, SM_LINE, -350 - 150, 128));

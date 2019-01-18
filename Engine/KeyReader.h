@@ -43,8 +43,8 @@ const std::bitset<KEY_TOTAL> IS_SPECIAL(
 class KeyReader
 {
 private:
-    int _state[KEY_TOTAL];
-    char _layout[KEY_TOTAL][2][2][2];
+    int _state[KEY_TOTAL] = {};
+    char _layout[KEY_TOTAL][2][2][2] = {};
 
     // Calculates the amount of ticks a mofier has been pressed down
     int _modifier_ticks(int left, int right) {

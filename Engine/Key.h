@@ -9,7 +9,9 @@
 // Definitions
 #define CLICKED false
 #define HELD true
+#define PARENT true
 
+// Key names
 const std::unordered_map<int, std::string> MODIFIER_KEYS = {
     { VK_LSHIFT   , "left shift"    },
     { VK_RSHIFT   , "right shift"   },
@@ -162,12 +164,17 @@ public:
         return _key;
     }
 
-    char get_key_character()
+    char get_key_character(bool parent=false)
     {
-        return _c;
+        if (parent) {
+            return _c_parent;
+        }
+        else {
+            return _c;
+        }
     }
 
-    std::string get_key_name()
+    std::string get_key_name(bool parent=false)
     {
         std::string DELIMETER = " + ";
 
@@ -198,7 +205,7 @@ public:
                 key_name = key_name + "alt";
             }
 
-            if (_c == '\0') {
+            if (get_key_character(parent) == '\0') {
                 for (std::unordered_map<int, std::string>::const_iterator it = SPECIAL_KEYS.begin(); it != SPECIAL_KEYS.end(); ++it) {
                     if (_key == it->first) {
                         key_name = key_name + DELIMETER + it->second;
@@ -207,11 +214,11 @@ public:
                 }
             }
             else {
-                key_name = key_name + DELIMETER + _c;
+                key_name = key_name + DELIMETER + get_key_character(parent);
             }
         }
         else {
-            if (_c == '\0') {
+            if (get_key_character(parent) == '\0') {
                 bool found = false;
 
                 for (std::unordered_map<int, std::string>::const_iterator it = MODIFIER_KEYS.begin(); it != MODIFIER_KEYS.end(); ++it) {
@@ -232,7 +239,7 @@ public:
                 }
             }
             else {
-                key_name = key_name + _c;
+                key_name = key_name + get_key_character(parent);
             }
         }
 

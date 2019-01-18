@@ -451,7 +451,7 @@ void Menu::menu_control(std::vector<GameMessage*> &msg, std::string action, User
         }
 
         if (locked) {
-            if (k.get_key_code()) {
+            if (k != Key()) {
                 if      (cElement == 0)  userData.keyBindings.MOVE_UP          = k;
                 else if (cElement == 1)  userData.keyBindings.MOVE_DOWN        = k;
                 else if (cElement == 2)  userData.keyBindings.MOVE_LEFT        = k;
@@ -467,7 +467,7 @@ void Menu::menu_control(std::vector<GameMessage*> &msg, std::string action, User
                 else if (cElement == 12) userData.keyBindings.ITEM_4           = k;
                 else if (cElement == 13) userData.keyBindings.ITEM_5           = k;
 
-                scenes[cScene].elements[cElement].text = k.get_key_name();
+                scenes[cScene].elements[cElement].text = k.get_key_name(PARENT);
 
                 userData.save_data();
                 locked = false;
