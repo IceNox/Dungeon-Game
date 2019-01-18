@@ -11,6 +11,7 @@
 #include "Key.h"
 
 #include <fstream>
+#include <iostream>
 #include <vector>
 #include <algorithm>
 
@@ -87,29 +88,29 @@ private:
         int btn = 0;
 
         for (int i = 0; i < VK_SHIFT; i++) {
-            if (_state[i] != 0 && _state[i] <= last) {
-                last = last;
+            if (_state[i] != 0 && _state[i] < last) {
+                last = _state[i];
                 btn = i;
             }
         }
 
         for (int i = 1 + VK_MENU; i < VK_LWIN; i++) {
-            if (_state[i] != 0 && _state[i] <= last) {
-                last = last;
+            if (_state[i] != 0 && _state[i] < last) {
+                last = _state[i];
                 btn = i;
             }
         }
 
         for (int i = 1 + VK_RWIN; i < VK_LSHIFT; i++) {
-            if (_state[i] != 0 && _state[i] <= last) {
-                last = last;
+            if (_state[i] != 0 && _state[i] < last) {
+                last = _state[i];
                 btn = i;
             }
         }
 
         for (int i = 1 + VK_RMENU; i < KEY_TOTAL; i++) {
-            if (_state[i] != 0 && _state[i] <= last) {
-                last = last;
+            if (_state[i] != 0 && _state[i] < last) {
+                last = _state[i];
                 btn = i;
             }
         }

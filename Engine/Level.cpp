@@ -583,7 +583,10 @@ void Level::update_level(std::vector<GameMessage*> &msg, ScreenAnimations &scree
     // Pause/unpause 
     if (k == userData.keyBindings.PAUSE) toggle_pause();
 
-    // Open/close console (~)
+    // Update console
+    console.update_console(k, messages);
+
+    // Open/close console ( ~ US / ' UK)
     if (k == Key(VK_OEM_3, CLICKED)) {
         if (!console.is_opened()) {
             console.open();
@@ -592,9 +595,6 @@ void Level::update_level(std::vector<GameMessage*> &msg, ScreenAnimations &scree
             console.close();
         }
     }
-
-    // Update console
-    console.update_console(k, messages);
 
     if (paused) return;
 
