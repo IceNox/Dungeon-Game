@@ -21,7 +21,7 @@ const int STATE_SHIFT = 0x8000;
 const int CYCLES_HELD = 20;
 const int KEY_TOTAL = 256;
 
-const std::string LAYOUT = "Content/Misc/Layouts/UK-Layout.bin2";
+const std::string LAYOUT = "Content/Misc/Layouts/LT-Layout.bin";
 const std::bitset<KEY_TOTAL> IS_SPECIAL(
     "0000000000000000"
     "0000000000000000"
@@ -124,20 +124,21 @@ public:
         _state()
     {
         std::string line;
-        std::ifstream layout(LAYOUT);
+        std::ifstream layout(LAYOUT, ios::binary|ios::ate);
+        std::ifstream::pos_type pos = layout.tellg();
+        std::vector<char> result(pos);
 
-        if (layout.is_open()) {
-            while (getline(layout, line)) {
-                bool shift = (bool) std::stoi(line.substr(0 , 1), nullptr, 2);
-                bool ctrl  = (bool) std::stoi(line.substr(1 , 1), nullptr, 2);
-                bool alt   = (bool) std::stoi(line.substr(2 , 1), nullptr, 2);
-                int  vk    = (int)  std::stoi(line.substr(3 , 8), nullptr, 2);
-                char c     = (char) std::stoi(line.substr(11, 8), nullptr, 2);
-                _layout[vk][shift][ctrl][alt] = c;
-            }
+        layout.seekg(0, ios::beg);
+        layout.read(&result[0], pos);
+
+        for (unsigned index = 0; index < result.size();) {
+            uint8_t shift = result[index++];
+            uint8_t ctrl  = result[index++];
+            uint8_t alt   = result[index++];
+            uint8_t vk    = result[index++];
+
+            _layout[vk][shift][ctrl][alt] = result[index++];
         }
-
-        layout.close();
     }
 
     void update_key_states()
