@@ -17,12 +17,16 @@ struct TileData
     int powered;
     
     // Occupation
+    int occupied;
     int terrain;
     int object;
 
     //
     int player;
     int enemy;
+
+    int enemyId; // Enemy oid
+    int playerId; // Index in player coordinate vectors
 
     int directlyLit;
 };
@@ -31,6 +35,10 @@ struct LevelStateData
 {
     int width;
     int height;
+
+    int playerCount;
+    std::vector<int> playerX;
+    std::vector<int> playerY;
 
     std::vector<TileData> tiles;
 };

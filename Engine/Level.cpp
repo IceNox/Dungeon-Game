@@ -736,6 +736,7 @@ void Level::set_game_state_data()
 
         // Occupation
         levelStateData.tiles[i].terrain = (tiles[i].type == WALL && tiles[i].active);
+        levelStateData.tiles[i].occupied = (tiles[i].type == WALL && tiles[i].active);
 
         // Lighting
         levelStateData.tiles[i].directlyLit = tiles[i].directlyLit;
@@ -747,13 +748,17 @@ void Level::set_game_state_data()
             int index = staticObjects[i].gPos.index(_LEVEL_WIDTH);
 
             levelStateData.tiles[index].object = true;
+            levelStateData.tiles[index].occupied = true;
         }
     }
+
     for (unsigned i = 0; i < dynamicObjects.size(); i++) {
         // Set enemies
         int index = dynamicObjects[i].gPos.index(_LEVEL_WIDTH);
 
         levelStateData.tiles[index].enemy = true;
+        levelStateData.tiles[index].enemyId = dynamicObjects[i].oid;
+        levelStateData.tiles[index].occupied = true;
     }
 
     for (unsigned i = 0; i < players.size(); i++) {
@@ -761,6 +766,14 @@ void Level::set_game_state_data()
         int index = players[i].gPos.index(_LEVEL_WIDTH);
 
         levelStateData.tiles[index].player = true;
+        levelStateData.tiles[index].playerId = i;
+        levelStateData.tiles[index].occupied = true;
+    }
+
+    levelStateData.playerCount = players.size();
+    for (unsigned i = 0; i < players.size(); i++) {
+        levelStateData.playerX.push_back(players[i].gPos.x);
+        levelStateData.playerY.push_back(players[i].gPos.y);
     }
 }
 
