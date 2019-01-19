@@ -11,6 +11,27 @@
 #define HELD true
 #define PARENT true
 
+// Specials
+const int KEY_TOTAL = 256;
+const std::bitset<KEY_TOTAL> IS_SPECIAL(
+    "0000000000000000"
+    "0000000000000000"
+    "0000000000000000"
+    "0000000000000000"
+    "0000000000000000"
+    "0000000000111111"
+    "0000000000000011"
+    "0000000011111111"
+    "1111111111111111"
+    "1110111111111111"
+    "0011100000000000"
+    "0000000000000000"
+    "0000000000000000"
+    "0111000111111111"
+    "0000100000011111"
+    "0011001101110110"
+);
+
 // Key names
 const std::unordered_map<int, std::string> MODIFIER_KEYS = {
     { VK_LSHIFT   , "left shift"    },
@@ -205,7 +226,7 @@ public:
                 key_name = key_name + "alt";
             }
 
-            if (get_key_character(parent) == '\0') {
+            if (IS_SPECIAL[_key]) {
                 for (std::unordered_map<int, std::string>::const_iterator it = SPECIAL_KEYS.begin(); it != SPECIAL_KEYS.end(); ++it) {
                     if (_key == it->first) {
                         key_name = key_name + DELIMETER + it->second;
@@ -218,7 +239,7 @@ public:
             }
         }
         else {
-            if (get_key_character(parent) == '\0') {
+            if (IS_SPECIAL[_key]) {
                 bool found = false;
 
                 for (std::unordered_map<int, std::string>::const_iterator it = MODIFIER_KEYS.begin(); it != MODIFIER_KEYS.end(); ++it) {

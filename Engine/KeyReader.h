@@ -19,27 +19,8 @@
 const int MAX_INT = 2147483647;
 const int STATE_SHIFT = 0x8000;
 const int CYCLES_HELD = 20;
-const int KEY_TOTAL = 256;
 
-const std::string LAYOUT = "Content/Misc/Layouts/LT-Layout.bin";
-const std::bitset<KEY_TOTAL> IS_SPECIAL(
-    "0000000000000000"
-    "0000000000000000"
-    "0000000000000000"
-    "0000000000000000"
-    "0000000000000000"
-    "0000000000111111"
-    "0000000000000011"
-    "0000000011111111"
-    "1111111111111111"
-    "1110111111111111"
-    "0011100000000000"
-    "0000000000000000"
-    "0000000000000000"
-    "0111000111111111"
-    "0000100000011111"
-    "0011001101110110"
-);
+const std::string LAYOUT = "Content/Misc/Layouts/UK-Layout.bin";
 
 class KeyReader
 {
