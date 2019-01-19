@@ -31,7 +31,8 @@ std::vector<ScriptLoadData> _OBJECT_SCRIPTS;
 
 Game::Game(MainWindow& wnd)
     :
-    wnd(wnd)
+    wnd(wnd),
+    keyReader(wnd.GetHwnd())
 {
     // Start game timer
     maintime::initialize();

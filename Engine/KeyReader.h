@@ -20,7 +20,8 @@ const int MAX_INT = 2147483647;
 const int STATE_SHIFT = 0x8000;
 const int CYCLES_HELD = 20;
 
-const std::string LAYOUT = "Content/Misc/Layouts/UK-Layout.bin";
+const std::string LAYOUT_PATH = "Content/Misc/Layouts/";
+const std::string LAYOUT_EXTENSION = ".bin";
 
 class KeyReader
 {
@@ -100,17 +101,30 @@ private:
     }
 
 public:
-    KeyReader()
+    KeyReader(HWND hWnd)
         :
         _state()
     {
+        char language_buffer[9];
+        char region_buffer[9];
+
+        DWORD threadID = GetWindowThreadProcessId(hWnd, NULL);
+        HKL current_layout = GetKeyboardLayout(threadID);
+        LANGID language = (LANGID)(((UINT)current_layout) & 0xFFFF);
+        LCID locale = MAKELCID(language, SORT_DEFAULT);
+        int lang_return = GetLocaleInfoA(locale, LOCALE_SISO639LANGNAME, language_buffer, 9);
+        int region_return = GetLocaleInfoA(locale, LOCALE_SISO3166CTRYNAME, region_buffer, 9);
+        std::string language_name(language_buffer, lang_return-1);
+        std::string region_name(region_buffer, region_return-1);
+        std::string layout = LAYOUT_PATH + language_name + "-" + region_name + LAYOUT_EXTENSION;
+
         std::string line;
-        std::ifstream layout(LAYOUT, ios::binary|ios::ate);
-        std::ifstream::pos_type pos = layout.tellg();
+        std::ifstream layout_file(layout, ios::binary|ios::ate);
+        std::ifstream::pos_type pos = layout_file.tellg();
         std::vector<char> result(pos);
 
-        layout.seekg(0, ios::beg);
-        layout.read(&result[0], pos);
+        layout_file.seekg(0, ios::beg);
+        layout_file.read(&result[0], pos);
 
         for (unsigned index = 0; index < result.size();) {
             uint8_t shift = result[index++];

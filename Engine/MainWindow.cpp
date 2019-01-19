@@ -76,6 +76,11 @@ MainWindow::~MainWindow()
     UnregisterClass( wndClassName,hInst );
 }
 
+HWND MainWindow::GetHwnd()
+{
+    return hWnd;
+}
+
 bool MainWindow::IsActive() const
 {
     return GetActiveWindow() == hWnd;
