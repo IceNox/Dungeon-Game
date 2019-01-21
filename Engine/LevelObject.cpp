@@ -22,6 +22,11 @@ void LevelObject::move_to(Pos2D pos, int duration)
 
     if (duration != 0) {
         moveDirection = (pos - gPos).vdirection();
+
+        if (moveDirection != UP && moveDirection != DOWN) {
+            facing = moveDirection;
+            script["facing"] = (int)facing;
+        }
     }
 }
 
@@ -110,7 +115,7 @@ StaticObject::StaticObject(int id, Pos2D gPos, bool setup)
     script.new_usertype<Pos2D>
     (
         "position",
-        sol::constructors<>(),
+        sol::constructors<Pos2D()>(),
         "x", sol::readonly(&Pos2D::x),
         "y", sol::readonly(&Pos2D::y)
     );
@@ -125,10 +130,13 @@ StaticObject::StaticObject(int id, Pos2D gPos, bool setup)
         "pressuredB" , sol::readonly(&TileData::pressuredB),
         "pressured"  , sol::readonly(&TileData::pressured),
         "powered"    , sol::readonly(&TileData::powered),
+        "occupied"   , sol::readonly(&TileData::occupied),
         "terrain"    , sol::readonly(&TileData::terrain),
         "object"     , sol::readonly(&TileData::object),
         "player"     , sol::readonly(&TileData::player),
         "enemy"      , sol::readonly(&TileData::enemy),
+        "playerid"   , sol::readonly(&TileData::playerId),
+        "enemyid"    , sol::readonly(&TileData::enemyId),
         "directlyLit", sol::readonly(&TileData::directlyLit)
     );
 
@@ -136,9 +144,12 @@ StaticObject::StaticObject(int id, Pos2D gPos, bool setup)
     (
         "levelData",
         sol::constructors<>(),
-        "width" , sol::readonly(&LevelStateData::width),
-        "height", sol::readonly(&LevelStateData::height),
-        "tiles" , sol::readonly(&LevelStateData::tiles)
+        "width"      , sol::readonly(&LevelStateData::width),
+        "height"     , sol::readonly(&LevelStateData::height),
+        "playercount", sol::readonly(&LevelStateData::playerCount),
+        "playerx"    , sol::readonly(&LevelStateData::playerX),
+        "playery"    , sol::readonly(&LevelStateData::playerY),
+        "tiles"      , sol::readonly(&LevelStateData::tiles)
     );
 
     script.new_usertype<DamageInfo>
@@ -160,7 +171,7 @@ StaticObject::StaticObject(int id, Pos2D gPos, bool setup)
     script.new_usertype<LevelMessage>
     (
         "levelMessage",
-        sol::constructors<>(),
+        sol::constructors<LevelMessage()>(),
         "source"    , &LevelMessage::source,
         "message"   , &LevelMessage::message,
         "argKeys"   , &LevelMessage::argKeys,
@@ -228,10 +239,14 @@ StaticObject::StaticObject(int id, Pos2D gPos, bool setup)
 
 void StaticObject::update(const LevelStateData &ld, long int curTime)
 {
-    if (!moveState.ongoing) {
-        // Run logic
-        script["update"](cPos, ld, maintime::currentGameTime);
+    // Set variables
+    script["moving"] = moveState.ongoing;
+    script["moveprogress"] = moveState.progress;
 
+    // Run logic
+    script["update"](cPos, ld, maintime::currentGameTime / 1000);
+
+    if (!moveState.ongoing) {
         // Check for a movement call
         if (script["startmovement"] == true) {
             if (script["movement"]["relative"] == true) {
@@ -258,7 +273,7 @@ void StaticObject::update(const LevelStateData &ld, long int curTime)
     gPos = cPos / cellSize;
 
     // Set sprite
-    currentSprite = script["select_sprite"](facing, moveState.ongoing, moveState.progress);
+    currentSprite = script["select_sprite"](maintime::currentGameTime / 1000);
     sOffset = { -sprites[currentSprite].GetCenterX(), -sprites[currentSprite].GetCenterY() };
     sPos = cPos + sOffset;
     sPos.y -= height;
@@ -273,6 +288,8 @@ void StaticObject::update(const LevelStateData &ld, long int curTime)
     obstructive = obs.value();
     pressuring  = pre.value();
     powering    = pwr.value();
+
+    facing = static_cast<Direction>(script["facing"]);
 
     return;
 }
@@ -329,7 +346,7 @@ DynamicObject::DynamicObject(int id, Pos2D gPos)
     script.new_usertype<Pos2D>
     (
         "position",
-        sol::constructors<>(),
+        sol::constructors<Pos2D()>(),
         "x", &Pos2D::x,
         "y", &Pos2D::y
     );
@@ -344,10 +361,13 @@ DynamicObject::DynamicObject(int id, Pos2D gPos)
         "pressuredB" , sol::readonly(&TileData::pressuredB),
         "pressured"  , sol::readonly(&TileData::pressured),
         "powered"    , sol::readonly(&TileData::powered),
+        "occupied"   , sol::readonly(&TileData::occupied),
         "terrain"    , sol::readonly(&TileData::terrain),
         "object"     , sol::readonly(&TileData::object),
         "player"     , sol::readonly(&TileData::player),
         "enemy"      , sol::readonly(&TileData::enemy),
+        "playerid"   , sol::readonly(&TileData::playerId),
+        "enemyid"    , sol::readonly(&TileData::enemyId),
         "directlyLit", sol::readonly(&TileData::directlyLit)
     );
 
@@ -355,31 +375,18 @@ DynamicObject::DynamicObject(int id, Pos2D gPos)
     (
         "levelData",
         sol::constructors<>(),
-        "width" , sol::readonly(&LevelStateData::width),
-        "height", sol::readonly(&LevelStateData::height),
-        "tiles" , sol::readonly(&LevelStateData::tiles)
-    );
-
-    script.new_usertype<DamageInfo>
-    (
-        "damageInfo",
-        sol::constructors<>(),
-        "amount"       , sol::readonly(&DamageInfo::amount),
-        "type"         , sol::readonly(&DamageInfo::type),
-        "players"      , sol::readonly(&DamageInfo::players),
-        "enemies"      , sol::readonly(&DamageInfo::enemies),
-        "terrain"      , sol::readonly(&DamageInfo::terrain),
-        "direction"    , sol::readonly(&DamageInfo::dir),
-        "ground"       , sol::readonly(&DamageInfo::ground),
-        "precise"      , sol::readonly(&DamageInfo::precise),
-        "knockbackStr" , sol::readonly(&DamageInfo::knockbackStr),
-        "statusEffects", sol::readonly(&DamageInfo::statusEffects)
+        "width"      , sol::readonly(&LevelStateData::width),
+        "height"     , sol::readonly(&LevelStateData::height),
+        "playercount", sol::readonly(&LevelStateData::playerCount),
+        "playerx"    , sol::readonly(&LevelStateData::playerX),
+        "playery"    , sol::readonly(&LevelStateData::playerY),
+        "tiles"      , sol::readonly(&LevelStateData::tiles)
     );
 
     script.new_usertype<LevelMessage>
     (
         "levelMessage",
-        sol::constructors<>(),
+        sol::constructors<LevelMessage()>(),
         "source"    , &LevelMessage::source,
         "message"   , &LevelMessage::message,
         "argKeys"   , &LevelMessage::argKeys,
@@ -439,26 +446,18 @@ DynamicObject::DynamicObject(int id, Pos2D gPos)
     sol::optional<int> hoy = script["hitbox"]["offset"]["y"];
 
     hOffset = { hox.value(), hoy.value() };
-
-    // Set light source
-    sol::optional<int> isLS = script["lightsourcecount"];
-    lightSource = isLS.value();
-
-    for (int i = 0; i < isLS.value(); i++) {
-        sol::optional<int> lsX = script["lightsources"][i]["offset"]["x"];
-        sol::optional<int> lsY = script["lightsources"][i]["offset"]["y"];
-        lightSourcePos.push_back(Pos2D(lsX.value(), lsY.value()));
-
-        sol::optional<int> str = script["lightsources"][i]["strength"];
-    }
 }
 
 void DynamicObject::update(std::vector<LevelMessage> &messages, const LevelStateData &ld, long int curtime)
 {
-    if (!moveState.ongoing) {
-        // Run logic
-        script["update"](cPos, ld, maintime::currentGameTime);
+    // Set variables
+    script["moving"] = moveState.ongoing;
+    script["moveprogress"] = moveState.progress;
 
+    // Run logic
+    script["update"](cPos, ld, maintime::currentGameTime / 1000);
+
+    if (!moveState.ongoing) {
         // Check for a movement call
         if (script["startmovement"] == true) {
             if (script["movement"]["relative"] == true) {
@@ -475,6 +474,8 @@ void DynamicObject::update(std::vector<LevelMessage> &messages, const LevelState
                     script["movement"]["duration"]
                 );
             }
+
+            script["reset_movement"]();
         }
     }
     else {
@@ -486,12 +487,13 @@ void DynamicObject::update(std::vector<LevelMessage> &messages, const LevelState
     for (int i = 0; i < count; i++) {
         messages.push_back(script["get_message"](i));
     }
+    script["clear_messages"]();
 
     // Set grid position
     gPos = cPos / cellSize;
 
     // Set sprite
-    currentSprite = script["select_sprite"](facing, moveState.ongoing, moveState.progress);
+    currentSprite = script["select_sprite"](maintime::currentGameTime / 1000);
     sOffset = { -sprites[currentSprite].GetCenterX(), -sprites[currentSprite].GetCenterY() };
     sPos = cPos + sOffset;
     sPos.y -= height;
@@ -506,6 +508,8 @@ void DynamicObject::update(std::vector<LevelMessage> &messages, const LevelState
     obstructive = obs.value();
     pressuring = pre.value();
     powering = pwr.value();
+
+    facing = static_cast<Direction>(script["facing"]);
 
     return;
 }
