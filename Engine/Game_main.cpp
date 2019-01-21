@@ -627,6 +627,14 @@ void Game::load_items()
 
                 // Load script
                 sol::state scr;
+
+                struct T {};
+                scr.new_usertype<T>("position");
+                scr.new_usertype<T>("tileData");
+                scr.new_usertype<T>("levelData");
+                scr.new_usertype<T>("damageInfo");
+                scr.new_usertype<T>("levelMessage");
+
                 scr.script_file(spath);
 
                 // Add script data object
@@ -671,6 +679,14 @@ void Game::load_objects()
 
                 // Load script
                 sol::state scr;
+
+                struct T {};
+                scr.new_usertype<T>("position");
+                scr.new_usertype<T>("tileData");
+                scr.new_usertype<T>("levelData");
+                scr.new_usertype<T>("damageInfo");
+                scr.new_usertype<T>("levelMessage");
+
                 scr.script_file(spath);
 
                 // Add script data object
