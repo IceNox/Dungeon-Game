@@ -37,7 +37,9 @@
 		"sObjects": [
 			{"id": 101000, "pos": {"x": 5, "y": 8}}
 		],
-		"dObjects": []
+		"dObjects": [
+			{"id": 201000, "pos": {"x": 5, "y": 2}}
+		]
 	},
 	{
 		"width": 11,
@@ -59,7 +61,9 @@
 		"sObjects": [
 			{"id": 101000, "pos": {"x": 5, "y": 8}}
 		],
-		"dObjects": []
+		"dObjects": [
+			{"id": 201000, "pos": {"x": 5, "y": 2}}
+		]
 	}
 	]
 }

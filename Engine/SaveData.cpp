@@ -121,6 +121,17 @@ void SaveData::read_from_file(std::string fileName)
                 save["levels"][i]["sObjects"][j]["pos"]["y"]
             ));
         }
+
+        // Get dynamic objects
+        levelData[i].dObjectCount = save["levels"][i]["dObjects"].size();
+
+        for (int j = 0; j < levelData[i].dObjectCount; j++) {
+            levelData[i].dObjectID.push_back(save["levels"][i]["dObjects"][j]["id"]);
+            levelData[i].dObjectPos.push_back(Pos2D(
+                save["levels"][i]["dObjects"][j]["pos"]["x"],
+                save["levels"][i]["dObjects"][j]["pos"]["y"]
+            ));
+        }
     }
 
     /*
