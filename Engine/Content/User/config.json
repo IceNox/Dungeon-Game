@@ -1,1 +1,125 @@
-{"keybindings":{"changedir":16,"changemap":77,"dropitem":18,"item1":49,"item2":50,"item3":51,"item4":52,"item5":53,"movedown":40,"moveleft":37,"moveright":39,"moveup":38,"pause":27,"useitem":32},"settings":{"fullscreen":true,"mode4k":false,"native":true,"resolution":{"height":750,"width":1175}}}
+{
+    "keybindings": {
+        "changedir": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "changemap": [
+            0,
+            0,
+            0,
+            77,
+            109,
+            77
+        ],
+        "dropitem": [
+            0,
+            0,
+            1,
+            81,
+            113,
+            81
+        ],
+        "item1": [
+            0,
+            0,
+            0,
+            49,
+            49,
+            49
+        ],
+        "item2": [
+            0,
+            0,
+            0,
+            50,
+            50,
+            50
+        ],
+        "item3": [
+            0,
+            0,
+            0,
+            51,
+            51,
+            51
+        ],
+        "item4": [
+            0,
+            0,
+            0,
+            52,
+            52,
+            52
+        ],
+        "item5": [
+            0,
+            0,
+            0,
+            53,
+            53,
+            53
+        ],
+        "movedown": [
+            0,
+            0,
+            0,
+            40,
+            0,
+            0
+        ],
+        "moveleft": [
+            0,
+            0,
+            0,
+            37,
+            0,
+            0
+        ],
+        "moveright": [
+            0,
+            0,
+            0,
+            39,
+            0,
+            0
+        ],
+        "moveup": [
+            0,
+            0,
+            0,
+            38,
+            0,
+            0
+        ],
+        "pause": [
+            0,
+            0,
+            0,
+            27,
+            0,
+            0
+        ],
+        "useitem": [
+            0,
+            0,
+            0,
+            32,
+            0,
+            0
+        ]
+    },
+    "settings": {
+        "fullscreen": false,
+        "mode4k": false,
+        "native": true,
+        "resolution": {
+            "height": 750,
+            "width": 1175
+        }
+    }
+}

@@ -5,6 +5,7 @@
 #include <bitset>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 // Definitions
 #define CLICKED false
@@ -163,9 +164,28 @@ public:
         return !(*this == key);
     }
 
-    void operator= (int key)
+    void operator= (std::vector<int> key)
     {
-        _key = key;
+        _modifier_keys[SHIFT] = (bool)key[0];
+        _modifier_keys[CTRL] = (bool)key[1];
+        _modifier_keys[ALT] = (bool)key[2];
+        _key = key[3];
+        _held = CLICKED;
+        _c = key[4];
+        _c_parent = key[5];
+    }
+
+    std::vector<int> get_key_array()
+    {
+        std::vector<int> output;
+        output.push_back((int)_modifier_keys[SHIFT]);
+        output.push_back((int)_modifier_keys[CTRL]);
+        output.push_back((int)_modifier_keys[ALT]);
+        output.push_back((int)_key);
+        output.push_back((int)_c);
+        output.push_back((int)_c_parent);
+
+        return output;
     }
 
     int get_key_code()

@@ -50,21 +50,21 @@ public:
         json_output["settings"]["resolution"]["width"]  = settings.window_width;
         json_output["settings"]["resolution"]["height"] = settings.window_height;
 
-        json_output["keybindings"]["moveup"]    = keyBindings.MOVE_UP.get_key_code();
-        json_output["keybindings"]["movedown"]  = keyBindings.MOVE_DOWN.get_key_code();
-        json_output["keybindings"]["moveleft"]  = keyBindings.MOVE_LEFT.get_key_code();
-        json_output["keybindings"]["moveright"] = keyBindings.MOVE_RIGHT.get_key_code();
-        json_output["keybindings"]["changedir"] = keyBindings.CHANGE_DIRECTION.get_key_code();
-        json_output["keybindings"]["changemap"] = keyBindings.CHANGE_MAP_SIZE.get_key_code();
-        json_output["keybindings"]["useitem"]   = keyBindings.USE_ITEM.get_key_code();
-        json_output["keybindings"]["dropitem"]  = keyBindings.DROP_ITEM.get_key_code();
-        json_output["keybindings"]["item1"]     = keyBindings.ITEM_1.get_key_code();
-        json_output["keybindings"]["item2"]     = keyBindings.ITEM_2.get_key_code();
-        json_output["keybindings"]["item3"]     = keyBindings.ITEM_3.get_key_code();
-        json_output["keybindings"]["item4"]     = keyBindings.ITEM_4.get_key_code();
-        json_output["keybindings"]["item5"]     = keyBindings.ITEM_5.get_key_code();
-        json_output["keybindings"]["pause"]     = keyBindings.PAUSE.get_key_code();
+        json_output["keybindings"]["moveup"]    = keyBindings.MOVE_UP.get_key_array();
+        json_output["keybindings"]["movedown"]  = keyBindings.MOVE_DOWN.get_key_array();
+        json_output["keybindings"]["moveleft"]  = keyBindings.MOVE_LEFT.get_key_array();
+        json_output["keybindings"]["moveright"] = keyBindings.MOVE_RIGHT.get_key_array();
+        json_output["keybindings"]["changedir"] = keyBindings.CHANGE_DIRECTION.get_key_array();
+        json_output["keybindings"]["changemap"] = keyBindings.CHANGE_MAP_SIZE.get_key_array();
+        json_output["keybindings"]["useitem"]   = keyBindings.USE_ITEM.get_key_array();
+        json_output["keybindings"]["dropitem"]  = keyBindings.DROP_ITEM.get_key_array();
+        json_output["keybindings"]["item1"]     = keyBindings.ITEM_1.get_key_array();
+        json_output["keybindings"]["item2"]     = keyBindings.ITEM_2.get_key_array();
+        json_output["keybindings"]["item3"]     = keyBindings.ITEM_3.get_key_array();
+        json_output["keybindings"]["item4"]     = keyBindings.ITEM_4.get_key_array();
+        json_output["keybindings"]["item5"]     = keyBindings.ITEM_5.get_key_array();
+        json_output["keybindings"]["pause"]     = keyBindings.PAUSE.get_key_array();
 
-        out << json_output;
+        out << json_output.dump(4);
     }
 };
