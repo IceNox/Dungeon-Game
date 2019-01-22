@@ -10,35 +10,31 @@
 
 #include "Key.h"
 
-#include <fstream>
-#include <iostream>
-#include <vector>
 #include <algorithm>
 
 // Constants
 const int MAX_INT = 2147483647;
-const int STATE_SHIFT = 0x8000;
+const int STATE_SHIFT = 0x80;
 const int CYCLES_HELD = 20;
-
-const std::string LAYOUT_PATH = "Content/Misc/Layouts/";
-const std::string LAYOUT_EXTENSION = ".bin";
 
 class KeyReader
 {
 private:
-    int _state[KEY_TOTAL] = {};
-    char _layout[KEY_TOTAL][2][2][2] = {};
+    int _keyDurationState[KEY_TOTAL];
+    BYTE _lpKeyState[KEY_TOTAL];
+    DWORD _threadID;
+    HKL _current_layout;
 
     // Calculates the amount of ticks a mofier has been pressed down
     int _modifier_ticks(int left, int right) {
-        if (_state[left] == 0) {
-            return _state[right];
+        if (_keyDurationState[left] == 0) {
+            return _keyDurationState[right];
         }
-        else if (_state[right] == 0) {
-            return _state[left];
+        else if (_keyDurationState[right] == 0) {
+            return _keyDurationState[left];
         }
         else {
-            return min(_state[left], _state[right]);
+            return min(_keyDurationState[left], _keyDurationState[right]);
         }
     }
 
@@ -65,85 +61,63 @@ private:
     }
 
     // Key code of last pressed button
-    int _last_button() {
+    UINT _last_button() {
         int last = _last_modifier();
-        int btn = 0;
+        UINT uVirtKey = 0;
 
-        for (int i = 0; i < VK_SHIFT; i++) {
-            if (_state[i] != 0 && _state[i] < last) {
-                last = _state[i];
-                btn = i;
+        for (UINT i = 0; i < VK_SHIFT; i++) {
+            if (_keyDurationState[i] != 0 && _keyDurationState[i] < last) {
+                last = _keyDurationState[i];
+                uVirtKey = i;
             }
         }
 
-        for (int i = 1 + VK_MENU; i < VK_LWIN; i++) {
-            if (_state[i] != 0 && _state[i] < last) {
-                last = _state[i];
-                btn = i;
+        for (UINT i = 1 + VK_MENU; i < VK_LWIN; i++) {
+            if (_keyDurationState[i] != 0 && _keyDurationState[i] < last) {
+                last = _keyDurationState[i];
+                uVirtKey = i;
             }
         }
 
-        for (int i = 1 + VK_RWIN; i < VK_LSHIFT; i++) {
-            if (_state[i] != 0 && _state[i] < last) {
-                last = _state[i];
-                btn = i;
+        for (UINT i = 1 + VK_RWIN; i < VK_LSHIFT; i++) {
+            if (_keyDurationState[i] != 0 && _keyDurationState[i] < last) {
+                last = _keyDurationState[i];
+                uVirtKey = i;
             }
         }
 
-        for (int i = 1 + VK_RMENU; i < KEY_TOTAL; i++) {
-            if (_state[i] != 0 && _state[i] < last) {
-                last = _state[i];
-                btn = i;
+        for (UINT i = 1 + VK_RMENU; i < KEY_TOTAL; i++) {
+            if (_keyDurationState[i] != 0 && _keyDurationState[i] < last) {
+                last = _keyDurationState[i];
+                uVirtKey = i;
             }
         }
 
-        return btn;
+        return uVirtKey;
     }
 
 public:
     KeyReader(HWND hWnd)
         :
-        _state()
+        _keyDurationState(),
+        _lpKeyState()
     {
-        char language_buffer[9];
-        char region_buffer[9];
-
-        DWORD threadID = GetWindowThreadProcessId(hWnd, NULL);
-        HKL current_layout = GetKeyboardLayout(threadID);
-        LANGID language = (LANGID)(((UINT)current_layout) & 0xFFFF);
-        LCID locale = MAKELCID(language, SORT_DEFAULT);
-        int lang_return = GetLocaleInfoA(locale, LOCALE_SISO639LANGNAME, language_buffer, 9);
-        int region_return = GetLocaleInfoA(locale, LOCALE_SISO3166CTRYNAME, region_buffer, 9);
-        std::string language_name(language_buffer, lang_return-1);
-        std::string region_name(region_buffer, region_return-1);
-        std::string layout = LAYOUT_PATH + language_name + "-" + region_name + LAYOUT_EXTENSION;
-
-        std::string line;
-        std::ifstream layout_file(layout, ios::binary|ios::ate);
-        std::ifstream::pos_type pos = layout_file.tellg();
-        std::vector<char> result(pos);
-
-        layout_file.seekg(0, ios::beg);
-        layout_file.read(&result[0], pos);
-
-        for (unsigned index = 0; index < result.size();) {
-            uint8_t shift = result[index++];
-            uint8_t ctrl  = result[index++];
-            uint8_t alt   = result[index++];
-            uint8_t vk    = result[index++];
-
-            _layout[vk][shift][ctrl][alt] = result[index++];
-        }
+        _threadID = GetWindowThreadProcessId(hWnd, NULL);
     }
 
     void update_key_states()
     {
-        for (int i = 0; i < KEY_TOTAL; i++) {
-            if (GetKeyState(i) & STATE_SHIFT) {
-                _state[i]++;
-            }
-            else {
-                _state[i] = 0;
+        _current_layout = GetKeyboardLayout(_threadID);
+
+        BOOL success = GetKeyboardState(_lpKeyState);
+        if (success) {
+            for (int i = 0; i < KEY_TOTAL; i++) {
+                if (_lpKeyState[i] & STATE_SHIFT) {
+                    _keyDurationState[i]++;
+                }
+                else {
+                    _keyDurationState[i] = 0;
+                }
             }
         }
     }
@@ -157,38 +131,35 @@ public:
         // Intentional decrementation since single modifier key
         // VK codes are higher than shared modifier VK codes
         for (int i = KEY_TOTAL - 1; i > 0; i--) {
-            int state_ticks = _state[i];
+            int state_ticks = _keyDurationState[i];
             if (state_ticks) {
                 key_count++;
 
-                if (state_ticks < last) {
+                if (state_ticks < last || state_ticks <= last && !IS_SPECIAL[i]) {
                     last = state_ticks;
                     key = i;
                 }
             }
         }
 
+        bool key_held = _keyDurationState[key] > CYCLES_HELD;
+        UINT uVirtKey = key * (int)(_keyDurationState[key] == 1 || key_held);
+        bool shift    = (bool)_modifier_ticks(VK_LSHIFT, VK_RSHIFT);
+        bool ctrl     = (bool)_modifier_ticks(VK_LCONTROL, VK_RCONTROL);
+        bool alt      = (bool)_modifier_ticks(VK_LMENU, VK_RMENU);
+        UINT uScanCode = MapVirtualKeyExA(uVirtKey, MAPVK_VK_TO_VSC, _current_layout);
+        BYTE *lpKeyState = _lpKeyState;
+        WORD lpChar = 0;
+        UINT uFlags = 0;
+
+        int success = ToAsciiEx(uVirtKey, uScanCode, lpKeyState, &lpChar, uFlags, _current_layout);
+        WORD parentChar = MapVirtualKeyExA(uVirtKey, MAPVK_VK_TO_CHAR, _current_layout);
+
         if (key_count > 2) {
-            key = _last_button();
-
-            int  key_code = key * (int)(_state[key] == 1 || _state[key] > CYCLES_HELD);
-            bool key_held = _state[key] > CYCLES_HELD;
-            bool shift    = (bool)_modifier_ticks(VK_LSHIFT, VK_RSHIFT);
-            bool ctrl     = (bool)_modifier_ticks(VK_LCONTROL, VK_RCONTROL);
-            bool alt      = (bool)_modifier_ticks(VK_LMENU, VK_RMENU);
-
-            return Key(
-                shift, ctrl, alt, key_code, key_held,
-                _layout[key_code][shift][ctrl][alt],
-                _layout[key_code][false][false][false]
-            );
+            return Key(shift, ctrl, alt, uVirtKey, key_held, lpChar, parentChar);
         }
         else {
-            int  key_code = key * (int)(_state[key] == 1 || _state[key] > CYCLES_HELD);
-            bool key_held = _state[key] > CYCLES_HELD;
-            char key_char = _layout[key_code][false][false][false];
-
-            return Key(false, false, false, key_code, key_held, key_char, key_char);
+            return Key(false, false, false, uVirtKey, key_held, lpChar, parentChar);
         }
     }
 };
