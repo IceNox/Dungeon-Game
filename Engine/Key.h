@@ -33,18 +33,6 @@ const std::bitset<KEY_TOTAL> IS_SPECIAL(
 );
 
 // Key names
-const std::unordered_map<int, std::string> MODIFIER_KEYS = {
-    { VK_LSHIFT   , "left shift"    },
-    { VK_RSHIFT   , "right shift"   },
-    { VK_SHIFT    , "shift"         },
-    { VK_LCONTROL , "left control"  },
-    { VK_RCONTROL , "right control" },
-    { VK_CONTROL  , "control"       },
-    { VK_LMENU    , "left alt"      },
-    { VK_RMENU    , "right alt"     },
-    { VK_MENU     , "alt"           }
-};
-
 const std::unordered_map<int, std::string> SPECIAL_KEYS = {
     { VK_LBUTTON  , "mouse 1"       },
     { VK_RBUTTON  , "mouse 2"       },
@@ -202,66 +190,43 @@ public:
         std::string key_name;
         bool delimeter = false;
 
-        if (_modifier_keys.any()) {
-            if (_modifier_keys[SHIFT]) {
-                delimeter = true;
-                key_name = key_name + "shift";
+        if (_modifier_keys[SHIFT]) {
+            delimeter = true;
+            key_name = key_name + "shift";
+        }
+
+        if (_modifier_keys[CTRL]) {
+            if (delimeter) {
+                key_name = key_name + DELIMETER;
             }
 
-            if (_modifier_keys[CTRL]) {
-                if (delimeter) {
-                    key_name = key_name + DELIMETER;
+            delimeter = true;
+            key_name = key_name + "ctrl";
+        }
+
+        if (_modifier_keys[ALT]) {
+            if (delimeter) {
+                key_name = key_name + DELIMETER;
+            }
+
+            delimeter = true;
+            key_name = key_name + "alt";
+        }
+
+        if (delimeter && (get_key_character(parent) || IS_SPECIAL[_key])) {
+            key_name = key_name + DELIMETER;
+        }
+
+        if (IS_SPECIAL[_key]) {
+            for (std::unordered_map<int, std::string>::const_iterator it = SPECIAL_KEYS.begin(); it != SPECIAL_KEYS.end(); ++it) {
+                if (_key == it->first) {
+                    key_name = key_name + it->second;
+                    break;
                 }
-
-                delimeter = true;
-                key_name = key_name + "ctrl";
-            }
-
-            if (_modifier_keys[ALT]) {
-                if (delimeter) {
-                    key_name = key_name + DELIMETER;
-                }
-
-                delimeter = true;
-                key_name = key_name + "alt";
-            }
-
-            if (IS_SPECIAL[_key]) {
-                for (std::unordered_map<int, std::string>::const_iterator it = SPECIAL_KEYS.begin(); it != SPECIAL_KEYS.end(); ++it) {
-                    if (_key == it->first) {
-                        key_name = key_name + DELIMETER + it->second;
-                        break;
-                    }
-                }
-            }
-            else {
-                key_name = key_name + DELIMETER + get_key_character(parent);
             }
         }
-        else {
-            if (IS_SPECIAL[_key]) {
-                bool found = false;
-
-                for (std::unordered_map<int, std::string>::const_iterator it = MODIFIER_KEYS.begin(); it != MODIFIER_KEYS.end(); ++it) {
-                    if (_key == it->first) {
-                        key_name = key_name + it->second;
-                        found = true;
-                        break;
-                    }
-                }
-
-                if (!found) {
-                    for (std::unordered_map<int, std::string>::const_iterator it = SPECIAL_KEYS.begin(); it != SPECIAL_KEYS.end(); ++it) {
-                        if (_key == it->first) {
-                            key_name = key_name + it->second;
-                            break;
-                        }
-                    }
-                }
-            }
-            else {
-                key_name = key_name + get_key_character(parent);
-            }
+        else if (get_key_character(parent)) {
+            key_name = key_name + get_key_character(parent);
         }
 
         return key_name;

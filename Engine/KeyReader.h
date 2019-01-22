@@ -66,28 +66,28 @@ private:
         UINT uVirtKey = 0;
 
         for (UINT i = 0; i < VK_SHIFT; i++) {
-            if (_keyDurationState[i] != 0 && _keyDurationState[i] < last) {
+            if (_keyDurationState[i] != 0 && _keyDurationState[i] <= last) {
                 last = _keyDurationState[i];
                 uVirtKey = i;
             }
         }
 
         for (UINT i = 1 + VK_MENU; i < VK_LWIN; i++) {
-            if (_keyDurationState[i] != 0 && _keyDurationState[i] < last) {
+            if (_keyDurationState[i] != 0 && _keyDurationState[i] <= last) {
                 last = _keyDurationState[i];
                 uVirtKey = i;
             }
         }
 
         for (UINT i = 1 + VK_RWIN; i < VK_LSHIFT; i++) {
-            if (_keyDurationState[i] != 0 && _keyDurationState[i] < last) {
+            if (_keyDurationState[i] != 0 && _keyDurationState[i] <= last) {
                 last = _keyDurationState[i];
                 uVirtKey = i;
             }
         }
 
         for (UINT i = 1 + VK_RMENU; i < KEY_TOTAL; i++) {
-            if (_keyDurationState[i] != 0 && _keyDurationState[i] < last) {
+            if (_keyDurationState[i] != 0 && _keyDurationState[i] <= last) {
                 last = _keyDurationState[i];
                 uVirtKey = i;
             }
@@ -124,23 +124,7 @@ public:
 
     Key get_key()
     {
-        int key_count = 0;
-        int last = MAX_INT;
-        int key = 0;
-
-        // Intentional decrementation since single modifier key
-        // VK codes are higher than shared modifier VK codes
-        for (int i = KEY_TOTAL - 1; i > 0; i--) {
-            int state_ticks = _keyDurationState[i];
-            if (state_ticks) {
-                key_count++;
-
-                if (state_ticks < last || state_ticks <= last && !IS_SPECIAL[i]) {
-                    last = state_ticks;
-                    key = i;
-                }
-            }
-        }
+        UINT key = _last_button();
 
         bool key_held = _keyDurationState[key] > CYCLES_HELD;
         UINT uVirtKey = key * (int)(_keyDurationState[key] == 1 || key_held);
@@ -154,12 +138,6 @@ public:
 
         int success = ToAsciiEx(uVirtKey, uScanCode, lpKeyState, &lpChar, uFlags, _current_layout);
         WORD parentChar = MapVirtualKeyExA(uVirtKey, MAPVK_VK_TO_CHAR, _current_layout);
-
-        if (key_count > 2) {
-            return Key(shift, ctrl, alt, uVirtKey, key_held, lpChar, parentChar);
-        }
-        else {
-            return Key(false, false, false, uVirtKey, key_held, lpChar, parentChar);
-        }
+        return Key(shift, ctrl, alt, uVirtKey, key_held, lpChar, parentChar);
     }
 };
