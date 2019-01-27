@@ -6,7 +6,7 @@
 #include <cassert>
 #include <fstream>
 
-Sprite::Sprite(const std::string &filename, const std::string &spriteName)
+Sprite::Sprite(const std::string &filename, const std::string &spriteName, int upscale)
 {
     // Clear pixels
     pPixels = nullptr;
@@ -51,7 +51,7 @@ Sprite::Sprite(const std::string &filename, const std::string &spriteName)
     }
 
     // Upscale the sprite
-    Upscale(4);
+    Upscale(upscale);
 
     // Check if sprite is animated
     int l = filename.length();

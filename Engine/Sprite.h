@@ -9,7 +9,7 @@ class Sprite
 {
 public:
     Sprite() {}
-    Sprite(const std::string& filename, const std::string& spriteName);
+    Sprite(const std::string& filename, const std::string& spriteName, int upscale = 4);
     Sprite(int width, int height, std::string spriteName, int frames, int centerx, int centery);
     Sprite(const Sprite&);
     ~Sprite();
