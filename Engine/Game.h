@@ -53,6 +53,18 @@
 
 using namespace std::chrono;
 
+// Data structures for calling functions
+struct TextRenderData
+{
+    std::string font = "basic-small";
+    int size = 4;
+    bool centered = false;
+    Color tcolor = { 255, 255, 255 };
+    float transparency = 1.0f;
+    float brightness = 1.0f;
+};
+
+// Main game class
 class Game
 {
 public:
@@ -65,6 +77,7 @@ public:
     void read_save_file_names();
     void read_user_level_names();
     void read_textures();
+    void read_fonts();
     void load_items();
     void load_objects();
     int load_sprite(std::string fileDir);
@@ -113,8 +126,7 @@ public:
 
     std::vector<LevelData> levelData;
 
-    Font f_small;
-    Font f_large;
+    std::vector<Font> fonts;
 
     Menu menu;
     Level level;
@@ -169,5 +181,5 @@ public:
     //void send_draw_info(Pos2D pos, std::string sprname, float brightness, std::vector<Sprite> &spr, float transparency = 0.0f);
     //void send_draw_info(int x, int y, float brightness, Sprite spr, RECT r, float transparency = 0.0f);
     //void send_draw_info(int x, int y, std::string sprname, float brightness, RECT r, std::vector<Sprite> &spr, float transparency = 0.0f);
-    void draw_text(Pos2D pos, std::string text, bool centered, bool large, float brightness, float transparency = 1.0f);
+    void render_text(Pos2D pos, std::string text, TextRenderData txr = TextRenderData());
 };

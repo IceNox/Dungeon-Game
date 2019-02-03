@@ -345,7 +345,7 @@ Color Graphics::GetPixel( int i )
     assert(i < int(Graphics::ScreenWidth) * int(Graphics::ScreenHeight));
     return pSysBuffer[i];
 }
-
+/*
 void Graphics::DrawSprite(Pos2D pos, Sprite s, float brightness, float transparency)
 {
     // Set transparency bounds
@@ -396,6 +396,7 @@ void Graphics::DrawSprite(Pos2D pos, Sprite s, float brightness, float transpare
         }
     }
 }
+*/
 /*
 void Graphics::DrawSpriteTransparent(int x, int y, const Sprite& s, float brightness, float transparency, Color chroma)
 {
@@ -458,26 +459,41 @@ void Graphics::DrawSpriteNonChroma(int x, int y, const Sprite& s, float brightne
     }
 }
 */
-void Graphics::DrawSpriteRECT(Pos2D pos, Sprite s, float brightness, RECT ri, RECT ro, float transparency)
+void Graphics::DrawSprite(Pos2D pos, const Sprite& s, SpriteDrawData sdd)
 {
-    // Set transparency bounds
-    add_bounds(transparency, 0.0f, 1.0f);
-
-    // Apply transparency to the sprite
-    if (transparency < 1.0f) {
-        s.ApplyTransparency(transparency);
-    }
+    // Set bounds
+    add_bounds(sdd.transparency, 0.0f, 1.0f);
+    add_bounds(sdd.brightness, 0.0f, 1.0f);
+    add_bounds(sdd.blendp, 0.0f, 1.0f);
 
     // Get sprite dimensions
     const int height = s.GetHeight();
     const int width  = s.GetWidth();
 
     // Adjust input bounds
-    if (ri.left < 0) ri.left = 0;
-    if (ri.top  < 0) ri.top  = 0;
+    if (sdd.ira) {
+        if (sdd.irect.left < 0) sdd.irect.left = 0;
+        if (sdd.irect.top < 0)  sdd.irect.top = 0;
 
-    if (ri.right  > width ) ri.right  = width;
-    if (ri.bottom > height) ri.bottom = height;
+        if (sdd.irect.right > width)   sdd.irect.right = width;
+        if (sdd.irect.bottom > height) sdd.irect.bottom = height;
+    }
+
+    // Adjust output bounds
+    if (sdd.ora) {
+        if (sdd.orect.left < 0) sdd.orect.left = 0;
+        if (sdd.orect.top < 0)  sdd.orect.top = 0;
+
+        if (sdd.orect.right > ScreenWidth)   sdd.orect.right  = ScreenWidth;
+        if (sdd.orect.bottom > ScreenHeight) sdd.orect.bottom = ScreenHeight;
+    }
+    else {
+        sdd.orect.left = 0;
+        sdd.orect.top  = 0;
+
+        sdd.orect.right  = ScreenWidth;
+        sdd.orect.bottom = ScreenHeight;
+    }
 
     // Create offset variables
     int ox = 0;
@@ -487,43 +503,70 @@ void Graphics::DrawSpriteRECT(Pos2D pos, Sprite s, float brightness, RECT ri, RE
     int ty = height;
 
     // Evaluate selected sprite region
-    pos.x -= ri.left;
-    pos.y -= ri.top;
+    if (sdd.ira) {
+        pos.x -= sdd.irect.left;
+        pos.y -= sdd.irect.top;
 
-    if (ox < ri.left) ox = ri.left;
-    if (oy < ri.top ) oy = ri.top;
+        if (ox < sdd.irect.left) ox = sdd.irect.left;
+        if (oy < sdd.irect.top)  oy = sdd.irect.top;
 
-    if (tx > ri.right)  tx = ri.right;
-    if (ty > ri.bottom) ty = ri.bottom;
+        if (tx > sdd.irect.right)  tx = sdd.irect.right;
+        if (ty > sdd.irect.bottom) ty = sdd.irect.bottom;
+    }
+
 
     // Evaluate bounds if object is offbound
-    if (pos.x < ro.left) ox = abs(pos.x - ro.left);
-    if (pos.y < ro.top)  oy = abs(pos.y - ro.top);
+    if (pos.x < sdd.orect.left) ox = abs(pos.x - sdd.orect.left);
+    if (pos.y < sdd.orect.top)  oy = abs(pos.y - sdd.orect.top);
 
-    if (tx + pos.x > ro.right)  tx = ro.right  - pos.x;
-    if (ty + pos.y > ro.bottom) ty = ro.bottom - pos.y;
+    if (tx + pos.x > sdd.orect.right)  tx = sdd.orect.right - pos.x;
+    if (ty + pos.y > sdd.orect.bottom) ty = sdd.orect.bottom - pos.y;
 
     // Draw to screen
     for (int sy = oy; sy < ty; sy++) {
         for (int sx = ox; sx < tx; sx++) {
             // Skip if pixel is out of selected sprite region
-            if (sx < ri.left || sx > ri.right || sy < ri.top || sy > ri.bottom)
-                continue;
+            //if (sdd.ira)
+                //if (sx < sdd.irect.left || sx > sdd.irect.right || sy < sdd.irect.top || sy > sdd.irect.bottom)
+                    //continue;
+
+            // Apply transparency
+            int pxla = s.GetPixel(sx, sy).GetA();
+            if (sdd.transparency < 1.0f) pxla *= sdd.transparency;
 
             // Skip transparent pixels
-            if (s.GetPixel(sx, sy).GetA() == 0)
-                continue;
+            if (pxla == 0) continue;
+
+            // Get pixel to draw
+            Color pxl = s.GetPixel(sx, sy, sdd.brightness);
+            int pxlr = pxl.GetR();
+            int pxlg = pxl.GetG();
+            int pxlb = pxl.GetB();
+
+            // Apply color adjustments
+            if (sdd.blendp > 0.0f) {
+                if (sdd.blendp == 1.0f) {
+                    pxlr = sdd.color.GetR() * sdd.brightness;
+                    pxlg = sdd.color.GetG() * sdd.brightness;
+                    pxlb = sdd.color.GetB() * sdd.brightness;
+                }
+                else {
+                    pxlr += (sdd.color.GetR() * sdd.brightness - pxlr) * sdd.blendp;
+                    pxlg += (sdd.color.GetG() * sdd.brightness - pxlg) * sdd.blendp;
+                    pxlb += (sdd.color.GetB() * sdd.brightness - pxlb) * sdd.blendp;
+                }
+            }
 
             // Draw the pixel
-            if (s.GetPixel(sx, sy).GetA() == 255) {
-                PutPixel(pos.x + sx, pos.y + sy, s.GetPixel(sx, sy, brightness));
+            if (pxla == 255) {
+                PutPixel(pos.x + sx, pos.y + sy, Color(pxlr, pxlg, pxlb));
             }
             else {
-                float ratio = s.GetPixel(sx, sy).GetA() / 255.0f;
+                float ratio = pxla / 255.0f;
 
-                int nr = GetPixel(pos.x + sx, pos.y + sy).GetR() + (s.GetPixel(sx, sy, brightness).GetR() - GetPixel(pos.x + sx, pos.y + sy).GetR()) * ratio;
-                int ng = GetPixel(pos.x + sx, pos.y + sy).GetG() + (s.GetPixel(sx, sy, brightness).GetG() - GetPixel(pos.x + sx, pos.y + sy).GetG()) * ratio;
-                int nb = GetPixel(pos.x + sx, pos.y + sy).GetB() + (s.GetPixel(sx, sy, brightness).GetB() - GetPixel(pos.x + sx, pos.y + sy).GetB()) * ratio;
+                int nr = GetPixel(pos.x + sx, pos.y + sy).GetR() + (pxlr - GetPixel(pos.x + sx, pos.y + sy).GetR()) * ratio;
+                int ng = GetPixel(pos.x + sx, pos.y + sy).GetG() + (pxlg - GetPixel(pos.x + sx, pos.y + sy).GetG()) * ratio;
+                int nb = GetPixel(pos.x + sx, pos.y + sy).GetB() + (pxlb - GetPixel(pos.x + sx, pos.y + sy).GetB()) * ratio;
 
                 PutPixel(pos.x + sx, pos.y + sy, Color(nr, ng, nb));
             }

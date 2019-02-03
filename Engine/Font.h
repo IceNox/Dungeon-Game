@@ -8,10 +8,11 @@
 class Font
 {
 public:
+    std::string name;
     std::vector<Sprite> character;
-    std::vector<int>    characterW;
+    std::vector<int> characterW;
+    std::vector<int> characterH;
+    int kerning;
 
-    Font();
-
-    void set_variables(std::string type);
+    Font() {};
 };
