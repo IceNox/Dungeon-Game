@@ -525,15 +525,15 @@ void Game::draw_player_health()
                 }
             }
             if (healthToDraw >= 2) {
-                send_draw_info(Pos2D(drawX, drawY), 1.0f, sprites[HEART_FULL]);
+                gfx.DrawSprite(Pos2D(drawX, drawY), sprites[HEART_FULL]);
                 healthToDraw -= 2;
             }
             else if (healthToDraw == 1) {
-                send_draw_info(Pos2D(drawX, drawY), 1.0f, sprites[HEART_HALF]);
+                gfx.DrawSprite(Pos2D(drawX, drawY), sprites[HEART_HALF]);
                 healthToDraw -= 1;
             }
             else if (healthToDraw == 0) {
-                send_draw_info(Pos2D(drawX, drawY), 1.0f, sprites[HEART_EMPTY]);
+                gfx.DrawSprite(Pos2D(drawX, drawY), sprites[HEART_EMPTY]);
             }
 
             drawX += 56;
@@ -560,11 +560,11 @@ void Game::draw_player_armor()
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < 5; j++) {
             if (armorToDraw >= 2) {
-                send_draw_info(Pos2D(drawX, drawY), 1.0f, sprites[SHIELD_FULL]);
+                gfx.DrawSprite(Pos2D(drawX, drawY), sprites[SHIELD_FULL]);
                 armorToDraw -= 2;
             }
             else if (armorToDraw == 1) {
-                send_draw_info(Pos2D(drawX, drawY), 1.0f, sprites[SHIELD_HALF]);
+                gfx.DrawSprite(Pos2D(drawX, drawY), sprites[SHIELD_HALF]);
                 armorToDraw -= 1;
             }
             else if (armorToDraw == 0) {
