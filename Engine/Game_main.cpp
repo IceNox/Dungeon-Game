@@ -43,6 +43,7 @@ Game::Game(MainWindow& wnd)
     load_config();
     load_menu();
     read_textures();
+    read_fonts();
     //ReadLevels();
     load_items();
     load_objects();
@@ -154,34 +155,38 @@ void Game::ComposeFrame()
     int time = (maintime::now() - frameStartTime).get_duration();
     int FPS = round(1000000.0 / time);
 
+    TextRenderData txr;
+    if (FPS < 60) txr.tcolor = { 255, 255, 0 };
+    if (FPS < 30) txr.tcolor = { 255, 0, 0 };
+
     std::ostringstream ss;
     ss << FPS;
-    draw_text(Pos2D(4, gfx.ScreenHeight - 24), ss.str(), false, false, 1.0f);
+    render_text(Pos2D(4, gfx.ScreenHeight - 24), ss.str(), txr);
     
     // Show test timer
     std::ostringstream ss2;
     ss2 << maintime::now().get_time(SECONDS);
-    draw_text(Pos2D(4, gfx.ScreenHeight - 48), ss2.str(), false, false, 1.0f);
+    render_text(Pos2D(4, gfx.ScreenHeight - 48), ss2.str());
 }
 
 void Game::send_draw_info       (Pos2D pos, float brightness, const Sprite &spr,                   float transparency)
 {
-    gfx.DrawSprite(pos, spr, brightness, transparency);
+    //gfx.DrawSprite(pos, spr, brightness, transparency);
 }
 
 void Game::send_draw_info_IRECT (Pos2D pos, float brightness, const Sprite &spr, RECT ri,          float transparency)
 {
-    gfx.DrawSpriteRECT(pos, spr, brightness, ri, { 0, 0, gfx.ScreenWidth, gfx.ScreenHeight }, transparency);
+    //gfx.DrawSpriteRECT(pos, spr, brightness, ri, { 0, 0, gfx.ScreenWidth, gfx.ScreenHeight }, transparency);
 }
 
 void Game::send_draw_info_ORECT (Pos2D pos, float brightness, const Sprite &spr,          RECT ro, float transparency)
 {
-    gfx.DrawSpriteRECT(pos, spr, brightness, { 0, 0, spr.GetWidth(), spr.GetHeight() }, ro, transparency);
+    //gfx.DrawSpriteRECT(pos, spr, brightness, { 0, 0, spr.GetWidth(), spr.GetHeight() }, ro, transparency);
 }
 
 void Game::send_draw_info_IORECT(Pos2D pos, float brightness, const Sprite &spr, RECT ri, RECT ro, float transparency)
 {
-    gfx.DrawSpriteRECT(pos, spr, brightness, ri, ro, transparency);
+    //gfx.DrawSpriteRECT(pos, spr, brightness, ri, ro, transparency);
 }
 /*
 void Game::send_draw_info(Pos2D pos, std::string sprname, float brightness, std::vector<Sprite> &spr, float transparency)
@@ -224,8 +229,58 @@ void Game::send_draw_info(int x, int y, std::string sprname, float brightness, R
     }
 }
 */
-void Game::draw_text(Pos2D pos, std::string text, bool centered, bool large, float brightness, float transparency)
+void Game::render_text(Pos2D pos, std::string text, TextRenderData txr)
 {
+    // Find font index
+    int findex = -1;
+    for (unsigned i = 0; i < fonts.size(); i++) {
+        if (fonts[i].name == txr.font) {
+            findex = i;
+            break;
+        }
+    }
+
+    if (findex == -1) return;
+
+    // Set starting x coordinate
+    int startX = pos.x;
+
+    // Calculate text dimensions
+    int textWidth = 0;
+    int textHeight = 0;
+    for (unsigned i = 0; i < text.length(); i++) {
+        textWidth += fonts[findex].characterW[(int)text[i] - 32] * txr.size;
+        textWidth += (i == 0 ? 0 : fonts[findex].kerning * txr.size);
+
+        if (fonts[findex].characterH[(int)text[i] - 32] * txr.size > textHeight) {
+            textHeight = fonts[findex].characterH[(int)text[i] - 32] * txr.size;
+        }
+    }
+
+    // If centered, half starting x coordinate
+    if (txr.centered) {
+        startX = pos.x - textWidth / 2;
+    }
+
+    // Set up draw data
+    SpriteDrawData sdd;
+    sdd.transparency = txr.transparency;
+    sdd.brightness = txr.brightness;
+    sdd.color = txr.tcolor;
+    sdd.blendp = 1.0f;
+
+    // Draw every letter
+    int textPos = 0;
+    for (unsigned i = 0; i < text.length(); i++) {
+        Sprite chr = fonts[findex].character[(int)text[i] - 32];
+        chr.Upscale(txr.size);
+        gfx.DrawSprite(Pos2D(startX + textPos, pos.y), chr, sdd);
+
+        // Set next letter pos
+        textPos += fonts[findex].characterW[(int)text[i] - 32] * txr.size;
+        textPos += fonts[findex].kerning * txr.size;
+    }
+    /*
     if (large) {
         /// Large text drawing
         // Set starting x coordinate
@@ -240,7 +295,7 @@ void Game::draw_text(Pos2D pos, std::string text, bool centered, bool large, flo
         // Draw every letter
         int textPos = 0;
         for (int i = 0; i < text.length(); i++) {
-            send_draw_info(Pos2D(startX + textPos, pos.y), brightness, f_large.character.at((int)text[i] - 32), transparency);
+            send_draw_info(Pos2D(startX + textPos, pos.y), brightness, f_large.character[(int)text[i] - 32], transparency);
 
             // Set next letter pos
             textPos += f_large.characterW[(int)text[i] - 32];
@@ -276,6 +331,7 @@ void Game::draw_text(Pos2D pos, std::string text, bool centered, bool large, flo
             textPos += 4;
         }
     }
+    */
 }
 
 void Game::load_config()
@@ -577,6 +633,8 @@ void Game::read_textures()
         sprites[sprites.size() - 1].SetCenterPos(cx, cy);
     }
 
+    return;
+
     // Read large font
     typeCount = tx["largefont"].size();
     for (int i = 0; i < typeCount; i++) {
@@ -604,10 +662,47 @@ void Game::read_textures()
 
         f_small.character[f_small.character.size() - 1].SetCenterPos(cx, cy);
     }
+}
 
-    return;
+void Game::read_fonts()
+{
+    // Font directory
+    std::wstring dir = L"Content/Misc/Fonts/";
+    std::wstring path = dir + L"*.json*";
 
-    in.close();
+    // Find files
+    WIN32_FIND_DATA fd;
+    HANDLE hFind = ::FindFirstFile(path.c_str(), &fd);
+    if (hFind != INVALID_HANDLE_VALUE) {
+        do {
+            if (!(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+                int index = fonts.size();
+                std::string spath = "Content/Misc/Fonts/" + wstring_to_string(fd.cFileName);
+
+                // Load font data
+                json fn;
+                std::ifstream file(spath);
+                file >> fn;
+
+                fonts.push_back(Font());
+                fonts[index].name = fn["fontname"].get<std::string>();
+                fonts[index].kerning = fn["kerning"];
+
+                // Get character sprites
+                for (unsigned i = 0; i < fn["characters"].size(); i++) {
+                    std::string fileDir = fn["characters"][i]["filepath"].get<std::string>();
+                    std::string sprName = fn["characters"][i]["spritename"].get<std::string>();
+
+                    std::string fileDirFull = "Content/" + fileDir;
+                    fonts[index].character.push_back(Sprite(fileDirFull, sprName, 1));
+
+                    fonts[index].characterW.push_back(fonts[index].character[i].GetWidth());
+                    fonts[index].characterH.push_back(fonts[index].character[i].GetHeight());
+                }
+            }
+        } while (::FindNextFile(hFind, &fd));
+        ::FindClose(hFind);
+    }
 }
 
 void Game::load_items()

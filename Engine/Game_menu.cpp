@@ -66,7 +66,12 @@ void Game::ComposeMenu()
     }
 
     // Draw scene title text
-    draw_text(Pos2D(centerX, 32), menu.scenes[menu.cScene].title, true, true, menuBrightness);
+    TextRenderData txr;
+    txr.centered = true;
+    txr.font = "basic-large";
+    txr.brightness = menuBrightness;
+
+    render_text(Pos2D(centerX, 32), menu.scenes[menu.cScene].title, txr);
 
     // Draw scene elements
     draw_elements(centerX, menuBrightness);
@@ -99,7 +104,7 @@ void Game::draw_elements(int centerX, float menuBrightness)
         selectionTransparency = selectionTransparency * selectionTransparency;
 
         // If the element is inactive, grey it out
-        float eBrightness = 1.0f;
+        volatile float eBrightness = 1.0f;
         if (menu.scenes[menu.cScene].elements[i].active == false) {
             eBrightness *= 0.5f;
         }
@@ -111,58 +116,55 @@ void Game::draw_elements(int centerX, float menuBrightness)
 
         // Draw selection marker if nescessary
         if (selected) {
+            SpriteDrawData sdd;
+            sdd.brightness = eBrightness * menuBrightness;
+            sdd.transparency = selectionTransparency;
+
             if (menu.scenes[menu.cScene].elements[i].smtype == SM_LINE) {
-                send_draw_info(Pos2D(x - 64, y + 24), eBrightness * menuBrightness, sprites[SELECTION_MARKER], selectionTransparency);
+                gfx.DrawSprite(Pos2D(x - 64, y + 24), sprites[SELECTION_MARKER], sdd);
             }
             else if (menu.scenes[menu.cScene].elements[i].smtype == SM_ARROW) {
-                send_draw_info(Pos2D(x - 16, y), eBrightness * menuBrightness, sprites[SELECTION_ARROW_RIGHT], selectionTransparency);
+                gfx.DrawSprite(Pos2D(x - 16, y), sprites[SELECTION_ARROW_RIGHT], sdd);
             }
         }
 
+        // Draw the elements
+        SpriteDrawData sdd;
+        TextRenderData txr;
+        sdd.brightness = eBrightness * menuBrightness;
+        txr.brightness = eBrightness * menuBrightness;
+
         if (menu.scenes[menu.cScene].elements[i].type == ME_BUTTON || menu.scenes[menu.cScene].elements[i].type == ME_TEXT) {
             // Draw the button/text
-            draw_text
-            (
-                Pos2D(x, y),
-                menu.scenes[menu.cScene].elements[i].text,
-                menu.scenes[menu.cScene].elements[i].coordCentered,
-                false,
-                eBrightness * menuBrightness
-            );
+            txr.centered = menu.scenes[menu.cScene].elements[i].coordCentered;
+
+            render_text(Pos2D(x, y), menu.scenes[menu.cScene].elements[i].text, txr);
         }
         else if (menu.scenes[menu.cScene].elements[i].type == ME_SLIDER) {
             // Draw the slider
             if (menu.scenes[menu.cScene].elements[i].coordCentered) x -= 42;
-            send_draw_info(Pos2D(x, y + 8), eBrightness * menuBrightness, sprites[SLIDER_BODY]);
+            gfx.DrawSprite(Pos2D(x, y + 8), sprites[SLIDER_BODY], sdd);
 
             int value = menu.scenes[menu.cScene].elements[i].value;
-            send_draw_info(Pos2D(x - 4 + value * 8, y + 4), eBrightness * menuBrightness, sprites[SLIDER_HEAD]);
+            gfx.DrawSprite(Pos2D(x - 4 + value * 8, y + 4), sprites[SLIDER_HEAD], sdd);
         }
         else if (menu.scenes[menu.cScene].elements[i].type == ME_SELECTION) {
             // Draw the selection
-            int w = menu.scenes[menu.cScene].elements[i].width;
+            txr.centered = true;
 
+            int w = menu.scenes[menu.cScene].elements[i].width;
             if (!menu.scenes[menu.cScene].elements[i].coordCentered) x += w / 2;
 
-            draw_text
-            (
-                Pos2D(x, y),
-                menu.scenes[menu.cScene].elements[i].selections[menu.scenes[menu.cScene].elements[i].cSelection],
-                true,
-                false,
-                eBrightness * menuBrightness
-            );
+            render_text(Pos2D(x, y), menu.scenes[menu.cScene].elements[i].selections[menu.scenes[menu.cScene].elements[i].cSelection], txr);
 
             x -= w / 2;
-            send_draw_info(Pos2D(x, y), 1.0f * menuBrightness, sprites[SELECTION_ARROW_LEFT]);
+            gfx.DrawSprite(Pos2D(x, y), sprites[SELECTION_ARROW_LEFT], sdd);
 
             x += w - 12;
-            send_draw_info(Pos2D(x, y), 1.0f * menuBrightness, sprites[SELECTION_ARROW_RIGHT]);
+            gfx.DrawSprite(Pos2D(x, y), sprites[SELECTION_ARROW_RIGHT], sdd);
         }
         else if (menu.scenes[menu.cScene].elements[i].type == ME_SWITCH) {
             // Draw the switch
-            int w = 116;
-
             std::string text;
 
             if        (menu.scenes[menu.cScene].elements[i].variant == 0) {
@@ -184,22 +186,18 @@ void Game::draw_elements(int centerX, float menuBrightness)
                     text = "no";
             }
 
+            int w = 116;
             if (!menu.scenes[menu.cScene].elements[i].coordCentered) x += w / 2;
 
-            draw_text
-            (
-                Pos2D(x, y),
-                text,
-                true,
-                false,
-                eBrightness * menuBrightness
-            );
+            txr.centered = true;
+
+            render_text(Pos2D(x, y), text, txr);
 
             x -= w / 2;
-            send_draw_info(Pos2D(x, y), 1.0f * menuBrightness, sprites[SELECTION_ARROW_LEFT]);
+            gfx.DrawSprite(Pos2D(x, y), sprites[SELECTION_ARROW_LEFT], sdd);
 
             x += w - 12;
-            send_draw_info(Pos2D(x, y), 1.0f * menuBrightness, sprites[SELECTION_ARROW_RIGHT]);
+            gfx.DrawSprite(Pos2D(x, y), sprites[SELECTION_ARROW_RIGHT], sdd);
         }
     }
 }

@@ -44,14 +44,17 @@ void Game::ComposeGame()
 
 /// Draw floor
     for (int i = 0; i < _LEVEL_WIDTH * _LEVEL_HEIGHT; i++) {
+        SpriteDrawData sdd;
+        sdd.brightness = level.tiles[i].brightness;
+
         if (level.tiles[i].type != WALL) {
             if (level.tiles[i].brightness > 0.0f) {
-                send_draw_info(startPos + level.tiles[i].gridPos * cellSize, level.tiles[i].brightness, sprites[DIRT]);
+                gfx.DrawSprite(startPos + level.tiles[i].gridPos * cellSize, sprites[DIRT], sdd);
             }
         }
         else if (level.tiles[i].type == WALL && !level.tiles[i].active) {
             if (level.tiles[i].brightness > 0.0f) {
-                send_draw_info(startPos + level.tiles[i].gridPos * cellSize, level.tiles[i].brightness, sprites[DIRT]);
+                gfx.DrawSprite(startPos + level.tiles[i].gridPos * cellSize, sprites[DIRT], sdd);
             }
         }
 
@@ -74,29 +77,39 @@ void Game::ComposeGame()
     // Draw ground animations
     for (int i = 0; i < level.animations.size(); i++) {
         if (level.animations[i].ground) {
-            send_draw_info_IRECT(startPos + level.animations[i].sPos, 1.0f, sprites[level.animations[i].spriteIndex], level.animations[i].spriteRegion);
+            SpriteDrawData sdd;
+            sdd.irect = level.animations[i].spriteRegion;
+            sdd.ira = true;
+
+            gfx.DrawSprite(startPos + level.animations[i].sPos, sprites[level.animations[i].spriteIndex], sdd);
         }
     }
 
 /// Draw level elements top to botton
     for (int y = 0; y < level.height; y++) {
+        SpriteDrawData sdd;
+
         // Walls
         for (int c = y * level.width; c < (y + 1) * level.width; c++) {
             if (level.tiles[c].type == WALL && level.tiles[c].brightness > 0.0f) {
+                sdd.brightness = level.tiles[c].brightness;
+
                 if (level.tiles[c].active) {
                     if (level.tiles[c].sideVisible && level.tiles[c].sideRevealed) {
-                        send_draw_info(startPos + level.tiles[c].gridPos * cellSize + Pos2D(0, cellHeight / 2), level.tiles[c].brightness, sprites[STONE_SIDE]);
+                        gfx.DrawSprite(startPos + level.tiles[c].gridPos * cellSize + Pos2D(0, cellHeight / 2), sprites[STONE_SIDE], sdd);
                     }
                     if (level.tiles[c].visible) {
-                        send_draw_info(startPos + level.tiles[c].gridPos * cellSize - Pos2D(0, cellHeight / 2), level.tiles[c].brightness, sprites[STONE]);
+                        gfx.DrawSprite(startPos + level.tiles[c].gridPos * cellSize - Pos2D(0, cellHeight / 2), sprites[STONE], sdd);
                     }
                 }
                 else {
+                    sdd.transparency = 0.75f;
+
                     if (level.tiles[c].sideVisible && level.tiles[c].sideRevealed) {
-                        send_draw_info(startPos + level.tiles[c].gridPos * cellSize + Pos2D(0, cellHeight / 2), level.tiles[c].brightness, sprites[STONE_SIDE], 0.75f);
+                        gfx.DrawSprite(startPos + level.tiles[c].gridPos * cellSize + Pos2D(0, cellHeight / 2), sprites[STONE_SIDE], sdd);
                     }
                     if (level.tiles[c].visible) {
-                        send_draw_info(startPos + level.tiles[c].gridPos * cellSize - Pos2D(0, cellHeight / 2), level.tiles[c].brightness, sprites[STONE], 0.75f);
+                        gfx.DrawSprite(startPos + level.tiles[c].gridPos * cellSize - Pos2D(0, cellHeight / 2), sprites[STONE], sdd);
                     }
                 }
             }
@@ -105,7 +118,11 @@ void Game::ComposeGame()
         // Portals
         for (int i = 0; i < level.portals.size(); i++) {
             if (level.portals[i].entryPos.y == y && level.portals[i].visible) {
-                send_draw_info_IRECT(startPos + level.portals[i].entryPos * cellSize + Pos2D(0, 24), 1.0f, sprites[EXIT_GREEN], level.portals[i].spriteRegion);
+                SpriteDrawData sddp;
+                sddp.irect = level.portals[i].spriteRegion;
+                sddp.ira = true;
+
+                gfx.DrawSprite(startPos + level.portals[i].entryPos * cellSize + Pos2D(0, 24), sprites[EXIT_GREEN], sddp);
             }
         }
 
@@ -150,7 +167,7 @@ void Game::ComposeGame()
 
                 if (cellY < cellHeight / 2 && level.entities[i]->visible) {
                     //send_draw_info_IRECT(startPos + level.entities[i]->sPos, 1.0f, sprites[level.entities[i]->spriteIndex], level.entities[i]->spriteRegion);
-                    send_draw_info(startPos + level.entities[i]->sPos, 1.0f, sprites[level.entities[i]->spriteIndex]);
+                    gfx.DrawSprite(startPos + level.entities[i]->sPos, sprites[level.entities[i]->spriteIndex]);
                 }
             }
         }
@@ -158,19 +175,19 @@ void Game::ComposeGame()
         // Players
         for (int i = 0; i < level.players.size(); i++) {
             if (level.players[0].gPos.y == y) {
-                send_draw_info(startPos + level.players[0].sPos, 1.0f, sprites[level.players[0].finalSprite]);
+                gfx.DrawSprite(startPos + level.players[0].sPos, sprites[level.players[0].finalSprite]);
             }
         }
 
         // Objects
         for (unsigned i = 0; i < level.staticObjects.size(); i++) {
             if (level.staticObjects[i].gPos.y == y && level.staticObjects[i].visible) {
-                send_draw_info(startPos + level.staticObjects[i].sPos, 1.0f, sprites[level.staticObjects[i].currentSprite]);
+                gfx.DrawSprite(startPos + level.staticObjects[i].sPos, sprites[level.staticObjects[i].currentSprite]);
             }
         }
         for (unsigned i = 0; i < level.dynamicObjects.size(); i++) {
             if (level.dynamicObjects[i].gPos.y == y && level.dynamicObjects[i].visible) {
-                send_draw_info(startPos + level.dynamicObjects[i].sPos, 1.0f, sprites[level.dynamicObjects[i].currentSprite]);
+                gfx.DrawSprite(startPos + level.dynamicObjects[i].sPos, sprites[level.dynamicObjects[i].currentSprite]);
             }
         }
 
@@ -261,28 +278,40 @@ void Game::ComposeGame()
 
                 if (cellY >= cellHeight / 2 && level.entities[i]->visible) {
                     //send_draw_info_IRECT(startPos + level.entities[i]->sPos, 1.0f, sprites[level.entities[i]->spriteIndex], level.entities[i]->spriteRegion);
-                    send_draw_info(startPos + level.entities[i]->sPos, 1.0f, sprites[level.entities[i]->spriteIndex]);
+                    gfx.DrawSprite(startPos + level.entities[i]->sPos, sprites[level.entities[i]->spriteIndex]);
                 }
             }
         }
-        
+
+        sdd.brightness = 1.0f;
+        sdd.ira = true;
         // Animations
         for (int i = 0; i < level.animations.size(); i++) {
             if (!level.animations[i].ground) {
                 if ((level.animations[i].cPos / cellSize).y == y) {
-                    send_draw_info_IRECT(startPos + level.animations[i].sPos, 1.0f, sprites[level.animations[i].spriteIndex], level.animations[i].spriteRegion);
+                    sdd.irect = level.animations[i].spriteRegion;
+
+                    gfx.DrawSprite(startPos + level.animations[i].sPos, sprites[level.animations[i].spriteIndex], sdd);
                 }
             }
         }
     }
 
     // Particles (non-text)
-    for (int i = 0; i < level.particles.size(); i++) {
-        if (!(level.particles[i].dtype == PARTICLE_TEXT)) {
-            if (level.particles[i].dtype == PARTICLE_SPRITE)
-                send_draw_info(startPos + level.particles[i].sPos, 1.0f, sprites[level.particles[i].spriteIndex], level.particles[i].transparency);
-            else if (level.particles[i].dtype == PARTICLE_RECTANGLE)
-                send_draw_info(startPos + level.particles[i].sPos, 1.0f, level.particles[i].srect, level.particles[i].transparency);
+    {
+        SpriteDrawData sdd;
+
+        for (int i = 0; i < level.particles.size(); i++) {
+            if (!(level.particles[i].dtype == PARTICLE_TEXT)) {
+                sdd.transparency = level.particles[i].transparency;
+
+                if (level.particles[i].dtype == PARTICLE_SPRITE) {
+                    gfx.DrawSprite(startPos + level.particles[i].sPos, sprites[level.particles[i].spriteIndex], sdd);
+                }
+                else if (level.particles[i].dtype == PARTICLE_RECTANGLE) {
+                    gfx.DrawSprite(startPos + level.particles[i].sPos, level.particles[i].srect, sdd);
+                }
+            }
         }
     }
 
@@ -353,9 +382,15 @@ void Game::ComposeGame()
     draw_sign_text(startX, startY, pauseDim);
     */
     // Text particles
-    for (int i = 0; i < level.particles.size(); i++) {
-        if (level.particles[i].dtype == PARTICLE_TEXT) {
-            draw_text(startPos + level.particles[i].cPos, level.particles[i].text, true, false, 1.0f, level.particles[i].transparency);
+    {
+        TextRenderData txr;
+        txr.centered = true;
+
+        for (int i = 0; i < level.particles.size(); i++) {
+            if (level.particles[i].dtype == PARTICLE_TEXT) {
+                txr.transparency = level.particles[i].transparency;
+                render_text(startPos + level.particles[i].cPos, level.particles[i].text, txr);
+            }
         }
     }
 
@@ -379,15 +414,25 @@ void Game::ComposeGame()
     // Screen animation
     screenAnimations.apply_slow(gfx.pSysBuffer);
 
-    // If level is paused draw text "PAUSED"
-    if (level.paused) {
-        gfx.ChangeBrightness(0.5f);
-        draw_text(centerPos + Pos2D(0, -12), "paused", true, true, 1.0f);
-    }
+    // Draw pause and console
+    {
+        TextRenderData txr;
+        txr.centered = true;
+        txr.font = "basic-large";
 
-    if (level.console.is_opened()) {
-        gfx.ChangeBrightness(0.75f);
-        draw_text(Pos2D(4, 4), level.console.get_text(), false, false, 1.0f);
+        if (level.paused) {
+            gfx.ChangeBrightness(0.5f);
+            render_text(centerPos + Pos2D(0, -12), "paused", txr);
+        }
+
+        txr.centered = false;
+        txr.font = "basic-small";
+        txr.size = 2;
+
+        if (level.console.is_opened()) {
+            gfx.ChangeBrightness(0.75f);
+            render_text(Pos2D(4, 4), level.console.get_text(), txr);
+        }
     }
 
     /*
@@ -600,7 +645,7 @@ void Game::draw_player_gold()
 
     std::ostringstream ss;
     ss << level.players[0].gold;
-    draw_text(startPos + Pos2D(24, 0), ss.str(), false, false, 1.0f);
+    render_text(startPos + Pos2D(24, 0), ss.str());
 }
 
 void Game::draw_player_effects(int startX, int startY)
@@ -783,7 +828,7 @@ void Game::draw_sign_text(int x, int y)
             startY -= (level.signs[i].textLine.size() - 1) * 24;
 
             for (int j = 0; j < level.signs[i].textLine.size(); j++) {
-                draw_text(Pos2D(x + startX, y + startY), level.signs[i].textLine[j], true, false, 1.0f);
+                //draw_text(Pos2D(x + startX, y + startY), level.signs[i].textLine[j], true, false, 1.0f);
 
                 startY += 24;
             }

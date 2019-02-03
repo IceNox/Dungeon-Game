@@ -30,6 +30,19 @@
 
 #include <vector>
 
+// Data structures for calling functions
+struct SpriteDrawData
+{
+    RECT irect = { 0, 0, 0, 0 }; bool ira = false; // Input RECT active
+    RECT orect = { 0, 0, 0, 0 }; bool ora = false; // Output RECT active
+    float transparency = 1.0f;
+    float brightness = 1.0f;
+
+    Color color = { 255, 255, 255 };
+    float blendp = 0.0f;
+};
+
+// Graphics class
 class Graphics
 {
 public:
@@ -68,10 +81,10 @@ public:
     Color GetPixel( int x,int y );
     Color GetPixel( int i );
 
-    void DrawSprite(Pos2D pos, Sprite s, float brightness, float transparency = 1.0f);
+    //void DrawSprite(Pos2D pos, Sprite s, float brightness, float transparency = 1.0f);
     //void DrawSpriteTransparent(int x, int y, const Sprite& s, float brightness, float transparency, Color chroma = Colors::Magenta);
     //void DrawSpriteNonChroma(int x, int y, const Sprite& s, float brightness);
-    void DrawSpriteRECT(Pos2D pos, Sprite s, float brightness, RECT ri, RECT ro, float transparency = 1.0f);
+    void DrawSprite(Pos2D pos, const Sprite& s, SpriteDrawData sdd = SpriteDrawData());
     //void DrawSpriteTransparentRECT(int x, int y, const Sprite& s, float brightness, float transparency, RECT r, Color chroma = Colors::Magenta);
     //void DrawSpriteNonChromaRECT(int x, int y, const Sprite& s, float brightness, RECT r);
 
