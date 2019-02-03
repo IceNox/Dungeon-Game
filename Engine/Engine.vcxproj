@@ -297,7 +297,6 @@
     <ClCompile Include="Lua\lvm.c" />
     <ClCompile Include="Lua\lzio.c" />
     <ClCompile Include="Portal.cpp" />
-    <ClCompile Include="Font.cpp" />
     <ClCompile Include="Functions.cpp" />
     <ClCompile Include="Game_menu.cpp" />
     <ClCompile Include="Graphics.cpp" />

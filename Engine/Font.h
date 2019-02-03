@@ -14,7 +14,5 @@ public:
     std::vector<int> characterH;
     int kerning;
 
-    Font();
-
-    void set_variables(std::string type);
+    Font() {};
 };

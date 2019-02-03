@@ -127,8 +127,6 @@ public:
     std::vector<LevelData> levelData;
 
     std::vector<Font> fonts;
-    Font f_small;
-    Font f_large;
 
     Menu menu;
     Level level;

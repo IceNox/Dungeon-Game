@@ -380,9 +380,6 @@
     <ClCompile Include="Sign.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Font.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Minimap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

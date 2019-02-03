@@ -48,13 +48,6 @@ Game::Game(MainWindow& wnd)
     load_items();
     load_objects();
 
-
-    //screenAnimations.set_window_parameters(userData.cWindowWidth, userData.cWindowHeight);
-
-    // Set font variables
-    f_small.set_variables("small");
-    f_large.set_variables("large");
-
     programStart = std::chrono::system_clock::now();
 
     // Create window
@@ -631,36 +624,6 @@ void Game::read_textures()
         spriteFilePaths.push_back(fileDirFull);
 
         sprites[sprites.size() - 1].SetCenterPos(cx, cy);
-    }
-
-    return;
-
-    // Read large font
-    typeCount = tx["largefont"].size();
-    for (int i = 0; i < typeCount; i++) {
-        std::string fileDir = tx["largefont"][i]["filepath"].get<std::string>();
-        std::string sprName = tx["largefont"][i]["spritename"].get<std::string>();
-        int cx = tx["largefont"][i]["centerpos"]["x"];
-        int cy = tx["largefont"][i]["centerpos"]["y"];
-
-        std::string fileDirFull = "Content/" + fileDir;
-        f_large.character.push_back(Sprite(fileDirFull, sprName));
-
-        f_large.character[f_large.character.size() - 1].SetCenterPos(cx, cy);
-    }
-
-    // Read small font
-    typeCount = tx["smallfont"].size();
-    for (int i = 0; i < typeCount; i++) {
-        std::string fileDir = tx["smallfont"][i]["filepath"].get<std::string>();
-        std::string sprName = tx["smallfont"][i]["spritename"].get<std::string>();
-        int cx = tx["smallfont"][i]["centerpos"]["x"];
-        int cy = tx["smallfont"][i]["centerpos"]["y"];
-
-        std::string fileDirFull = "Content/" + fileDir;
-        f_small.character.push_back(Sprite(fileDirFull, sprName));
-
-        f_small.character[f_small.character.size() - 1].SetCenterPos(cx, cy);
     }
 }
 
