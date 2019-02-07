@@ -259,6 +259,18 @@ function update(pos, ld, curtime_t)
 	messagecount = #messages
 end
 
+function damage(di)
+	if (di.enemies == true) then
+		health = health - di.amount
+		if (health <= 0) then
+			health = 0
+			return true
+		end
+		
+		return false
+	end
+end
+
 idleanimationtime_d = 500 -- Cooldown between idle animation changes in ms
 function select_sprite(curtime_t)
 	if (not(moving) and not(attacking)) then

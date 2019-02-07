@@ -383,6 +383,22 @@ DynamicObject::DynamicObject(int id, Pos2D gPos)
         "tiles"      , sol::readonly(&LevelStateData::tiles)
     );
 
+    script.new_usertype<DamageInfo>
+    (
+        "damageInfo",
+        sol::constructors<>(),
+        "amount"       , sol::readonly(&DamageInfo::amount),
+        "type"         , sol::readonly(&DamageInfo::type),
+        "players"      , sol::readonly(&DamageInfo::players),
+        "enemies"      , sol::readonly(&DamageInfo::enemies),
+        "terrain"      , sol::readonly(&DamageInfo::terrain),
+        "direction"    , sol::readonly(&DamageInfo::dir),
+        "ground"       , sol::readonly(&DamageInfo::ground),
+        "precise"      , sol::readonly(&DamageInfo::precise),
+        "knockbackStr" , sol::readonly(&DamageInfo::knockbackStr),
+        "statusEffects", sol::readonly(&DamageInfo::statusEffects)
+    );
+
     script.new_usertype<LevelMessage>
     (
         "levelMessage",
