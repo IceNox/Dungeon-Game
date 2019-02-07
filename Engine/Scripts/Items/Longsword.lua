@@ -40,7 +40,7 @@ hitp[0] =
 -- RIGHT
 hitp[1] =
 {
-	centerx = 3,
+	centerx = 1,
 	centery = 1,
 	width = 3,
 	height = 1,
