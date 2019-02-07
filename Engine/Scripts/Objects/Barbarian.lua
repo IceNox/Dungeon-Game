@@ -262,8 +262,11 @@ end
 function damage(di)
 	if (di.enemies == true) then
 		health = health - di.amount
+		healthbarvisible = true
+		
 		if (health <= 0) then
 			health = 0
+			healthbarvisible = false
 			return true
 		end
 		

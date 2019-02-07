@@ -19,6 +19,14 @@ spriteycenters =
 }
 spriteindexes = {}
 
+-- Health
+maxhealth = 0
+health = 0
+armor = 0
+
+healthbarheight = 0
+healthbarvisible = false
+
 -- Hitbox
 hitbox = 
 {
