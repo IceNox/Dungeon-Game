@@ -203,6 +203,14 @@ StaticObject::StaticObject(int id, Pos2D gPos, bool setup)
         return;
     }
 
+    // Set health variables
+    maxHealth = script["maxhealth"];
+    health = script["health"];
+    armor = script["armor"];
+
+    healthbarHeight = script["healthbarheight"];
+    healthbarVisible = script["healthbarvisible"];
+
     // Set sprite variables
     currentSprite = EMPTY_SPRITE;
     sOffset = { -sprites[currentSprite].GetCenterX(), -sprites[currentSprite].GetCenterY() };
@@ -440,7 +448,7 @@ DynamicObject::DynamicObject(int id, Pos2D gPos)
     armor = script["armor"];
 
     healthbarHeight = script["healthbarheight"];
-    healthbarVisible = false;
+    healthbarVisible = script["healthbarvisible"];
 
     // Set sprite variables
     currentSprite = EMPTY_SPRITE;
@@ -513,6 +521,14 @@ void DynamicObject::update(std::vector<LevelMessage> &messages, const LevelState
     sOffset = { -sprites[currentSprite].GetCenterX(), -sprites[currentSprite].GetCenterY() };
     sPos = cPos + sOffset;
     sPos.y -= height;
+
+    // Set healthbar
+    maxHealth = script["maxhealth"];
+    health = script["health"];
+    armor = script["armor"];
+
+    healthbarHeight = script["healthbarheight"];
+    healthbarVisible = script["healthbarvisible"];
 
     // Set hitbox
     hitbox.cPos = cPos;

@@ -34,6 +34,14 @@ public:
 
     Direction facing;
 
+    // Health
+    int maxHealth;
+    int health;
+    int armor;
+
+    int healthbarHeight;
+    bool healthbarVisible = false;
+
     // Sprite
     Pos2D sPos;
     Pos2D sOffset;
@@ -111,13 +119,6 @@ public:
 class DynamicObject : public LevelObject
 {
 public:
-    int maxHealth;
-    int health;
-    int armor;
-
-    int healthbarHeight;
-    bool healthbarVisible = false;
-
     DynamicObject(int id, Pos2D gPos);
     DynamicObject(const DynamicObject &);
     DynamicObject& operator=(const DynamicObject &);
