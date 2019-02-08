@@ -152,8 +152,8 @@ public:
 
 /// Functions
     // Level
-    void draw_enemy_health(int startX, int startY, int hstartX, int hstartY, int health, int maxHealth);
-    void draw_enemy_armor(int startX, int startY, int astartX, int astartY, int armor);
+    void draw_object_health(Pos2D startPos, const LevelObject& obj);
+    void draw_object_armor(Pos2D startPos, const LevelObject& obj);
     void draw_player_health();
     void draw_player_armor();
     void draw_player_items();

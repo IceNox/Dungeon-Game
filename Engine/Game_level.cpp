@@ -183,11 +183,21 @@ void Game::ComposeGame()
         for (unsigned i = 0; i < level.staticObjects.size(); i++) {
             if (level.staticObjects[i].gPos.y == y && level.staticObjects[i].visible) {
                 gfx.DrawSprite(startPos + level.staticObjects[i].sPos, sprites[level.staticObjects[i].currentSprite]);
+
+                if (level.staticObjects[i].healthbarVisible) {
+                    draw_object_health(startPos, level.staticObjects[i]);
+                    draw_object_armor(startPos, level.staticObjects[i]);
+                }
             }
         }
         for (unsigned i = 0; i < level.dynamicObjects.size(); i++) {
             if (level.dynamicObjects[i].gPos.y == y && level.dynamicObjects[i].visible) {
                 gfx.DrawSprite(startPos + level.dynamicObjects[i].sPos, sprites[level.dynamicObjects[i].currentSprite]);
+
+                if (level.dynamicObjects[i].healthbarVisible) {
+                    draw_object_health(startPos, level.dynamicObjects[i]);
+                    draw_object_armor(startPos, level.dynamicObjects[i]);
+                }
             }
         }
 
@@ -454,8 +464,35 @@ void Game::ComposeGame()
     }
 }
 
-void Game::draw_enemy_health(int startX, int startY, int hstartX, int hstartY, int health, int maxHealth)
+void Game::draw_object_health(Pos2D startPos, const LevelObject& obj)
 {
+    int healthToDraw = obj.health;
+
+    int heartSprWidth  = sprites[HEART_SMALL_FULL].GetWidth();
+    int heartSprHeight = sprites[HEART_SMALL_FULL].GetHeight();
+
+    // Calculate offset
+    Pos2D drawPos = startPos + obj.cPos;
+    drawPos.x -= ((obj.maxHealth / 2 * (heartSprWidth + 4)) - 4) / 2;
+    drawPos.y -= obj.healthbarHeight - 2;
+
+    // Draw each heart
+    for (int i = 0; i < obj.maxHealth / 2; i++) {
+        if (healthToDraw >= 2) {
+            gfx.DrawSprite(drawPos, sprites[HEART_SMALL_FULL]);
+            healthToDraw -= 2;
+        }
+        else if (healthToDraw == 1) {
+            gfx.DrawSprite(drawPos, sprites[HEART_SMALL_HALF]);
+            healthToDraw -= 1;
+        }
+        else if (healthToDraw == 0) {
+            gfx.DrawSprite(drawPos, sprites[HEART_SMALL_EMPTY]);
+        }
+
+        drawPos.x += heartSprWidth + 4;
+    }
+
     /*
     int healthToDraw = health;
 
@@ -479,8 +516,35 @@ void Game::draw_enemy_health(int startX, int startY, int hstartX, int hstartY, i
     */
 }
 
-void Game::draw_enemy_armor(int startX, int startY, int astartX, int astartY, int armor)
+void Game::draw_object_armor(Pos2D startPos, const LevelObject& obj)
 {
+    int armorToDraw = obj.armor;
+
+    int shieldSprWidth  = sprites[SHIELD_SMALL_FULL].GetWidth();
+    int shieldSprHeight = sprites[SHIELD_SMALL_FULL].GetHeight();
+
+    // Calculate offset
+    Pos2D drawPos = startPos + obj.cPos;
+    drawPos.x -= ((obj.armor / 2 * (shieldSprWidth + 4)) - 4) / 2;
+    drawPos.y -= obj.healthbarHeight + shieldSprHeight + 2;
+
+    // Draw each shield
+    while (true) {
+        if (armorToDraw >= 2) {
+            gfx.DrawSprite(drawPos, sprites[SHIELD_SMALL_FULL]);
+            armorToDraw -= 2;
+        }
+        else if (armorToDraw == 1) {
+            gfx.DrawSprite(drawPos, sprites[SHIELD_SMALL_HALF]);
+            break;
+        }
+        else if (armorToDraw == 0) {
+            break;
+        }
+
+        drawPos.x += shieldSprWidth + 4;
+    }
+
     /*
     int armorToDraw = armor;
 

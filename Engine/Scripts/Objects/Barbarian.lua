@@ -51,7 +51,7 @@ maxhealth = 4
 health = 4
 armor = 0
 
-healthbarheight = 78
+healthbarheight = 92
 healthbarvisible = false
 
 -- Hitbox
