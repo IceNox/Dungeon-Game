@@ -4,7 +4,7 @@ VARIANT = 0
 NAME = "Barbarian"
 
 -- Sprites to load
-spritecount = 10
+spritecount = 14
 spritepaths =
 {
 	"Content/Game/Mobs/Barbarian/Barbarian_attack_left_1.tga", 	-- 1
@@ -16,7 +16,11 @@ spritepaths =
 	"Content/Game/Mobs/Barbarian/Barbarian_jump_left_1.tga", 	-- 7
 	"Content/Game/Mobs/Barbarian/Barbarian_jump_left_2.tga", 	-- 8
 	"Content/Game/Mobs/Barbarian/Barbarian_jump_right_1.tga", 	-- 9
-	"Content/Game/Mobs/Barbarian/Barbarian_jump_right_2.tga" 	-- 10
+	"Content/Game/Mobs/Barbarian/Barbarian_jump_right_2.tga", 	-- 10
+	"Content/Game/Animations/Attack/Attack_chop_up_animation-f07.tga",	  -- 11
+	"Content/Game/Animations/Attack/Attack_chop_right_animation-f07.tga", -- 12
+	"Content/Game/Animations/Attack/Attack_chop_down_animation-f07.tga",  -- 13
+	"Content/Game/Animations/Attack/Attack_chop_left_animation-f07.tga"   -- 14
 }
 spritexcenters =
 {
@@ -29,20 +33,28 @@ spritexcenters =
 	36, -- 7
 	36, -- 8
 	36, -- 9
-	36  -- 10
+	36, -- 10
+	4,  -- 11
+	12, -- 12
+	4,  -- 13
+	12  -- 14
 }
 spriteycenters =
 {
-	68, -- 1
-	68, -- 2
-	68, -- 3
-	68, -- 4
-	68, -- 5
-	68, -- 6
-	68, -- 7
-	68, -- 8
-	68, -- 9
-	68  -- 10
+	88, -- 1
+	88, -- 2
+	88, -- 3
+	88, -- 4
+	88, -- 5
+	88, -- 6
+	88, -- 7
+	88, -- 8
+	88, -- 9
+	88, -- 10
+	36, -- 11
+	36, -- 12
+	36, -- 13
+	36  -- 14
 }
 spriteindexes = {}
 
@@ -241,16 +253,26 @@ function update(pos, ld, curtime_t)
 		
 		-- Finish attack if necessary
 		if (mselapsed_d > attackdur_d) then
+			-- Deal damage
 			messages[#messages+1] = levelMessage.new()
 			messages[#messages].source = "barbarian"
 			messages[#messages].message = "damage " .. attackpos.x .. " " .. attackpos.y .. " 1 p " .. dirstr[attackdir]
 			
+			-- Show swing animation
 			messages[#messages+1] = levelMessage.new()
 			messages[#messages].source = "barbarian"
-			messages[#messages].message = "particle " .. attackpos.x * 96 + 20 .. " " .. attackpos.y * 96 + 40
-			messages[#messages].argKeys = {"velocity", "elength", "flength", "text"}
-			messages[#messages].argValsInt = {0, 1000, 1000, 0}
-			messages[#messages].argValsStr = {"0;0", "", "", "hit"}
+			if (attackdir == 0) then
+				messages[#messages].message = "animation " .. pos.x .. " " .. pos.y - 48 - 36 .. " " .. spriteindexes[11]
+			elseif (attackdir == 1) then
+				messages[#messages].message = "animation " .. pos.x + 48 .. " " .. pos.y - 36 .. " " .. spriteindexes[12]
+			elseif (attackdir == 2) then
+				messages[#messages].message = "animation " .. pos.x .. " " .. pos.y + 48 - 36 .. " " .. spriteindexes[13]
+			elseif (attackdir == 3) then
+				messages[#messages].message = "animation " .. pos.x - 48 .. " " .. pos.y - 36 .. " " .. spriteindexes[14]
+			end
+			messages[#messages].argKeys = {"fholdtime", "ground"}
+			messages[#messages].argValsInt = {15, 0}
+			messages[#messages].argValsStr = {"", "false"}
 			
 			attacking = false
 		end
@@ -267,6 +289,9 @@ function damage(di)
 		if (health <= 0) then
 			health = 0
 			healthbarvisible = false
+			
+			--messages[#messages+1] = levelMessage.new()
+			
 			return true
 		end
 		
