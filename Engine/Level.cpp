@@ -854,6 +854,33 @@ void Level::handle_messages()
                 particles.pop_back();
             }
         }
+
+        // Spawn object
+        if (command == "spawn") {
+            std::string type = exer_str_until(messages[i].message);
+
+            std::string result;
+            if (type == "d" || type == "dynamic") {
+                std::string xstr = exer_str_until(messages[i].message);
+                std::string ystr = exer_str_until(messages[i].message);
+                std::string id = exer_str_until(messages[i].message);
+
+                int x = str_to_int(xstr);
+                int y = str_to_int(ystr);
+
+                dynamicObjects.push_back(DynamicObject(str_to_int(id), { x, y }));
+            }
+            else if (type == "s" || type == "static") {
+                std::string xstr = exer_str_until(messages[i].message);
+                std::string ystr = exer_str_until(messages[i].message);
+                std::string id = exer_str_until(messages[i].message);
+
+                int x = str_to_int(xstr);
+                int y = str_to_int(ystr);
+
+                staticObjects.push_back(StaticObject(str_to_int(id), { x, y }));
+            }
+        }
     }
     /*
     for (auto it : levelMessages) {
@@ -1346,6 +1373,10 @@ void Level::deal_damage(ScreenAnimations &screenAnimations)
 
         for (unsigned i = 0; i < healthMap[index].dInfo.size(); i++) {
             staticObjects[i].damage(healthMap[index].dInfo[i]);
+
+            if (healthMap[index].dInfo[i].source == "player") {
+                // Start shake
+            }
         }
     }
 
@@ -1356,6 +1387,10 @@ void Level::deal_damage(ScreenAnimations &screenAnimations)
 
         for (unsigned i = 0; i < healthMap[index].dInfo.size(); i++) {
             dynamicObjects[i].damage(messages, healthMap[index].dInfo[i]);
+
+            if (healthMap[index].dInfo[i].source == "player") {
+                // Start shake
+            }
         }
     }
 
