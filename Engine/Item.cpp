@@ -17,7 +17,7 @@ Item::Item(int id, TimePoint lastUsed)
     script.new_usertype<Pos2D>
     (
         "position",
-        sol::constructors<>(),
+        sol::constructors<Pos2D()>(),
         "x", &Pos2D::x,
         "y", &Pos2D::y
     );

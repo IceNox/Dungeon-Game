@@ -4,10 +4,14 @@ VARIANT = 0
 NAME = "Longsword"
 
 -- Sprites to load
-spritecount = 1
+spritecount = 5
 spritepaths =
 {
-	"Content/Game/Items/Longsword.tga"
+	"Content/Game/Items/Longsword.tga",
+	"Content/Game/Animations/Attack/Attack_chop_up_animation-f07.tga",
+	"Content/Game/Animations/Attack/Attack_chop_right_animation-f07.tga",
+	"Content/Game/Animations/Attack/Attack_chop_down_animation-f07.tga",
+	"Content/Game/Animations/Attack/Attack_chop_left_animation-f07.tga"
 }
 spriteindexes = {}
 
@@ -88,9 +92,10 @@ messagecount = 0
 messages = {}
 
 -- Logic
-function use(pos, direction, ld, curTime)
-	pos.x = math.floor(pos.x / 96)
-	pos.y = math.floor(pos.y / 96)
+function use(pos, direction, ld, curtime_t)
+	gpos = position.new()
+	gpos.x = math.floor(pos.x / 96)
+	gpos.y = math.floor(pos.y / 96)
 
 	if (direction == -1) then
 		return
@@ -104,10 +109,26 @@ function use(pos, direction, ld, curTime)
 			if (hitp[direction].pattern[y][x] == 1) then
 				messages[#messages+1] = levelMessage.new()
 				messages[#messages].source = "player"
-				messages[#messages].message = "damage " .. pos.x + dx .. " " .. pos.y + dy .. " 1 p " .. dirstr[direction]
+				messages[#messages].message = "damage " .. gpos.x + dx .. " " .. gpos.y + dy .. " 1 p " .. dirstr[direction]
 			end
 		end
 	end
+	
+	-- Show swing animation
+	messages[#messages+1] = levelMessage.new()
+	messages[#messages].source = "player"
+	if (direction == 0) then
+		messages[#messages].message = "animation " .. pos.x .. " " .. pos.y - 48 - 36 .. " " .. spriteindexes[2]
+	elseif (direction == 1) then
+		messages[#messages].message = "animation " .. pos.x + 48 .. " " .. pos.y - 36 .. " " .. spriteindexes[3]
+	elseif (direction == 2) then
+		messages[#messages].message = "animation " .. pos.x .. " " .. pos.y + 48 - 36 .. " " .. spriteindexes[4]
+	elseif (direction == 3) then
+		messages[#messages].message = "animation " .. pos.x - 48 .. " " .. pos.y - 36 .. " " .. spriteindexes[5]
+	end
+	messages[#messages].argKeys = {"fholdtime", "ground"}
+	messages[#messages].argValsInt = {15, 0}
+	messages[#messages].argValsStr = {"", "false"}
 	
 	messagecount = #messages
 	do return end
