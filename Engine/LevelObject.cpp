@@ -25,7 +25,7 @@ void LevelObject::move_to(Pos2D pos, int duration)
 
         if (moveDirection != UP && moveDirection != DOWN) {
             facing = moveDirection;
-            script["facing"] = (int)facing;
+            (*scripts[scri])["facing"] = (int)facing;
         }
     }
 }
@@ -57,7 +57,7 @@ void LevelObject::update_movement()
         height = 0;
 
         moveState.ongoing = false;
-        script["reset_movement"]();
+        (*scripts[scri])["reset_movement"]();
 
         return;
     }
@@ -67,7 +67,7 @@ void LevelObject::update_movement()
     float mheight = 0.0f;
 
     // Default move path
-    if (script["movement"]["mtype"] == -1) {
+    if ((*scripts[scri])["movement"]["mtype"] == -1) {
         movedBy = 1.0f - (1.0f - moveState.progress) * (1.0f - moveState.progress);
 
         float xAxis = 2 * (moveState.progress - 0.5f);
@@ -77,22 +77,13 @@ void LevelObject::update_movement()
     }
     // Script calculated move path
     else {
-        sol::tie(movedBy, mheight) = script["movementtypes"][script["movement"]["mtype"]](moveState.progress);
+        sol::tie(movedBy, mheight) = (*scripts[scri])["movementtypes"][(*scripts[scri])["movement"]["mtype"]](moveState.progress);
     }
 
     Pos2D moveVec = moveEndPos - moveStartPos;
 
     cPos = moveStartPos + moveVec * movedBy;
     height = ceil(mheight);
-}
-
-StaticObject::StaticObject(const StaticObject &o)
-    : StaticObject(o.oid, o.gPos)
-{}
-
-StaticObject& StaticObject::operator=(const StaticObject &o)
-{
-    return *this;
 }
 
 StaticObject::StaticObject(int id, Pos2D gPos, bool setup)
@@ -108,11 +99,14 @@ StaticObject::StaticObject(int id, Pos2D gPos, bool setup)
 
     cPos = gPos * cellSize + Pos2D(cellSize / 2);
 
-    // Set up script state
-    script.open_libraries(sol::lib::base);
-    script.open_libraries(sol::lib::math);
+    // Get script index
+    scri = scripts.AddState();
 
-    script.new_usertype<Pos2D>
+    // Set up script state
+    scripts[scri]->open_libraries(sol::lib::base);
+    scripts[scri]->open_libraries(sol::lib::math);
+
+    scripts[scri]->new_usertype<Pos2D>
     (
         "position",
         sol::constructors<Pos2D()>(),
@@ -120,7 +114,7 @@ StaticObject::StaticObject(int id, Pos2D gPos, bool setup)
         "y", sol::readonly(&Pos2D::y)
     );
 
-    script.new_usertype<TileData>
+    scripts[scri]->new_usertype<TileData>
     (
         "tileData",
         sol::constructors<>(),
@@ -140,7 +134,7 @@ StaticObject::StaticObject(int id, Pos2D gPos, bool setup)
         "directlyLit", sol::readonly(&TileData::directlyLit)
     );
 
-    script.new_usertype<LevelStateData>
+    scripts[scri]->new_usertype<LevelStateData>
     (
         "levelData",
         sol::constructors<>(),
@@ -152,7 +146,7 @@ StaticObject::StaticObject(int id, Pos2D gPos, bool setup)
         "tiles"      , sol::readonly(&LevelStateData::tiles)
     );
 
-    script.new_usertype<DamageInfo>
+    scripts[scri]->new_usertype<DamageInfo>
     (
         "damageInfo",
         sol::constructors<>(),
@@ -168,7 +162,7 @@ StaticObject::StaticObject(int id, Pos2D gPos, bool setup)
         "statusEffects", sol::readonly(&DamageInfo::statusEffects)
     );
 
-    script.new_usertype<LevelMessage>
+    scripts[scri]->new_usertype<LevelMessage>
     (
         "levelMessage",
         sol::constructors<LevelMessage()>(),
@@ -184,11 +178,11 @@ StaticObject::StaticObject(int id, Pos2D gPos, bool setup)
     for (int i = 0; i < _OBJECT_SCRIPTS.size(); i++) {
         if (id / 1000 == _OBJECT_SCRIPTS[i].id) {
             // Open script file
-            script.script_file(_OBJECT_SCRIPTS[i].filePath);
+            scripts[scri]->script_file(_OBJECT_SCRIPTS[i].filePath);
 
             // Set sprites
             for (int j = 0; j < _OBJECT_SCRIPTS[i].spriteIndexes.size(); j++) {
-                script["spriteindexes"][j+1] = _OBJECT_SCRIPTS[i].spriteIndexes[j];
+                (*scripts[scri])["spriteindexes"][j+1] = _OBJECT_SCRIPTS[i].spriteIndexes[j];
             }
 
             linked = true;
@@ -204,71 +198,71 @@ StaticObject::StaticObject(int id, Pos2D gPos, bool setup)
     }
 
     // Set health variables
-    maxHealth = script["maxhealth"];
-    health = script["health"];
-    armor = script["armor"];
+    maxHealth = (*scripts[scri])["maxhealth"];
+    health = (*scripts[scri])["health"];
+    armor = (*scripts[scri])["armor"];
 
-    healthbarHeight = script["healthbarheight"];
-    healthbarVisible = script["healthbarvisible"];
+    healthbarHeight = (*scripts[scri])["healthbarheight"];
+    healthbarVisible = (*scripts[scri])["healthbarvisible"];
 
     // Set sprite variables
     currentSprite = EMPTY_SPRITE;
     sOffset = { -sprites[currentSprite].GetCenterX(), -sprites[currentSprite].GetCenterY() };
 
     // Set hitbox
-    sol::optional<int> hType = script["hitbox"]["shape"];
+    sol::optional<int> hType = (*scripts[scri])["hitbox"]["shape"];
     hitbox.type = hType.value();
 
-    sol::optional<int> w = script["hitbox"]["size"]["w"];
-    sol::optional<int> h = script["hitbox"]["size"]["h"];
-    sol::optional<int> r = script["hitbox"]["size"]["r"];
+    sol::optional<int> w = (*scripts[scri])["hitbox"]["size"]["w"];
+    sol::optional<int> h = (*scripts[scri])["hitbox"]["size"]["h"];
+    sol::optional<int> r = (*scripts[scri])["hitbox"]["size"]["r"];
 
     hitbox.width  = w.value();
     hitbox.height = h.value();
     hitbox.radius = r.value();
     
-    sol::optional<int> hox = script["hitbox"]["offset"]["x"];
-    sol::optional<int> hoy = script["hitbox"]["offset"]["y"];
+    sol::optional<int> hox = (*scripts[scri])["hitbox"]["offset"]["x"];
+    sol::optional<int> hoy = (*scripts[scri])["hitbox"]["offset"]["y"];
 
     hOffset = { hox.value(), hoy.value() };
 
     // Set light source
-    sol::optional<int> isLS = script["lightsourcecount"];
+    sol::optional<int> isLS = (*scripts[scri])["lightsourcecount"];
     lightSource = isLS.value();
 
     for (int i = 0; i < isLS.value(); i++) {
-        sol::optional<int> lsX = script["lightsources"][i]["offset"]["x"];
-        sol::optional<int> lsY = script["lightsources"][i]["offset"]["y"];
+        sol::optional<int> lsX = (*scripts[scri])["lightsources"][i]["offset"]["x"];
+        sol::optional<int> lsY = (*scripts[scri])["lightsources"][i]["offset"]["y"];
         lightSourcePos.push_back(Pos2D(lsX.value(), lsY.value()));
 
-        sol::optional<int> str = script["lightsources"][i]["strength"];
+        sol::optional<int> str = (*scripts[scri])["lightsources"][i]["strength"];
     }
 }
 
 void StaticObject::update(const LevelStateData &ld, long int curTime)
 {
     // Set variables
-    script["moving"] = moveState.ongoing;
-    script["moveprogress"] = moveState.progress;
+    (*scripts[scri])["moving"] = moveState.ongoing;
+    (*scripts[scri])["moveprogress"] = moveState.progress;
 
     // Run logic
-    script["update"](cPos, ld, maintime::currentGameTime / 1000);
+    (*scripts[scri])["update"](cPos, ld, maintime::currentGameTime / 1000);
 
     if (!moveState.ongoing) {
         // Check for a movement call
-        if (script["startmovement"] == true) {
-            if (script["movement"]["relative"] == true) {
+        if ((*scripts[scri])["startmovement"] == true) {
+            if ((*scripts[scri])["movement"]["relative"] == true) {
                 move_by_(
-                    script["movement"]["x"],
-                    script["movement"]["y"],
-                    script["movement"]["duration"]
+                    (*scripts[scri])["movement"]["x"],
+                    (*scripts[scri])["movement"]["y"],
+                    (*scripts[scri])["movement"]["duration"]
                 );
             }
             else {
                 move_to_(
-                    script["movement"]["x"],
-                    script["movement"]["y"],
-                    script["movement"]["duration"]
+                    (*scripts[scri])["movement"]["x"],
+                    (*scripts[scri])["movement"]["y"],
+                    (*scripts[scri])["movement"]["duration"]
                 );
             }
         }
@@ -281,7 +275,7 @@ void StaticObject::update(const LevelStateData &ld, long int curTime)
     gPos = cPos / cellSize;
 
     // Set sprite
-    currentSprite = script["select_sprite"](maintime::currentGameTime / 1000);
+    currentSprite = (*scripts[scri])["select_sprite"](maintime::currentGameTime / 1000);
     sOffset = { -sprites[currentSprite].GetCenterX(), -sprites[currentSprite].GetCenterY() };
     sPos = cPos + sOffset;
     sPos.y -= height;
@@ -290,50 +284,46 @@ void StaticObject::update(const LevelStateData &ld, long int curTime)
     hitbox.cPos = cPos;
 
     // Set other variables
-    sol::optional<int> obs = script["obstructive"];
-    sol::optional<int> pre = script["pressuring"];
-    sol::optional<int> pwr = script["powering"];
+    sol::optional<int> obs = (*scripts[scri])["obstructive"];
+    sol::optional<int> pre = (*scripts[scri])["pressuring"];
+    sol::optional<int> pwr = (*scripts[scri])["powering"];
     obstructive = obs.value();
     pressuring  = pre.value();
     powering    = pwr.value();
 
-    facing = static_cast<Direction>(script["facing"]);
+    facing = static_cast<Direction>((*scripts[scri])["facing"]);
 
     return;
 }
 
 void StaticObject::damage(const DamageInfo &di)
 {
-    destroyed = script["damage"](di, destroyed);
+    destroyed = (*scripts[scri])["damage"](di, destroyed);
 
     if (!moveState.ongoing) {
         // Check for a movement call
-        if (script["startmovement"] == true) {
-            if (script["movement"]["relative"] == true) {
+        if ((*scripts[scri])["startmovement"] == true) {
+            if ((*scripts[scri])["movement"]["relative"] == true) {
                 move_by_(
-                    script["movement"]["x"],
-                    script["movement"]["y"],
-                    script["movement"]["duration"]
+                    (*scripts[scri])["movement"]["x"],
+                    (*scripts[scri])["movement"]["y"],
+                    (*scripts[scri])["movement"]["duration"]
                 );
             }
             else {
                 move_to_(
-                    script["movement"]["x"],
-                    script["movement"]["y"],
-                    script["movement"]["duration"]
+                    (*scripts[scri])["movement"]["x"],
+                    (*scripts[scri])["movement"]["y"],
+                    (*scripts[scri])["movement"]["duration"]
                 );
             }
         }
     }
 }
 
-DynamicObject::DynamicObject(const DynamicObject &o)
-    : DynamicObject(o.oid, o.gPos)
-{}
-
-DynamicObject& DynamicObject::operator=(const DynamicObject &o)
+void StaticObject::destroy()
 {
-    return *this;
+    scripts.ReleaseObj(scri);
 }
 
 DynamicObject::DynamicObject(int id, Pos2D gPos)
@@ -347,11 +337,14 @@ DynamicObject::DynamicObject(int id, Pos2D gPos)
 
     cPos = gPos * cellSize + Pos2D(cellSize / 2);
 
-    // Set up script state
-    script.open_libraries(sol::lib::base);
-    script.open_libraries(sol::lib::math);
+    // Get script index
+    scri = scripts.AddState();
 
-    script.new_usertype<Pos2D>
+    // Set up script state
+    scripts[scri]->open_libraries(sol::lib::base);
+    scripts[scri]->open_libraries(sol::lib::math);
+
+    scripts[scri]->new_usertype<Pos2D>
     (
         "position",
         sol::constructors<Pos2D()>(),
@@ -359,7 +352,7 @@ DynamicObject::DynamicObject(int id, Pos2D gPos)
         "y", &Pos2D::y
     );
 
-    script.new_usertype<TileData>
+    scripts[scri]->new_usertype<TileData>
     (
         "tileData",
         sol::constructors<>(),
@@ -379,7 +372,7 @@ DynamicObject::DynamicObject(int id, Pos2D gPos)
         "directlyLit", sol::readonly(&TileData::directlyLit)
     );
 
-    script.new_usertype<LevelStateData>
+    scripts[scri]->new_usertype<LevelStateData>
     (
         "levelData",
         sol::constructors<>(),
@@ -391,7 +384,7 @@ DynamicObject::DynamicObject(int id, Pos2D gPos)
         "tiles"      , sol::readonly(&LevelStateData::tiles)
     );
 
-    script.new_usertype<DamageInfo>
+    scripts[scri]->new_usertype<DamageInfo>
     (
         "damageInfo",
         sol::constructors<>(),
@@ -407,7 +400,7 @@ DynamicObject::DynamicObject(int id, Pos2D gPos)
         "statusEffects", sol::readonly(&DamageInfo::statusEffects)
     );
 
-    script.new_usertype<LevelMessage>
+    scripts[scri]->new_usertype<LevelMessage>
     (
         "levelMessage",
         sol::constructors<LevelMessage()>(),
@@ -423,11 +416,11 @@ DynamicObject::DynamicObject(int id, Pos2D gPos)
     for (int i = 0; i < _OBJECT_SCRIPTS.size(); i++) {
         if (id / 1000 == _OBJECT_SCRIPTS[i].id) {
             // Open script file
-            script.script_file(_OBJECT_SCRIPTS[i].filePath);
+            scripts[scri]->script_file(_OBJECT_SCRIPTS[i].filePath);
 
             // Set sprites
             for (int j = 0; j < _OBJECT_SCRIPTS[i].spriteIndexes.size(); j++) {
-                script["spriteindexes"][j + 1] = _OBJECT_SCRIPTS[i].spriteIndexes[j];
+                (*scripts[scri])["spriteindexes"][j + 1] = _OBJECT_SCRIPTS[i].spriteIndexes[j];
             }
 
             linked = true;
@@ -443,31 +436,31 @@ DynamicObject::DynamicObject(int id, Pos2D gPos)
     }
 
     // Set health variables
-    maxHealth = script["maxhealth"];
-    health = script["health"];
-    armor = script["armor"];
+    maxHealth = (*scripts[scri])["maxhealth"];
+    health = (*scripts[scri])["health"];
+    armor = (*scripts[scri])["armor"];
 
-    healthbarHeight = script["healthbarheight"];
-    healthbarVisible = script["healthbarvisible"];
+    healthbarHeight = (*scripts[scri])["healthbarheight"];
+    healthbarVisible = (*scripts[scri])["healthbarvisible"];
 
     // Set sprite variables
     currentSprite = EMPTY_SPRITE;
     sOffset = { -sprites[currentSprite].GetCenterX(), -sprites[currentSprite].GetCenterY() };
 
     // Set hitbox
-    sol::optional<int> hType = script["hitbox"]["shape"];
+    sol::optional<int> hType = (*scripts[scri])["hitbox"]["shape"];
     hitbox.type = hType.value();
 
-    sol::optional<int> w = script["hitbox"]["size"]["w"];
-    sol::optional<int> h = script["hitbox"]["size"]["h"];
-    sol::optional<int> r = script["hitbox"]["size"]["r"];
+    sol::optional<int> w = (*scripts[scri])["hitbox"]["size"]["w"];
+    sol::optional<int> h = (*scripts[scri])["hitbox"]["size"]["h"];
+    sol::optional<int> r = (*scripts[scri])["hitbox"]["size"]["r"];
 
     hitbox.width = w.value();
     hitbox.height = h.value();
     hitbox.radius = r.value();
 
-    sol::optional<int> hox = script["hitbox"]["offset"]["x"];
-    sol::optional<int> hoy = script["hitbox"]["offset"]["y"];
+    sol::optional<int> hox = (*scripts[scri])["hitbox"]["offset"]["x"];
+    sol::optional<int> hoy = (*scripts[scri])["hitbox"]["offset"]["y"];
 
     hOffset = { hox.value(), hoy.value() };
 }
@@ -475,31 +468,31 @@ DynamicObject::DynamicObject(int id, Pos2D gPos)
 void DynamicObject::update(std::vector<LevelMessage> &messages, const LevelStateData &ld, long int curtime)
 {
     // Set variables
-    script["moving"] = moveState.ongoing;
-    script["moveprogress"] = moveState.progress;
+    (*scripts[scri])["moving"] = moveState.ongoing;
+    (*scripts[scri])["moveprogress"] = moveState.progress;
 
     // Run logic
-    script["update"](cPos, ld, maintime::currentGameTime / 1000);
+    (*scripts[scri])["update"](cPos, ld, maintime::currentGameTime / 1000);
 
     if (!moveState.ongoing) {
         // Check for a movement call
-        if (script["startmovement"] == true) {
-            if (script["movement"]["relative"] == true) {
+        if ((*scripts[scri])["startmovement"] == true) {
+            if ((*scripts[scri])["movement"]["relative"] == true) {
                 move_by_(
-                    script["movement"]["x"],
-                    script["movement"]["y"],
-                    script["movement"]["duration"]
+                    (*scripts[scri])["movement"]["x"],
+                    (*scripts[scri])["movement"]["y"],
+                    (*scripts[scri])["movement"]["duration"]
                 );
             }
             else {
                 move_to_(
-                    script["movement"]["x"],
-                    script["movement"]["y"],
-                    script["movement"]["duration"]
+                    (*scripts[scri])["movement"]["x"],
+                    (*scripts[scri])["movement"]["y"],
+                    (*scripts[scri])["movement"]["duration"]
                 );
             }
 
-            script["reset_movement"]();
+            (*scripts[scri])["reset_movement"]();
         }
     }
     else {
@@ -507,66 +500,71 @@ void DynamicObject::update(std::vector<LevelMessage> &messages, const LevelState
     }
 
     // Get messages
-    int count = script["messagecount"].get<int>();
+    int count = (*scripts[scri])["messagecount"].get<int>();
     for (int i = 0; i < count; i++) {
-        messages.push_back(script["get_message"](i));
+        messages.push_back((*scripts[scri])["get_message"](i));
     }
-    script["clear_messages"]();
+    (*scripts[scri])["clear_messages"]();
 
     // Set grid position
     gPos = cPos / cellSize;
 
     // Set sprite
-    currentSprite = script["select_sprite"](maintime::currentGameTime / 1000);
+    currentSprite = (*scripts[scri])["select_sprite"](maintime::currentGameTime / 1000);
     sOffset = { -sprites[currentSprite].GetCenterX(), -sprites[currentSprite].GetCenterY() };
     sPos = cPos + sOffset;
     sPos.y -= height;
 
     // Set healthbar
-    maxHealth = script["maxhealth"];
-    health = script["health"];
-    armor = script["armor"];
+    maxHealth = (*scripts[scri])["maxhealth"];
+    health = (*scripts[scri])["health"];
+    armor = (*scripts[scri])["armor"];
 
-    healthbarHeight = script["healthbarheight"];
-    healthbarVisible = script["healthbarvisible"];
+    healthbarHeight = (*scripts[scri])["healthbarheight"];
+    healthbarVisible = (*scripts[scri])["healthbarvisible"];
 
     // Set hitbox
     hitbox.cPos = cPos;
 
     // Set other variables
-    sol::optional<int> obs = script["obstructive"];
-    sol::optional<int> pre = script["pressuring"];
-    sol::optional<int> pwr = script["powering"];
+    sol::optional<int> obs = (*scripts[scri])["obstructive"];
+    sol::optional<int> pre = (*scripts[scri])["pressuring"];
+    sol::optional<int> pwr = (*scripts[scri])["powering"];
     obstructive = obs.value();
     pressuring = pre.value();
     powering = pwr.value();
 
-    facing = static_cast<Direction>(script["facing"]);
+    facing = static_cast<Direction>((*scripts[scri])["facing"]);
 
     return;
 }
 
 void DynamicObject::damage(std::vector<LevelMessage> &messages, const DamageInfo &di)
 {
-    destroyed = script["damage"](di);
+    destroyed = (*scripts[scri])["damage"](di);
 
     if (!moveState.ongoing) {
         // Check for a movement call
-        if (script["startmovement"] == true) {
-            if (script["movement"]["relative"] == true) {
+        if ((*scripts[scri])["startmovement"] == true) {
+            if ((*scripts[scri])["movement"]["relative"] == true) {
                 move_by_(
-                    script["movement"]["x"],
-                    script["movement"]["y"],
-                    script["movement"]["duration"]
+                    (*scripts[scri])["movement"]["x"],
+                    (*scripts[scri])["movement"]["y"],
+                    (*scripts[scri])["movement"]["duration"]
                 );
             }
             else {
                 move_to_(
-                    script["movement"]["x"],
-                    script["movement"]["y"],
-                    script["movement"]["duration"]
+                    (*scripts[scri])["movement"]["x"],
+                    (*scripts[scri])["movement"]["y"],
+                    (*scripts[scri])["movement"]["duration"]
                 );
             }
         }
     }
+}
+
+void DynamicObject::destroy()
+{
+    scripts.ReleaseObj(scri);
 }

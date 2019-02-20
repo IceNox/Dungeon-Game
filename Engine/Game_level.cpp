@@ -292,17 +292,20 @@ void Game::ComposeGame()
                 }
             }
         }
+    }
+
+    // Animations (not-ground)
+    {
+        SpriteDrawData sdd;
 
         sdd.brightness = 1.0f;
         sdd.ira = true;
-        // Animations
+
         for (int i = 0; i < level.animations.size(); i++) {
             if (!level.animations[i].ground) {
-                if ((level.animations[i].cPos / cellSize).y == y) {
-                    sdd.irect = level.animations[i].spriteRegion;
+                sdd.irect = level.animations[i].spriteRegion;
 
-                    gfx.DrawSprite(startPos + level.animations[i].sPos, sprites[level.animations[i].spriteIndex], sdd);
-                }
+                gfx.DrawSprite(startPos + level.animations[i].sPos, sprites[level.animations[i].spriteIndex], sdd);
             }
         }
     }

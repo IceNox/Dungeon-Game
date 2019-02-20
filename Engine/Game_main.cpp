@@ -26,6 +26,8 @@ std::vector<std::string> _USER_LEVEL_FILE_NAMES;
 std::vector<Sprite> sprites = {};
 std::vector<std::string> spriteFilePaths = {};
 
+SolStateArray scripts;
+
 std::vector<ScriptLoadData> _ITEM_SCRIPTS;
 std::vector<ScriptLoadData> _OBJECT_SCRIPTS;
 

@@ -263,7 +263,7 @@ void Player::move
             moved = true;
         }
 
-        if (keys.key_clicked(userData.keyBindings.CHANGE_DIRECTION)) {
+        if (GetKeyState(userData.keyBindings.CHANGE_DIRECTION) & 0x8000) {
             Direction dir = facing;
 
             if        (up)    facing = UP;

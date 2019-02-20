@@ -4,6 +4,7 @@
 #include "LevelStateData.h"
 #include "Navigation.h"
 #include "Constants.h"
+#include "GlobalData.h"
 
 #include "HealthMap.h"
 
@@ -25,8 +26,8 @@ public:
     int ID;
     int VR;
 
-    // Script
-    sol::state script;
+    // Script index
+    int scri;
 
     // Position
     Pos2D gPos;
@@ -81,9 +82,6 @@ public:
 
     // FUNCTIONS
     LevelObject() = default;
-    LevelObject(const LevelObject &) = default;
-    LevelObject& operator=(const LevelObject &) = default;
-    ~LevelObject() = default;
 
     virtual ObjectType get_type() { return OBJECT_BASE; }
 
@@ -107,24 +105,22 @@ class StaticObject : public LevelObject
 {
 public:
     StaticObject(int id, Pos2D gPos, bool setup = true);
-    StaticObject(const StaticObject &);
-    StaticObject& operator=(const StaticObject &);
 
     virtual ObjectType get_type() { return OBJECT_STATIC; }
 
     virtual void update(const LevelStateData &ld, long int curTime);
     virtual void damage(const DamageInfo &di);
+    virtual void destroy();
 };
 
 class DynamicObject : public LevelObject
 {
 public:
     DynamicObject(int id, Pos2D gPos);
-    DynamicObject(const DynamicObject &);
-    DynamicObject& operator=(const DynamicObject &);
 
     virtual ObjectType get_type() { return OBJECT_DYNAMIC; }
 
     virtual void update(std::vector<LevelMessage> &messages, const LevelStateData &ld, long int curtime);
     virtual void damage(std::vector<LevelMessage> &messages, const DamageInfo &di);
+    virtual void destroy();
 };

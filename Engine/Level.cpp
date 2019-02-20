@@ -249,7 +249,7 @@ void Level::load_save_file(std::string saveName)
             )
         );
     }
-
+    
     // Read dynamic objects
     for (int i = 0; i < dObjectCount; i++) {
         dynamicObjects.push_back(
@@ -259,6 +259,8 @@ void Level::load_save_file(std::string saveName)
             )
         );
     }
+
+    //dynamicObjects.erase(dynamicObjects.begin());
 
     levelStartTime = maintime::now();
 
@@ -1371,10 +1373,10 @@ void Level::deal_damage(ScreenAnimations &screenAnimations)
         int index = staticObjects[i].gPos.index(width);
         if (!healthMap[index].active) continue;
 
-        for (unsigned i = 0; i < healthMap[index].dInfo.size(); i++) {
-            staticObjects[i].damage(healthMap[index].dInfo[i]);
+        for (unsigned j = 0; j < healthMap[index].dInfo.size(); j++) {
+            staticObjects[i].damage(healthMap[index].dInfo[j]);
 
-            if (healthMap[index].dInfo[i].source == "player") {
+            if (healthMap[index].dInfo[j].source == "player") {
                 // Start shake
             }
         }
@@ -1385,10 +1387,10 @@ void Level::deal_damage(ScreenAnimations &screenAnimations)
         int index = dynamicObjects[i].gPos.index(width);
         if (!healthMap[index].active) continue;
 
-        for (unsigned i = 0; i < healthMap[index].dInfo.size(); i++) {
-            dynamicObjects[i].damage(messages, healthMap[index].dInfo[i]);
+        for (unsigned j = 0; j < healthMap[index].dInfo.size(); j++) {
+            dynamicObjects[i].damage(messages, healthMap[index].dInfo[j]);
 
-            if (healthMap[index].dInfo[i].source == "player") {
+            if (healthMap[index].dInfo[j].source == "player") {
                 // Start shake
             }
         }
@@ -1497,6 +1499,7 @@ void Level::remove_destroyed_objects()
 {
     for (unsigned i = 0; i < staticObjects.size(); i++) {
         if (staticObjects[i].destroyed) {
+            staticObjects[i].destroy();
             staticObjects.erase(staticObjects.begin() + i);
             i--;
         }
@@ -1504,6 +1507,7 @@ void Level::remove_destroyed_objects()
 
     for (unsigned i = 0; i < dynamicObjects.size(); i++) {
         if (dynamicObjects[i].destroyed) {
+            dynamicObjects[i].destroy();
             dynamicObjects.erase(dynamicObjects.begin() + i);
             i--;
         }

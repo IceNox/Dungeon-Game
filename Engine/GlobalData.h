@@ -2,7 +2,7 @@
 
 #include "Navigation.h"
 #include "Sprite.h"
-#include "sol.hpp"
+#include "SolStateArray.h"
 
 #include <string>
 #include <vector>
@@ -36,6 +36,8 @@ extern std::vector<std::string> _USER_LEVEL_FILE_NAMES;
 
 extern std::vector<Sprite> sprites;
 extern std::vector<std::string> spriteFilePaths;
+
+extern SolStateArray scripts;
 
 extern std::vector<ScriptLoadData> _ITEM_SCRIPTS;
 extern std::vector<ScriptLoadData> _OBJECT_SCRIPTS;

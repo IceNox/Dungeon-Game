@@ -229,6 +229,7 @@
     <ClInclude Include="SaveData.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="Sol.hpp" />
+    <ClInclude Include="SolStateArray.h" />
     <ClInclude Include="SpriteSelection.h" />
     <ClInclude Include="StatusEffects.h" />
     <ClInclude Include="LevelStateData.h" />
