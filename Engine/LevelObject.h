@@ -95,7 +95,7 @@ public:
     void move_by(Pos2D pos, int duration = 0);
     void move_to_(int x, int y, int duration = 0);
     void move_by_(int x, int y, int duration = 0);
-    void update_movement();
+    void update_movement(const LevelStateData &ld);
 
 private:
     //void self_damage

@@ -632,27 +632,44 @@ void Level::update_level(std::vector<GameMessage*> &msg, ScreenAnimations &scree
     set_game_state_data();
 
     // Update all objects
-    players[0].update_player
-    (
-        tiles,
-        damageMap,
-        commands,
-        messages,
-        screenAnimations,
-        levelStateData,
-        keys,
-        userData,
-        console.is_opened()?true:false
-    );
+    for (unsigned i = 0; i < players.size(); i++) {
+        players[i].update_player
+        (
+            tiles,
+            damageMap,
+            commands,
+            messages,
+            screenAnimations,
+            levelStateData,
+            keys,
+            userData,
+            console.is_opened() ? true : false
+        );
+
+        // Update tile occupation to avoid 2 objects moving to 1 tile
+        int index = players[i].gPos.index(width);
+        tiles[index].occupied = true;
+        levelStateData.tiles[index].occupied = true;
+    }
 
     for (int i = 0; i < _LEVEL_WIDTH * _LEVEL_HEIGHT; i++) {
         tiles[i].update_tile(wires, baseFloorVariant, damageMap);
     }
     for (int i = 0; i < staticObjects.size(); i++) {
         staticObjects[i].update(levelStateData, maintime::currentGameTime);
+
+        // Update tile occupation
+        int index = staticObjects[i].gPos.index(width);
+        tiles[index].occupied = true;
+        levelStateData.tiles[index].occupied = true;
     }
     for (int i = 0; i < dynamicObjects.size(); i++) {
         dynamicObjects[i].update(messages, levelStateData, maintime::currentGameTime);
+
+        // Update tile occupation
+        int index = dynamicObjects[i].gPos.index(width);
+        tiles[index].occupied = true;
+        levelStateData.tiles[index].occupied = true;
     }
     for (auto it : entities) {
         it->update();

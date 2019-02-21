@@ -235,7 +235,6 @@ function update(pos, ld, curtime_t)
 				if (not(dx_ == 0 and dy_ == 0)) then
 					-- Set up variables
 					startmovement = true
-					movement.mtype = 1
 					movement.relative = true
 					movement.duration = 150
 					movement.x = dx_

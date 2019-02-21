@@ -87,7 +87,6 @@ end
 
 function damage(di, destroyed)
 	if (di.terrain == true) then
-		movement.mtype = 1
 		movement.relative = true
 		movement.duration = 150
 		

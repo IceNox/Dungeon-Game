@@ -375,16 +375,13 @@ void Player::move
             height = ceil(yAxis * jumpHeight) + (int)jumpHeight + 1;
         }
 
-        Pos2D ncPos;
         // End MA if the progress is 100%
         if (MAprogress >= 1.0f) {
             end_MA();
             return;
         }
-        // Otherwise, update player position
-        else {
-            ncPos = scPos + (mcVec * cProgress);
-        }
+
+        Pos2D ncPos = scPos + (mcVec * cProgress);
 
         // Check for collision with an occupied tile
         Pos2D ntPos = ncPos - (gPos * cellSize);

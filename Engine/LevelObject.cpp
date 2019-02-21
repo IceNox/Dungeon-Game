@@ -45,7 +45,7 @@ void LevelObject::move_by_(int x, int y, int duration)
     move_by({ x, y }, duration);
 }
 
-void LevelObject::update_movement()
+void LevelObject::update_movement(const LevelStateData& ld)
 {
     // Get time elapsed
     int mselapsed = (maintime::now() - moveState.start).get_duration(MILLISECONDS);
@@ -68,7 +68,7 @@ void LevelObject::update_movement()
 
     // Default move path
     if ((*scripts[scri])["movement"]["mtype"] == -1) {
-        movedBy = 1.0f - (1.0f - moveState.progress) * (1.0f - moveState.progress);
+        movedBy = moveState.progress * (2.0f - moveState.progress);
 
         float xAxis = 2 * (moveState.progress - 0.5f);
         float yAxis = xAxis * xAxis * -1.0f;
@@ -81,6 +81,41 @@ void LevelObject::update_movement()
     }
 
     Pos2D moveVec = moveEndPos - moveStartPos;
+    Pos2D newcPos = moveStartPos + (moveVec * movedBy);
+
+    // Check for collision with an occupied tile
+    Pos2D newtPos = newcPos - (gPos * cellSize);
+    bool collided = false;
+    const int C_DIST = 16;
+    if (newtPos.x < C_DIST) { // Left
+        int index = gPos.y * _LEVEL_WIDTH + (gPos.x - 1);
+        collided = ld.tiles[index].occupied;
+    }
+    else if (newtPos.y < C_DIST) { // Up
+        int index = (gPos.y - 1) * _LEVEL_WIDTH + gPos.x;
+        collided = ld.tiles[index].occupied;
+    }
+    else if (newtPos.x > cellSize - C_DIST) { // Right
+        int index = gPos.y * _LEVEL_WIDTH + (gPos.x + 1);
+        collided = ld.tiles[index].occupied;
+    }
+    else if (newtPos.y > cellSize - C_DIST) { // Down
+        int index = (gPos.y + 1) * _LEVEL_WIDTH + gPos.x;
+        collided = ld.tiles[index].occupied;
+    }
+
+    if (collided) {
+        Pos2D gcPos = gPos * cellSize + Pos2D(cellSize / 2);
+
+        float ratio = 1.0f / (1.0f - moveState.progress);
+        Pos2D s2Pos = gcPos + (cPos - gcPos) * ratio;
+
+        moveStartPos = s2Pos;
+        moveEndPos = gcPos;
+        moveVec = moveEndPos - moveStartPos;
+
+        newcPos = moveStartPos + (moveVec * movedBy);
+    }
 
     cPos = moveStartPos + moveVec * movedBy;
     height = ceil(mheight);
@@ -268,7 +303,7 @@ void StaticObject::update(const LevelStateData &ld, long int curTime)
         }
     }
     else {
-        update_movement();
+        update_movement(ld);
     }
 
     // Set grid position
@@ -496,7 +531,7 @@ void DynamicObject::update(std::vector<LevelMessage> &messages, const LevelState
         }
     }
     else {
-        update_movement();
+        update_movement(ld);
     }
 
     // Get messages
