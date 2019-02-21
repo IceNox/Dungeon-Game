@@ -10,10 +10,10 @@
 
 Player::Player(Pos2D gPos) : gPos(gPos)
 {
-    health       = 20;
-    armor       = 0;
+    health     = 6;
+    armor      = 0;
     gold       = 0;
-    maxHealth  = 20;
+    maxHealth  = 6;
 
     resistancePhysical = 0.0f;
     resistanceFire       = 0.0f;
@@ -213,10 +213,10 @@ void Player::apply_effects
 {
     // Slow
     if (statusEffects.slowed) {
-        MAlength = basePlayerMAlength / (1.0f - statusEffects.slowStrength);
+        MAlength = BASE_MA_LENGTH / (1.0f - statusEffects.slowStrength);
     }
     else {
-        MAlength = basePlayerMAlength;
+        MAlength = BASE_MA_LENGTH;
     }
 
     // Burn
@@ -295,8 +295,8 @@ void Player::move
         }
 
         moveBufferUp    = false;
-        moveBufferDown    = false;
-        moveBufferLeft    = false;
+        moveBufferDown  = false;
+        moveBufferLeft  = false;
         moveBufferRight = false;
 
         /*
@@ -307,11 +307,11 @@ void Player::move
         }
         }
         */
-
+        /*
         if (tiles[nPos.index(_LEVEL_WIDTH)].occupied) {
             moved = false;
         }
-
+        */
         // If a valid movement command was issued, set up movement animation variables
         if (moved == true) {
             currentAction = P_MOVING;
@@ -319,12 +319,12 @@ void Player::move
 
             inMA     = true;
             onGround = false;
-            sgPos     = gPos;
+            scPos    = cPos;
 
             c_MAlength = MAlength;
 
             lastAction = std::chrono::system_clock::now();
-            MAstart    = std::chrono::system_clock::now();
+            MAstart    = maintime::now();
 
             if (up) {
                 MAdirection = UP;
@@ -339,6 +339,12 @@ void Player::move
                 MAdirection = RIGHT;
             }
 
+            Pos2D egPos = gPos;
+            egPos.move(MAdirection, 1);
+            ecPos = egPos * cellSize + (cellSize / 2);
+
+            mcVec = ecPos - scPos;
+
             facing = MAdirection;
 
             // Set the tile the player is moving to as occupied to prevent other AI from entering it
@@ -352,40 +358,13 @@ void Player::move
     }
     else {
         // Update time
-        std::chrono::duration<float> elapsed_seconds = std::chrono::system_clock::now() - MAstart;
-
-        MAtimeElapsed = elapsed_seconds.count();
-        MAprogress      = MAtimeElapsed / c_MAlength;
-
-        // Calculate distance moved while in the MA
-        int movedBy;
-        movedBy = cellSize - cellSize * (1.0f - MAprogress) * (1.0f - MAprogress);
-
-        // If the player moved halfway to another tile, change his coordinates and update tile lighting info
-        if (MAprogress > 0.3f && changedPosition == false) {
-            changedPosition = true;
-
-            /*
-            if        (MAdirection == UP) {
-                gPos.y--;
-            }
-            else if (MAdirection == DOWN) {
-                gPos.y++;
-            }
-            else if (MAdirection == LEFT) {
-                gPos.x--;
-            }
-            else if (MAdirection == RIGHT) {
-                gPos.x++;
-            }
-            */
-
-            gPos.move(MAdirection, 1);
-        }
+        MAprogress = (maintime::now() - MAstart).get_duration(MILLISECONDS) / (float)c_MAlength;
 
         if (MAprogress > 0.5f) {
             spriteNumber = 2;
         }
+
+        float cProgress = MAprogress * (2.0f - MAprogress);
 
         // Calculate current height
         int height = 10;
@@ -396,28 +375,55 @@ void Player::move
             height = ceil(yAxis * jumpHeight) + (int)jumpHeight + 1;
         }
 
+        Pos2D ncPos;
         // End MA if the progress is 100%
         if (MAprogress >= 1.0f) {
             end_MA();
+            return;
         }
         // Otherwise, update player position
         else {
-            if        (MAdirection == UP) {
-                cPos.y = sgPos.y * cellHeight + cellHeight / 2 - movedBy;
-            }
-            else if (MAdirection == DOWN) {
-                cPos.y = sgPos.y * cellHeight + cellHeight / 2 + movedBy;
-            }
-            else if (MAdirection == LEFT) {
-                cPos.x = sgPos.x * cellWidth + cellWidth / 2 - movedBy;
-            }
-            else if (MAdirection == RIGHT) {
-                cPos.x = sgPos.x * cellWidth + cellWidth / 2 + movedBy;
-            }
+            ncPos = scPos + (mcVec * cProgress);
         }
 
-        // Update player sprite position
+        // Check for collision with an occupied tile
+        Pos2D ntPos = ncPos - (gPos * cellSize);
+        bool collided = false;
+        if      (ntPos.x < (hitboxRadius / 2)) { // Left
+            int index = gPos.y * _LEVEL_WIDTH + (gPos.x - 1);
+            collided = tiles[index].occupied;
+        }
+        else if (ntPos.y < (hitboxRadius / 2)) { // Up
+            int index = (gPos.y - 1) * _LEVEL_WIDTH + gPos.x;
+            collided = tiles[index].occupied;
+        }
+        else if (ntPos.x > cellSize - (hitboxRadius / 2)) { // Right
+            int index = gPos.y * _LEVEL_WIDTH + (gPos.x + 1);
+            collided = tiles[index].occupied;
+        }
+        else if (ntPos.y > cellSize - (hitboxRadius / 2)) { // Down
+            int index = (gPos.y + 1) * _LEVEL_WIDTH + gPos.x;
+            collided = tiles[index].occupied;
+        }
+
+        if (collided) {
+            Pos2D gcPos = gPos * cellSize + Pos2D(cellSize / 2);
+
+            float ratio = 1.0f / (1.0f - MAprogress);
+            Pos2D s2Pos = gcPos + (cPos - gcPos) * ratio;
+
+            scPos = s2Pos;
+            ecPos = gcPos;
+            mcVec = ecPos - scPos;
+
+            ncPos = scPos + (mcVec * cProgress);
+        }
+
+        cPos = ncPos;
+
+        // Update player sprite/grid position
         sPos = cPos + spriteOffset;
+        gPos = cPos / cellSize;
 
         if (inMA) sPos.y -= height;
 

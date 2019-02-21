@@ -1752,8 +1752,6 @@ void Level::update_tile_info()
 
     // Player
     tiles[players[0].gPos.index(_LEVEL_WIDTH)].occupied = true;
-    if (players[0].inMA) 
-        tiles[players[0].sgPos.index(_LEVEL_WIDTH, players[0].MAdirection, 1)].occupied = true;
 
     // Objects
     for (unsigned i = 0; i < staticObjects.size(); i++) {

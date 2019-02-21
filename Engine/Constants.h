@@ -13,8 +13,6 @@ const int cellSize = 96;
 
 const int levelsInStage = 6;
 
-const float basePlayerMAlength = 0.2f;
-
 enum MenuElementType
 {
     ME_BUTTON,

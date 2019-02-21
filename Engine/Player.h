@@ -98,14 +98,16 @@ public:
 
     bool changedPosition = false;
 
-    float MAlength = 5.0f;
-    float c_MAlength;
+    const int BASE_MA_LENGTH = 200;
+    int MAlength = 200;
+    int c_MAlength;
     bool inMA = false;
-    float MAtimeElapsed;
     float MAprogress;
+    Pos2D scPos;
+    Pos2D ecPos;
+    Pos2D mcVec;
+    TimePoint MAstart;
     Direction MAdirection;
-    time_point<system_clock> MAstart;
-    Pos2D sgPos;
 
     Player
     (
