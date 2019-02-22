@@ -211,9 +211,12 @@ StaticObject::StaticObject(int id, Pos2D gPos, bool setup)
     // Link object to apropriate script
     int linked = false;
     for (int i = 0; i < _OBJECT_SCRIPTS.size(); i++) {
-        if (id / 1000 == _OBJECT_SCRIPTS[i].id) {
+        if (ID == _OBJECT_SCRIPTS[i].id) {
             // Open script file
             scripts[scri]->script_file(_OBJECT_SCRIPTS[i].filePath);
+
+            // Set variant
+            (*scripts[scri])["VARIANT"] = VR;
 
             // Set sprites
             for (int j = 0; j < _OBJECT_SCRIPTS[i].spriteIndexes.size(); j++) {
@@ -451,9 +454,12 @@ DynamicObject::DynamicObject(int id, Pos2D gPos)
     // Link object to apropriate script
     int linked = false;
     for (int i = 0; i < _OBJECT_SCRIPTS.size(); i++) {
-        if (id / 1000 == _OBJECT_SCRIPTS[i].id) {
+        if (ID == _OBJECT_SCRIPTS[i].id) {
             // Open script file
             scripts[scri]->script_file(_OBJECT_SCRIPTS[i].filePath);
+
+            // Set variant
+            (*scripts[scri])["VARIANT"] = VR;
 
             // Set sprites
             for (int j = 0; j < _OBJECT_SCRIPTS[i].spriteIndexes.size(); j++) {

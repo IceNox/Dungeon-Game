@@ -15,35 +15,39 @@
 	"levels":
 	[
 	{
-		"width": 11,
-		"height": 11,
+		"width": 16,
+		"height": 16,
 		"entryPos": {
 			"x": 1,
 			"y": 1
 		},
 		"portals": [
-			{"entryPos": {"x": 8, "y": 8}, "exitPos": {"x": 1, "y": 1}, "exitLevel": 1}
+			{"entryPos": {"x": 13, "y": 13}, "exitPos": {"x": 1, "y": 1}, "exitLevel": 1}
 		],
 		"walls": [
-			{"pos": {"x": 4, "y": 4}, "variant": 0, "activatable": false, "toggleable": false, "active": true},
+			{"pos": {"x": 5, "y": 1}, "variant": 0, "activatable": false, "toggleable": false, "active": true},
+			{"pos": {"x": 5, "y": 2}, "variant": 0, "activatable": false, "toggleable": false, "active": true},
 			{"pos": {"x": 5, "y": 4}, "variant": 0, "activatable": false, "toggleable": false, "active": true},
-			{"pos": {"x": 6, "y": 4}, "variant": 0, "activatable": false, "toggleable": false, "active": true},
-			{"pos": {"x": 4, "y": 6}, "variant": 0, "activatable": false, "toggleable": false, "active": true},
-			{"pos": {"x": 5, "y": 6}, "variant": 0, "activatable": false, "toggleable": false, "active": true},
-			{"pos": {"x": 6, "y": 6}, "variant": 0, "activatable": false, "toggleable": false, "active": true}
+			{"pos": {"x": 5, "y": 5}, "variant": 0, "activatable": false, "toggleable": false, "active": true},
+			{"pos": {"x": 6, "y": 5}, "variant": 0, "activatable": false, "toggleable": false, "active": true},
+			{"pos": {"x": 9, "y": 5}, "variant": 0, "activatable": false, "toggleable": false, "active": true},
+			{"pos": {"x": 10, "y": 5}, "variant": 0, "activatable": false, "toggleable": false, "active": true},
+			{"pos": {"x": 10, "y": 4}, "variant": 0, "activatable": false, "toggleable": false, "active": true},
+			{"pos": {"x": 10, "y": 2}, "variant": 0, "activatable": false, "toggleable": false, "active": true},
+			{"pos": {"x": 10, "y": 1}, "variant": 0, "activatable": false, "toggleable": false, "active": true}
 		],
 		"baseFloorVariant": 1,
 		"floors": [],
 		"sObjects": [
-			{"id": 101000, "pos": {"x": 5, "y": 8}}
+			{"id": 101000, "pos": {"x": 5, "y": 8}},
+			{"id": 102001, "pos": {"x": 5, "y": 3}},
+			{"id": 102003, "pos": {"x": 10, "y": 3}},
+			{"id": 102002, "pos": {"x": 7, "y": 5}},
+			{"id": 102000, "pos": {"x": 8, "y": 5}}
 		],
 		"dObjects": [
 			{"id": 201000, "pos": {"x": 5, "y": 1}},
-			{"id": 201000, "pos": {"x": 5, "y": 2}},
-			{"id": 201000, "pos": {"x": 5, "y": 3}},
-			{"id": 201000, "pos": {"x": 6, "y": 1}},
-			{"id": 201000, "pos": {"x": 6, "y": 2}},
-			{"id": 201000, "pos": {"x": 6, "y": 3}}
+			{"id": 201000, "pos": {"x": 5, "y": 2}}
 		]
 	},
 	{
@@ -64,7 +68,8 @@
 		"baseFloorVariant": 1,
 		"floors": [],
 		"sObjects": [
-			{"id": 101000, "pos": {"x": 5, "y": 8}}
+			{"id": 101000, "pos": {"x": 5, "y": 8}},
+			{"id": 101000, "pos": {"x": 5, "y": 3}}
 		],
 		"dObjects": [
 			{"id": 201000, "pos": {"x": 5, "y": 1}},
