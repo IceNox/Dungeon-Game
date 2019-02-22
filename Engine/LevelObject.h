@@ -63,6 +63,7 @@ public:
     std::vector< int > lightSourceStr;
 
     // Other
+    bool transparent = false;
     bool obstructive = false;
     bool pressuring  = false;
     bool powering    = false;

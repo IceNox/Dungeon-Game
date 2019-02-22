@@ -319,12 +319,14 @@ void StaticObject::update(const LevelStateData &ld, long int curTime)
     hitbox.cPos = cPos;
 
     // Set other variables
+    sol::optional<int> trs = (*scripts[scri])["transparent"];
     sol::optional<int> obs = (*scripts[scri])["obstructive"];
     sol::optional<int> pre = (*scripts[scri])["pressuring"];
     sol::optional<int> pwr = (*scripts[scri])["powering"];
+    transparent = trs.value();
     obstructive = obs.value();
-    pressuring  = pre.value();
-    powering    = pwr.value();
+    pressuring = pre.value();
+    powering = pwr.value();
 
     facing = static_cast<Direction>((*scripts[scri])["facing"]);
 
@@ -562,9 +564,11 @@ void DynamicObject::update(std::vector<LevelMessage> &messages, const LevelState
     hitbox.cPos = cPos;
 
     // Set other variables
+    sol::optional<int> trs = (*scripts[scri])["transparent"];
     sol::optional<int> obs = (*scripts[scri])["obstructive"];
     sol::optional<int> pre = (*scripts[scri])["pressuring"];
     sol::optional<int> pwr = (*scripts[scri])["powering"];
+    transparent = trs.value();
     obstructive = obs.value();
     pressuring = pre.value();
     powering = pwr.value();

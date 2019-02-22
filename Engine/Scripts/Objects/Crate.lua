@@ -43,6 +43,7 @@ lightsources =
 }
 
 -- Other
+transparent = 0
 obstructive = 1
 pressuring = 1
 powering = 0

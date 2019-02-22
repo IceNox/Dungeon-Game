@@ -75,6 +75,7 @@ hitbox =
 }
 
 -- Other
+transparent = 1
 obstructive = 1
 pressuring = 1
 powering = 0

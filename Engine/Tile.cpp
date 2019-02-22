@@ -139,7 +139,6 @@ void Tile::update_tile
     // Set transparency
     transparent = true;
     if (type == WALL && active) transparent = false;
-    if (hasDoor)                transparent = false;
 
     // Update light level
     {

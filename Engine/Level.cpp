@@ -1763,6 +1763,15 @@ void Level::update_tile_info()
         tiles[i].powered    = false;
     }
 
+// Transparency
+    // Objects
+    for (unsigned i = 0; i < staticObjects.size(); i++) {
+        tiles[staticObjects[i].gPos.index(width)].transparent = staticObjects[i].transparent;
+    }
+    for (unsigned i = 0; i < dynamicObjects.size(); i++) {
+        tiles[dynamicObjects[i].gPos.index(width)].transparent = dynamicObjects[i].transparent;
+    }
+
 // Occupation
     // Walls
     for (int i = 0; i < _LEVEL_WIDTH * _LEVEL_HEIGHT; i++) {
