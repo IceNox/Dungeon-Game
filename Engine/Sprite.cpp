@@ -282,11 +282,15 @@ void Sprite::Upscale(int ratio)
         }
     }
 
-    // Clear old image pointer
-    pPixels = nullptr;
+    // Resize old image pointer
+    delete[] pPixels;
+    pPixels = new Color[newWidth * newHeight];
 
-    // Fill new data
-    pPixels = newPixels;
+    // Copy new data
+    for (unsigned i = 0; i < newWidth * newHeight; i++) {
+        pPixels[i] = newPixels[i];
+    }
+    delete[] newPixels;
 
     width  = newWidth;
     height = newHeight;
