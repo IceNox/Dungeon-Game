@@ -19,6 +19,14 @@ void Game::ComposeGame()
     Pos2D centerPos(gfx.ScreenWidth / 2, gfx.ScreenHeight / 2);
     Pos2D startPos(centerPos - level.players[0].cPos);
 
+    const int TILE_VISION_RADIUS = 12;
+    Pos2D tstart = (level.visionCenterPos / cellSize) - Pos2D(TILE_VISION_RADIUS);
+    Pos2D tend = tstart + Pos2D(TILE_VISION_RADIUS * 2);
+    if (tstart.x < 0) tstart.x = 0;
+    if (tstart.y < 0) tstart.y = 0;
+    if (tend.x > level.width)  tend.x = level.width;
+    if (tend.y > level.height) tend.y = level.height;
+
     // Show death screen
     if (level.inDeathScreen && !level.startedDeathEffect) {
         screenAnimations.start_death_effect();
@@ -43,35 +51,39 @@ void Game::ComposeGame()
     /// apply_shake(startX, startY);
 
 /// Draw floor
-    for (int i = 0; i < _LEVEL_WIDTH * _LEVEL_HEIGHT; i++) {
-        SpriteDrawData sdd;
-        sdd.brightness = level.tiles[i].brightness;
+    for (int y = tstart.y; y < tend.y; y++) {
+        for (int x = tstart.x; x < tend.x; x++) {
+            int index = y * level.width + x;
 
-        if (level.tiles[i].type != WALL) {
-            if (level.tiles[i].brightness > 0.0f) {
-                gfx.DrawSprite(startPos + level.tiles[i].gridPos * cellSize, sprites[DIRT], sdd);
-            }
-        }
-        else if (level.tiles[i].type == WALL && !level.tiles[i].active) {
-            if (level.tiles[i].brightness > 0.0f) {
-                gfx.DrawSprite(startPos + level.tiles[i].gridPos * cellSize, sprites[DIRT], sdd);
-            }
-        }
+            SpriteDrawData sdd;
+            sdd.brightness = level.tiles[index].brightness;
 
-        /* UNCOMMENT LATER
-        // Draw floor edge shadows
-        if (level.tiles[i].visible && (level.tiles[i].type != "wall" || (level.tiles[i].type == "wall" && !level.tiles[i].active))) {
-            if (level.tiles[i - level.width].type == "wall" && level.tiles[i - level.width].active) {
-                gfx.DrawFloorEdgeShadows(startX + level.tiles[i].x * cellWidth, startY + level.tiles[i].y * cellHeight, "up");
+            if (level.tiles[index].type != WALL) {
+                if (level.tiles[index].brightness > 0.0f) {
+                    gfx.DrawSprite(startPos + level.tiles[index].gridPos * cellSize, sprites[DIRT], sdd);
+                }
             }
-            if (level.tiles[i - 1].type == "wall" && level.tiles[i - 1].active) {
-                gfx.DrawFloorEdgeShadows(startX + level.tiles[i].x * cellWidth, startY + level.tiles[i].y * cellHeight, "left");
+            else if (level.tiles[index].type == WALL && !level.tiles[index].active) {
+                if (level.tiles[index].brightness > 0.0f) {
+                    gfx.DrawSprite(startPos + level.tiles[index].gridPos * cellSize, sprites[DIRT], sdd);
+                }
             }
-            if (level.tiles[i + 1].type == "wall" && level.tiles[i + 1].active) {
-                gfx.DrawFloorEdgeShadows(startX + level.tiles[i].x * cellWidth, startY + level.tiles[i].y * cellHeight, "right");
+
+            /* UNCOMMENT LATER
+            // Draw floor edge shadows
+            if (level.tiles[i].visible && (level.tiles[i].type != "wall" || (level.tiles[i].type == "wall" && !level.tiles[i].active))) {
+                if (level.tiles[i - level.width].type == "wall" && level.tiles[i - level.width].active) {
+                    gfx.DrawFloorEdgeShadows(startX + level.tiles[i].x * cellWidth, startY + level.tiles[i].y * cellHeight, "up");
+                }
+                if (level.tiles[i - 1].type == "wall" && level.tiles[i - 1].active) {
+                    gfx.DrawFloorEdgeShadows(startX + level.tiles[i].x * cellWidth, startY + level.tiles[i].y * cellHeight, "left");
+                }
+                if (level.tiles[i + 1].type == "wall" && level.tiles[i + 1].active) {
+                    gfx.DrawFloorEdgeShadows(startX + level.tiles[i].x * cellWidth, startY + level.tiles[i].y * cellHeight, "right");
+                }
             }
+            */
         }
-        */
     }
 
     // Draw ground animations
@@ -86,11 +98,14 @@ void Game::ComposeGame()
     }
 
 /// Draw level elements top to botton
-    for (int y = 0; y < level.height; y++) {
+    for (int y = tstart.y; y < tend.y; y++) {
         SpriteDrawData sdd;
 
         // Walls
         for (int c = y * level.width; c < (y + 1) * level.width; c++) {
+            int cx = c % level.width;
+            if (cx < tstart.x || cx >= tend.x) continue;
+
             if (level.tiles[c].type == WALL && level.tiles[c].brightness > 0.0f) {
                 sdd.brightness = level.tiles[c].brightness;
 
