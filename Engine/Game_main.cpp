@@ -89,6 +89,16 @@ void Game::UpdateModel()
     // Update key states
     keys.update_key_states();
 
+    // Reload all scripts
+    if (keys.key_clicked(kb::KC_FUN_5)) {
+        load_objects();
+        load_items();
+    }
+    // Reload object scripts
+    if (keys.key_clicked(kb::KC_FUN_6)) load_objects();
+    // Reload item scripts
+    if (keys.key_clicked(kb::KC_FUN_7)) load_items();
+
     // Update level model
     if (gameStateData.inLevel) {
         // Pause clock
@@ -672,6 +682,8 @@ void Game::read_fonts()
 
 void Game::load_items()
 {
+    _ITEM_SCRIPTS.clear();
+
     // Save directory
     std::wstring dir = L"Scripts/Items/";
     std::wstring path = dir + L"*.lua*";
@@ -724,6 +736,8 @@ void Game::load_items()
 
 void Game::load_objects()
 {
+    _OBJECT_SCRIPTS.clear();
+
     // Save directory
     std::wstring dir = L"Scripts/Objects/";
     std::wstring path = dir + L"*.lua*";
