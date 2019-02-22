@@ -901,6 +901,8 @@ void Level::handle_messages()
             }
         }
     }
+
+    messages.clear();
     /*
     for (auto it : levelMessages) {
         it->handle_msg
