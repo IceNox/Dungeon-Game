@@ -11,6 +11,9 @@ void PowerGrid::set_dimensions(int width, int height)
     wireGrid.clear();
     gates.clear();
 
+    this->width = width;
+    this->height = height;
+
     for (int i = 0; i < width * height; i++) {
         wireGrid.push_back(WireTile());
     }
