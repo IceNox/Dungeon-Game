@@ -246,6 +246,7 @@ StaticObject::StaticObject(int id, Pos2D gPos, bool setup)
     // Set sprite variables
     currentSprite = EMPTY_SPRITE;
     sOffset = { -sprites[currentSprite].GetCenterX(), -sprites[currentSprite].GetCenterY() };
+    sGround = (*scripts[scri])["ground"];
 
     // Set hitbox
     sol::optional<int> hType = (*scripts[scri])["hitbox"]["shape"];
@@ -317,6 +318,7 @@ void StaticObject::update(const LevelStateData &ld, long int curTime)
     sOffset = { -sprites[currentSprite].GetCenterX(), -sprites[currentSprite].GetCenterY() };
     sPos = cPos + sOffset;
     sPos.y -= height;
+    sGround = (*scripts[scri])["ground"];
 
     // Set hitbox
     hitbox.cPos = cPos;
@@ -489,6 +491,7 @@ DynamicObject::DynamicObject(int id, Pos2D gPos)
     // Set sprite variables
     currentSprite = EMPTY_SPRITE;
     sOffset = { -sprites[currentSprite].GetCenterX(), -sprites[currentSprite].GetCenterY() };
+    sGround = (*scripts[scri])["ground"];
 
     // Set hitbox
     sol::optional<int> hType = (*scripts[scri])["hitbox"]["shape"];
@@ -557,6 +560,7 @@ void DynamicObject::update(std::vector<LevelMessage> &messages, const LevelState
     sOffset = { -sprites[currentSprite].GetCenterX(), -sprites[currentSprite].GetCenterY() };
     sPos = cPos + sOffset;
     sPos.y -= height;
+    sGround = (*scripts[scri])["ground"];
 
     // Set healthbar
     maxHealth = (*scripts[scri])["maxhealth"];

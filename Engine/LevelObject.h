@@ -46,6 +46,7 @@ public:
     // Sprite
     Pos2D sPos;
     Pos2D sOffset;
+    bool sGround;
 
     int currentSprite;
 

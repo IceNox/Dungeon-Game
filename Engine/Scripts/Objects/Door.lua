@@ -28,6 +28,8 @@ spriteycenters =
 }
 spriteindexes = {}
 
+ground = false
+
 -- Health
 maxhealth = 0
 health = 0

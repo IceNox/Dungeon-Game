@@ -86,6 +86,34 @@ void Game::ComposeGame()
         }
     }
 
+    // Draw ground objects
+    for (int y = tstart.y; y < tend.y; y++) {
+        for (unsigned i = 0; i < level.staticObjects.size(); i++) {
+            if (!level.staticObjects[i].sGround) continue;
+
+            if (level.staticObjects[i].gPos.y == y && level.staticObjects[i].visible) {
+                gfx.DrawSprite(startPos + level.staticObjects[i].sPos, sprites[level.staticObjects[i].currentSprite]);
+
+                if (level.staticObjects[i].healthbarVisible) {
+                    draw_object_health(startPos, level.staticObjects[i]);
+                    draw_object_armor(startPos, level.staticObjects[i]);
+                }
+            }
+        }
+        for (unsigned i = 0; i < level.dynamicObjects.size(); i++) {
+            if (!level.dynamicObjects[i].sGround) continue;
+
+            if (level.dynamicObjects[i].gPos.y == y && level.dynamicObjects[i].visible) {
+                gfx.DrawSprite(startPos + level.dynamicObjects[i].sPos, sprites[level.dynamicObjects[i].currentSprite]);
+
+                if (level.dynamicObjects[i].healthbarVisible) {
+                    draw_object_health(startPos, level.dynamicObjects[i]);
+                    draw_object_armor(startPos, level.dynamicObjects[i]);
+                }
+            }
+        }
+    }
+
     // Draw ground animations
     for (int i = 0; i < level.animations.size(); i++) {
         if (level.animations[i].ground) {
@@ -194,8 +222,10 @@ void Game::ComposeGame()
             }
         }
 
-        // Objects
+        // Objects (not-ground)
         for (unsigned i = 0; i < level.staticObjects.size(); i++) {
+            if (level.staticObjects[i].sGround) continue;
+
             if (level.staticObjects[i].gPos.y == y && level.staticObjects[i].visible) {
                 gfx.DrawSprite(startPos + level.staticObjects[i].sPos, sprites[level.staticObjects[i].currentSprite]);
 
@@ -206,6 +236,8 @@ void Game::ComposeGame()
             }
         }
         for (unsigned i = 0; i < level.dynamicObjects.size(); i++) {
+            if (level.dynamicObjects[i].sGround) continue;
+
             if (level.dynamicObjects[i].gPos.y == y && level.dynamicObjects[i].visible) {
                 gfx.DrawSprite(startPos + level.dynamicObjects[i].sPos, sprites[level.dynamicObjects[i].currentSprite]);
 

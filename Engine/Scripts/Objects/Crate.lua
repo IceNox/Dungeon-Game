@@ -19,6 +19,8 @@ spriteycenters =
 }
 spriteindexes = {}
 
+ground = false
+
 -- Health
 maxhealth = 0
 health = 0
@@ -43,7 +45,7 @@ lightsources =
 }
 
 -- Other
-transparent = 0
+transparent = 1
 obstructive = 1
 pressuring = 1
 powering = 0
