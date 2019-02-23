@@ -106,7 +106,7 @@ private:
 class StaticObject : public LevelObject
 {
 public:
-    StaticObject(int id, Pos2D gPos, bool setup = true);
+    StaticObject(int id, Pos2D gPos, std::string data);
 
     virtual ObjectType get_type() { return OBJECT_STATIC; }
 
@@ -118,7 +118,7 @@ public:
 class DynamicObject : public LevelObject
 {
 public:
-    DynamicObject(int id, Pos2D gPos);
+    DynamicObject(int id, Pos2D gPos, std::string data);
 
     virtual ObjectType get_type() { return OBJECT_DYNAMIC; }
 

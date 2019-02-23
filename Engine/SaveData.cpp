@@ -144,6 +144,7 @@ void SaveData::read_from_file(std::string fileName)
                 save["levels"][i]["sObjects"][j]["pos"]["x"],
                 save["levels"][i]["sObjects"][j]["pos"]["y"]
             ));
+            levelData[i].sObjectData.push_back(save["levels"][i]["sObjects"][j]["data"]);
         }
 
         // Get dynamic objects
@@ -155,6 +156,7 @@ void SaveData::read_from_file(std::string fileName)
                 save["levels"][i]["dObjects"][j]["pos"]["x"],
                 save["levels"][i]["dObjects"][j]["pos"]["y"]
             ));
+            levelData[i].dObjectData.push_back(save["levels"][i]["dObjects"][j]["data"]);
         }
     }
 

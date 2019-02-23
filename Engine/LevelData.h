@@ -54,10 +54,12 @@ public:
     int sObjectCount;
     std::vector< int > sObjectID;
     std::vector<Pos2D> sObjectPos;
+    std::vector<std::string> sObjectData;
 
     int dObjectCount;
     std::vector< int > dObjectID;
     std::vector<Pos2D> dObjectPos;
+    std::vector<std::string> dObjectData;
 
     int wireCount;
     std::vector<Pos2D> wirePos;

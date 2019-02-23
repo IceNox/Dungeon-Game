@@ -342,6 +342,16 @@ function select_sprite(curtime_t)
 	end
 end
 
+-- Serialization
+function serialize()
+	return ""
+end
+
+function deserialize(data)
+
+end
+
+-- No need to do anything after here
 function get_message(index)
 	return messages[index+1]
 end

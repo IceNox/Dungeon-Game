@@ -256,7 +256,8 @@ void Level::load_save_file(std::string saveName)
         staticObjects.push_back(
             StaticObject(
                 saveData.levelData[sl_index].sObjectID[i],
-                saveData.levelData[sl_index].sObjectPos[i]
+                saveData.levelData[sl_index].sObjectPos[i],
+                saveData.levelData[sl_index].sObjectData[i]
             )
         );
     }
@@ -266,7 +267,8 @@ void Level::load_save_file(std::string saveName)
         dynamicObjects.push_back(
             DynamicObject(
                 saveData.levelData[sl_index].dObjectID[i],
-                saveData.levelData[sl_index].dObjectPos[i]
+                saveData.levelData[sl_index].dObjectPos[i],
+                saveData.levelData[sl_index].dObjectData[i]
             )
         );
     }
@@ -902,7 +904,8 @@ void Level::handle_messages()
                 int x = str_to_int(xstr);
                 int y = str_to_int(ystr);
 
-                dynamicObjects.push_back(DynamicObject(str_to_int(id), { x, y }));
+                std::string data = messages[i].str_at("data");
+                dynamicObjects.push_back(DynamicObject(str_to_int(id), { x, y }, data));
             }
             else if (type == "s" || type == "static") {
                 std::string xstr = exer_str_until(messages[i].message);
@@ -912,7 +915,8 @@ void Level::handle_messages()
                 int x = str_to_int(xstr);
                 int y = str_to_int(ystr);
 
-                staticObjects.push_back(StaticObject(str_to_int(id), { x, y }));
+                std::string data = messages[i].str_at("data");
+                staticObjects.push_back(StaticObject(str_to_int(id), { x, y }, data));
             }
         }
     }

@@ -121,10 +121,8 @@ void LevelObject::update_movement(const LevelStateData& ld)
     height = ceil(mheight);
 }
 
-StaticObject::StaticObject(int id, Pos2D gPos, bool setup)
+StaticObject::StaticObject(int id, Pos2D gPos, std::string data)
 {
-    if (!setup) return;
-
     // Set essential data
     this->oid = id;
     this->ID = oid / 1000;
@@ -228,11 +226,15 @@ StaticObject::StaticObject(int id, Pos2D gPos, bool setup)
         }
     }
 
-
     // Destroy object if no script is found
     if (!linked) {
         destroyed = true;
         return;
+    }
+
+    // Deserialize data
+    if (data.length() > 0) {
+        (*scripts[scri])["deserialize"](data);
     }
 
     // Set health variables
@@ -368,7 +370,7 @@ void StaticObject::destroy()
     scripts.ReleaseObj(scri);
 }
 
-DynamicObject::DynamicObject(int id, Pos2D gPos)
+DynamicObject::DynamicObject(int id, Pos2D gPos, std::string data)
 {
     // Set essential data
     this->oid = id;
@@ -473,11 +475,15 @@ DynamicObject::DynamicObject(int id, Pos2D gPos)
         }
     }
 
-
     // Destroy object if no script is found
     if (!linked) {
         destroyed = true;
         return;
+    }
+
+    // Deserialize data
+    if (data.length() > 0) {
+        (*scripts[scri])["deserialize"](data);
     }
 
     // Set health variables

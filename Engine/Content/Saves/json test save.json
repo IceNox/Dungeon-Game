@@ -45,25 +45,31 @@
 				{"pos": {"x": 3, "y": 9}, "type": 0, "powered": false},
 				{"pos": {"x": 4, "y": 10}, "type": 1, "powered": false},
 				{"pos": {"x": 3, "y": 10}, "type": 1, "powered": false},
-				{"pos": {"x": 3, "y": 11}, "type": 1, "powered": false}
+				{"pos": {"x": 3, "y": 11}, "type": 1, "powered": false},
+				{"pos": {"x": 7, "y": 9}, "type": 0, "powered": false},
+				{"pos": {"x": 8, "y": 9}, "type": 0, "powered": false},
+				{"pos": {"x": 9, "y": 9}, "type": 0, "powered": false},
+				{"pos": {"x": 10, "y": 9}, "type": 0, "powered": false}
 			],
 			"gates": [
 				{"pos": {"x": 1, "y": 2}, "type": 0, "facing": 2, "poweredL": false, "poweredR": false, "poweredB": false}
 			]
 		},
 		"sObjects": [
-			{"id": 101000, "pos": {"x": 5, "y": 8}},
-			{"id": 102001, "pos": {"x": 5, "y": 3}},
-			{"id": 102003, "pos": {"x": 10, "y": 3}},
-			{"id": 102002, "pos": {"x": 7, "y": 5}},
-			{"id": 102000, "pos": {"x": 8, "y": 5}},
-			{"id": 103000, "pos": {"x": 2, "y": 10}},
-			{"id": 103000, "pos": {"x": 4, "y": 10}},
-			{"id": 104000, "pos": {"x": 3, "y": 9}},
-			{"id": 104000, "pos": {"x": 3, "y": 11}}
+			{"id": 101000, "pos": {"x": 5, "y": 8}, "data": ""},
+			{"id": 102001, "pos": {"x": 5, "y": 3}, "data": ""},
+			{"id": 102003, "pos": {"x": 10, "y": 3}, "data": ""},
+			{"id": 102002, "pos": {"x": 7, "y": 5}, "data": ""},
+			{"id": 102000, "pos": {"x": 8, "y": 5}, "data": ""},
+			{"id": 103000, "pos": {"x": 2, "y": 10}, "data": ""},
+			{"id": 103000, "pos": {"x": 4, "y": 10}, "data": ""},
+			{"id": 104000, "pos": {"x": 3, "y": 9}, "data": ""},
+			{"id": 104000, "pos": {"x": 3, "y": 11}, "data": ""},
+			{"id": 105000, "pos": {"x": 9, "y": 9}, "data": "201000"},
+			{"id": 103001, "pos": {"x": 7, "y": 9}, "data": ""},
+			{"id": 104000, "pos": {"x": 10, "y": 9}, "data": ""}
 		],
 		"dObjects": [
-			{"id": 201000, "pos": {"x": 1, "y": 3}}
 		]
 	},
 	{
@@ -83,15 +89,36 @@
 		],
 		"baseFloorVariant": 1,
 		"floors": [],
-		"wires": [],
+		"powergrid": {
+			"wires": [
+				{"pos": {"x": 2, "y": 10}, "type": 0, "powered": false},
+				{"pos": {"x": 3, "y": 10}, "type": 0, "powered": false},
+				{"pos": {"x": 3, "y": 9}, "type": 0, "powered": false},
+				{"pos": {"x": 4, "y": 10}, "type": 1, "powered": false},
+				{"pos": {"x": 3, "y": 10}, "type": 1, "powered": false},
+				{"pos": {"x": 7, "y": 9}, "type": 0, "powered": false},
+				{"pos": {"x": 8, "y": 9}, "type": 0, "powered": false},
+				{"pos": {"x": 9, "y": 9}, "type": 0, "powered": false}
+			],
+			"gates": [
+				{"pos": {"x": 1, "y": 2}, "type": 0, "facing": 2, "poweredL": false, "poweredR": false, "poweredB": false}
+			]
+		},
 		"sObjects": [
-			{"id": 101000, "pos": {"x": 5, "y": 8}},
-			{"id": 101000, "pos": {"x": 5, "y": 3}}
+			{"id": 101000, "pos": {"x": 5, "y": 8}, "data": ""},
+			{"id": 102001, "pos": {"x": 5, "y": 3}, "data": ""},
+			{"id": 102003, "pos": {"x": 10, "y": 3}, "data": ""},
+			{"id": 102002, "pos": {"x": 7, "y": 5}, "data": ""},
+			{"id": 102000, "pos": {"x": 8, "y": 5}, "data": ""},
+			{"id": 103000, "pos": {"x": 2, "y": 10}, "data": ""},
+			{"id": 103000, "pos": {"x": 4, "y": 10}, "data": ""},
+			{"id": 104000, "pos": {"x": 3, "y": 9}, "data": ""},
+			{"id": 104000, "pos": {"x": 3, "y": 11}, "data": ""},
+			{"id": 103000, "pos": {"x": 7, "y": 9}, "data": ""},
+			{"id": 105000, "pos": {"x": 9, "y": 9}, "data": "201000"}
 		],
 		"dObjects": [
-			{"id": 201000, "pos": {"x": 5, "y": 1}},
-			{"id": 201000, "pos": {"x": 5, "y": 2}},
-			{"id": 201000, "pos": {"x": 5, "y": 3}}
+			{"id": 201000, "pos": {"x": 1, "y": 3}, "data": ""}
 		]
 	}
 	]

@@ -159,6 +159,14 @@ function select_sprite(curtime_t)
 	return 0
 end
 
+-- Serialization
+function serialize()
+	return ""
+end
+
+function deserialize(data)
+
+end
 
 -- No need to do anything after here
 function get_message(index)
