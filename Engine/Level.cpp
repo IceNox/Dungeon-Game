@@ -1770,24 +1770,32 @@ void Level::update_tile_info()
 {
     // Clear info
     for (int i = 0; i < _LEVEL_WIDTH * _LEVEL_HEIGHT; i++) {
-        tiles[i].occupied    = false;
-        tiles[i].pressured    = false;
+        tiles[i].occupied = false;
+        tiles[i].pressured = false;
         tiles[i].pressuredW = false;
         tiles[i].pressuredS = false;
         tiles[i].pressuredG = false;
-        tiles[i].powered    = false;
+        tiles[i].powered = false;
+        tiles[i].transparent = true;
     }
 
 // Transparency
+    // Walls
+    for (int i = 0; i < _LEVEL_WIDTH * _LEVEL_HEIGHT; i++) {
+        if (tiles[i].type == WALL && tiles[i].active) {
+            tiles[i].transparent = false;
+        }
+    }
+
     // Objects
     for (unsigned i = 0; i < staticObjects.size(); i++) {
-        if (staticObjects[i].transparent) {
-            tiles[staticObjects[i].gPos.index(width)].transparent = true;
+        if (!staticObjects[i].transparent) {
+            tiles[staticObjects[i].gPos.index(width)].transparent = false;
         }
     }
     for (unsigned i = 0; i < dynamicObjects.size(); i++) {
-        if (dynamicObjects[i].transparent) {
-            tiles[dynamicObjects[i].gPos.index(width)].transparent = true;
+        if (!dynamicObjects[i].transparent) {
+            tiles[dynamicObjects[i].gPos.index(width)].transparent = false;
         }
     }
 
