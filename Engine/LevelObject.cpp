@@ -145,8 +145,8 @@ StaticObject::StaticObject(int id, Pos2D gPos, bool setup)
     (
         "position",
         sol::constructors<Pos2D()>(),
-        "x", sol::readonly(&Pos2D::x),
-        "y", sol::readonly(&Pos2D::y)
+        "x", &Pos2D::x,
+        "y", &Pos2D::y
     );
 
     scripts[scri]->new_usertype<TileData>
