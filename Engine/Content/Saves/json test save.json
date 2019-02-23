@@ -38,16 +38,32 @@
 		],
 		"baseFloorVariant": 1,
 		"floors": [],
+		"powergrid": {
+			"wires": [
+				{"pos": {"x": 2, "y": 10}, "type": 0, "powered": false},
+				{"pos": {"x": 3, "y": 10}, "type": 0, "powered": false},
+				{"pos": {"x": 3, "y": 9}, "type": 0, "powered": false},
+				{"pos": {"x": 4, "y": 10}, "type": 1, "powered": false},
+				{"pos": {"x": 3, "y": 10}, "type": 1, "powered": false},
+				{"pos": {"x": 3, "y": 11}, "type": 1, "powered": false}
+			],
+			"gates": [
+				{"pos": {"x": 1, "y": 2}, "type": 0, "facing": 2, "poweredL": false, "poweredR": false, "poweredB": false}
+			]
+		},
 		"sObjects": [
 			{"id": 101000, "pos": {"x": 5, "y": 8}},
 			{"id": 102001, "pos": {"x": 5, "y": 3}},
 			{"id": 102003, "pos": {"x": 10, "y": 3}},
 			{"id": 102002, "pos": {"x": 7, "y": 5}},
-			{"id": 102000, "pos": {"x": 8, "y": 5}}
+			{"id": 102000, "pos": {"x": 8, "y": 5}},
+			{"id": 103000, "pos": {"x": 2, "y": 10}},
+			{"id": 103000, "pos": {"x": 4, "y": 10}},
+			{"id": 104000, "pos": {"x": 3, "y": 9}},
+			{"id": 104000, "pos": {"x": 3, "y": 11}}
 		],
 		"dObjects": [
-			{"id": 201000, "pos": {"x": 5, "y": 1}},
-			{"id": 201000, "pos": {"x": 5, "y": 2}}
+			{"id": 201000, "pos": {"x": 1, "y": 3}}
 		]
 	},
 	{
@@ -67,6 +83,7 @@
 		],
 		"baseFloorVariant": 1,
 		"floors": [],
+		"wires": [],
 		"sObjects": [
 			{"id": 101000, "pos": {"x": 5, "y": 8}},
 			{"id": 101000, "pos": {"x": 5, "y": 3}}
