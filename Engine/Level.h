@@ -12,7 +12,7 @@
 #include "Player.h"
 
 #include "Tile.h"
-#include "Wire.h"
+#include "PowerGrid.h"
 #include "LevelStateData.h"
 
 #include "Portal.h"
@@ -88,9 +88,11 @@ public:
     TileVariant baseFloorVariant;
 
     int tileCount;
-    int wireCount;
     std::vector<Tile> tiles;
-    std::vector<Wire> wires;
+
+    int wireCount;
+    int gateCount;
+    PowerGrid powerGrid;
 
     LevelStateData levelStateData;
 
@@ -196,7 +198,6 @@ public:
 
     void update_minimap(kb::Keys &keys, UserData &userData);
     void update_tile_info();
-    void update_wires();
     void update_lighting();
     void update_visibility();
 

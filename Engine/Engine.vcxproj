@@ -243,7 +243,7 @@
     <ClInclude Include="Textures.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="Animation.h" />
-    <ClInclude Include="Wire.h" />
+    <ClInclude Include="PowerGrid.h" />
     <ClInclude Include="Wizard.h" />
     <ClInclude Include="Wraith.h" />
     <ClInclude Include="Zombie.h" />
@@ -328,7 +328,7 @@
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="Animation.cpp" />
-    <ClCompile Include="Wire.cpp" />
+    <ClCompile Include="PowerGrid.cpp" />
     <ClCompile Include="Wizard.cpp" />
     <ClCompile Include="Wraith.cpp" />
     <ClCompile Include="Zombie.cpp" />

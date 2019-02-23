@@ -42,7 +42,6 @@ void Level::load_save_file(std::string saveName)
     players.clear();
     portals.clear();
     tiles.clear();
-    wires.clear();
     staticObjects.clear();
     dynamicObjects.clear();
 
@@ -109,11 +108,11 @@ void Level::load_save_file(std::string saveName)
     // Read level data
     baseFloorVariant   = saveData.levelData[sl_index].baseFloorVariant;
     tileCount          = width * height;
-    wireCount          = width * height;
     portalCount        = saveData.levelData[sl_index].portalCount;
 
+    wireCount = saveData.levelData[sl_index].wireCount;
+    gateCount = saveData.levelData[sl_index].gateCount;
     /*
-    wireCount          = saveData.levelData[sl_index].wireCount;
     crateCount         = saveData.levelData[sl_index].crateCount;
     pressurePlateCount = saveData.levelData[sl_index].pressurePlateCount;
     lampCount          = saveData.levelData[sl_index].lampCount;
@@ -146,17 +145,29 @@ void Level::load_save_file(std::string saveName)
     // Create minimap
     minimap.create_minimap(width, height);
 
-    // Fill wire and tile vectors
+    // Fill tile vectors
     for (int i = 0; i < tileCount; i++) {
-        wires.push_back(Wire());
         tiles.push_back(Tile());
     }
 
-    // Fill wires
-    for (int y = 0; y < _LEVEL_HEIGHT; y++) {
-        for (int x = 0; x < _LEVEL_WIDTH; x++) {
-            wires[y * _LEVEL_WIDTH + x].set_wire(Pos2D(x, y));
-        }
+    // Fill power grid
+    powerGrid.set_dimensions(_LEVEL_WIDTH, _LEVEL_HEIGHT);
+    for (int i = 0; i < wireCount; i++) {
+        powerGrid.set_wire(
+            saveData.levelData[sl_index].wirePos[i],
+            saveData.levelData[sl_index].wireType[i],
+            saveData.levelData[sl_index].wirePowered[i]
+        );
+    }
+    for (int i = 0; i < gateCount; i++) {
+        powerGrid.set_gate(
+            saveData.levelData[sl_index].gatePos[i],
+            static_cast<GateType>(saveData.levelData[sl_index].gateType[i]),
+            saveData.levelData[sl_index].gateFacing[i],
+            saveData.levelData[sl_index].gatePoweredL[i],
+            saveData.levelData[sl_index].gatePoweredR[i],
+            saveData.levelData[sl_index].gatePoweredB[i]
+        );
     }
 
     // Fill edge walls
@@ -628,7 +639,12 @@ void Level::update_level(std::vector<GameMessage*> &msg, ScreenAnimations &scree
         visionCenterPos = (players[0].cPos + players[1].cPos) / 2;
     }
 
-    // Set tile data grid
+    // Set tile and power grid data
+    set_game_state_data();
+    powerGrid.update(levelStateData.tiles);
+    for (int i = 0; i < _LEVEL_WIDTH * _LEVEL_HEIGHT; i++) {
+        tiles[i].update_tile(powerGrid, baseFloorVariant, damageMap);
+    }
     set_game_state_data();
 
     // Update all objects
@@ -650,10 +666,6 @@ void Level::update_level(std::vector<GameMessage*> &msg, ScreenAnimations &scree
         int index = players[i].gPos.index(width);
         tiles[index].occupied = true;
         levelStateData.tiles[index].occupied = true;
-    }
-
-    for (int i = 0; i < _LEVEL_WIDTH * _LEVEL_HEIGHT; i++) {
-        tiles[i].update_tile(wires, baseFloorVariant, damageMap);
     }
     for (int i = 0; i < staticObjects.size(); i++) {
         staticObjects[i].update(levelStateData, maintime::currentGameTime);
@@ -733,7 +745,6 @@ void Level::update_level(std::vector<GameMessage*> &msg, ScreenAnimations &scree
     merge_gold_on_ground();
     
     update_tile_info();
-    update_wires();
     update_lighting();
     update_minimap(keys, userData);
 
@@ -1994,44 +2005,15 @@ void Level::update_tile_info()
     }
 
 // Power
-    // Pressure plates
-    for (unsigned i = 0; i < pressurePlates.size(); i++) {
-        if (pressurePlates[i].pressed) {
-            int index = pressurePlates[i].gY * width + pressurePlates[i].gX;
-            tiles[index].powered = true;
+    // Objects
+    for (unsigned i = 0; i < staticObjects.size(); i++) {
+        if (staticObjects[i].powering) {
+            tiles[staticObjects[i].gPos.index(width)].powered = true;
         }
     }
-}
-
-void Level::update_wires()
-{
-    // Clear wire power
-    for (int i = 0; i < _LEVEL_WIDTH * _LEVEL_HEIGHT; i++) {
-        if (wires[i].leftPowered) wires[i].leftPowered = false;
-        if (wires[i].rightPowered) wires[i].rightPowered = false;
-        if (wires[i].redPowered) wires[i].redPowered = false;
-        if (wires[i].bluePowered) wires[i].bluePowered = false;
-        if (wires[i].greenPowered) wires[i].greenPowered = false;
-        if (wires[i].yellowPowered) wires[i].yellowPowered = false;
-    }
-
-    // Power wires
-    for (int i = 0; i < _LEVEL_WIDTH * _LEVEL_HEIGHT; i++) {
-        if (tiles[i].powered) {
-            if (!wires[i].gate) {
-                if (wires[i].red && !wires[i].redPowered) {
-                    //wires[i].power(wires, "", "red", width, height);
-                }
-                if (wires[i].blue && !wires[i].bluePowered) {
-                    //wires[i].power(wires, "", "blue", width, height);
-                }
-                if (wires[i].green && !wires[i].greenPowered) {
-                    //wires[i].power(wires, "", "green", width, height);
-                }
-                if (wires[i].yellow && !wires[i].yellowPowered) {
-                    //wires[i].power(wires, "", "yellow", width, height);
-                }
-            }
+    for (unsigned i = 0; i < dynamicObjects.size(); i++) {
+        if (dynamicObjects[i].powering) {
+            tiles[dynamicObjects[i].gPos.index(width)].powered = true;
         }
     }
 }

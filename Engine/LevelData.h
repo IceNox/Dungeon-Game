@@ -59,15 +59,19 @@ public:
     std::vector< int > dObjectID;
     std::vector<Pos2D> dObjectPos;
 
-    /*
     int wireCount;
-    std::vector<int> wireX;
-    std::vector<int> wireY;
-    std::vector<std::string> wireColor;
-    std::vector<bool> wireGate;
-    std::vector<std::string> wireGateType;
-    std::vector<std::string> wireFacing;
-
+    std::vector<Pos2D> wirePos;
+    std::vector<int> wireType;
+    std::vector<bool> wirePowered;
+    int gateCount;
+    std::vector<Pos2D> gatePos;
+    std::vector<int> gateType;
+    std::vector<Direction> gateFacing;
+    std::vector<bool> gatePoweredL;
+    std::vector<bool> gatePoweredR;
+    std::vector<bool> gatePoweredB;
+    
+    /*
     int crateCount;
     std::vector<int> crateX;
     std::vector<int> crateY;

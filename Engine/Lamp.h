@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Constants.h"
-#include "Wire.h"
+#include "PowerGrid.h"
 
 #include <string>
 #include <vector>
@@ -26,5 +26,5 @@ public:
     bool visible;
 
     Lamp(int gX, int gY, std::string type, bool toggleable);
-    void update_lamp(std::vector<Wire> &wires);
+    //void update_lamp(std::vector<Wire> &wires);
 };

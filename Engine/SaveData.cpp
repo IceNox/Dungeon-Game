@@ -111,6 +111,30 @@ void SaveData::read_from_file(std::string fileName)
             levelData[i].floorVariant.push_back(static_cast<TileVariant>(save["levels"][i]["floors"][j]["variant"]));
         }
 
+        // Get power grid
+        levelData[i].wireCount = save["levels"][i]["powergrid"]["wires"].size();
+        levelData[i].gateCount = save["levels"][i]["powergrid"]["gates"].size();
+
+        for (int j = 0; j < levelData[i].wireCount; j++) {
+            levelData[i].wirePos.push_back(Pos2D(
+                save["levels"][i]["powergrid"]["wires"][j]["pos"]["x"],
+                save["levels"][i]["powergrid"]["wires"][j]["pos"]["y"]
+            ));
+            levelData[i].wireType.push_back(save["levels"][i]["powergrid"]["wires"][j]["type"]);
+            levelData[i].wirePowered.push_back(save["levels"][i]["powergrid"]["wires"][j]["powered"]);
+        }
+        for (int j = 0; j < levelData[i].gateCount; j++) {
+            levelData[i].gatePos.push_back(Pos2D(
+                save["levels"][i]["powergrid"]["gates"][j]["pos"]["x"],
+                save["levels"][i]["powergrid"]["gates"][j]["pos"]["y"]
+            ));
+            levelData[i].gateType.push_back(save["levels"][i]["powergrid"]["gates"][j]["type"]);
+            levelData[i].gateFacing.push_back(static_cast<Direction>(save["levels"][i]["powergrid"]["gates"][j]["facing"]));
+            levelData[i].gatePoweredL.push_back(save["levels"][i]["powergrid"]["gates"][j]["poweredL"]);
+            levelData[i].gatePoweredR.push_back(save["levels"][i]["powergrid"]["gates"][j]["poweredR"]);
+            levelData[i].gatePoweredB.push_back(save["levels"][i]["powergrid"]["gates"][j]["poweredB"]);
+        }
+
         // Get static objects
         levelData[i].sObjectCount = save["levels"][i]["sObjects"].size();
 

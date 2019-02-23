@@ -4,7 +4,7 @@
 
 #include "GameTime.h"
 
-#include "Wire.h"
+#include "PowerGrid.h"
 
 #include "HealthMap.h"
 
@@ -95,7 +95,7 @@ public:
     );
     void update_tile
     (
-        std::vector<Wire> wires,
+        const PowerGrid& powerGrid,
         TileVariant baseFloorVariant,
         std::vector<DamageMap> &damageMap
     );

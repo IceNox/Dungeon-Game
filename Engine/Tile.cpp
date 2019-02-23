@@ -131,7 +131,7 @@ void Tile::set_light_level
 
 void Tile::update_tile
 (
-    std::vector<Wire> wires,
+    const PowerGrid& powerGrid,
     TileVariant baseFloorVariant,
     std::vector<DamageMap> &damageMap
 )
@@ -154,13 +154,7 @@ void Tile::update_tile
     // Set state
     if (activatable) {
         int index = gridPos.index(_LEVEL_WIDTH);
-        if (
-            wires[index].redPowered ||
-            wires[index].bluePowered ||
-            wires[index].greenPowered ||
-            wires[index].yellowPowered
-            )
-        {
+        if (powerGrid.is_powered(gridPos)) {
             if (toggleable && active && wasPoweredOff) {
                 active          = false;
                 wasPoweredOff = false;

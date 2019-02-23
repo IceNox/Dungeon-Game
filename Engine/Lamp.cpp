@@ -12,7 +12,7 @@ Lamp::Lamp(int gX, int gY, std::string type, bool toggleable) : gX(gX), gY(gY), 
     sX = gX * cellSize + 36;
     sY = gY * cellSize + 28;
 }
-
+/*
 void Lamp::update_lamp(std::vector<Wire> &wires)
 {
     if (
@@ -42,3 +42,4 @@ void Lamp::update_lamp(std::vector<Wire> &wires)
         wasPoweredOff = true;
     }
 }
+*/
