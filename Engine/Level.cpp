@@ -1929,6 +1929,18 @@ void Level::update_tile_info()
 
     }
 
+    // Objects
+    for (unsigned i = 0; i < staticObjects.size(); i++) {
+        if (staticObjects[i].pressuring && staticObjects[i].height == 0) {
+            tiles[staticObjects[i].gPos.index(width)].pressured = true;
+        }
+    }
+    for (unsigned i = 0; i < dynamicObjects.size(); i++) {
+        if (dynamicObjects[i].pressuring && dynamicObjects[i].height == 0) {
+            tiles[dynamicObjects[i].gPos.index(width)].pressured = true;
+        }
+    }
+
     // Gold
     for (unsigned i = 0; i < entities.size(); i++) {
         if (entities[i]->get_type() == ENTITY_GOLD) {
