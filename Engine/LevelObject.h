@@ -110,8 +110,8 @@ public:
 
     virtual ObjectType get_type() { return OBJECT_STATIC; }
 
-    virtual void update(const LevelStateData &ld, long int curTime);
-    virtual void damage(const DamageInfo &di);
+    virtual void update(std::vector<LevelMessage> &messages, const LevelStateData &ld, long int curTime);
+    virtual void damage(std::vector<LevelMessage> &messages, const DamageInfo &di);
     virtual void destroy();
 };
 

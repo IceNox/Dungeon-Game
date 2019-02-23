@@ -670,7 +670,7 @@ void Level::update_level(std::vector<GameMessage*> &msg, ScreenAnimations &scree
         levelStateData.tiles[index].occupied = true;
     }
     for (int i = 0; i < staticObjects.size(); i++) {
-        staticObjects[i].update(levelStateData, maintime::currentGameTime);
+        staticObjects[i].update(messages, levelStateData, maintime::currentGameTime);
 
         // Update tile occupation
         if (staticObjects[i].obstructive) {
@@ -1412,7 +1412,7 @@ void Level::deal_damage(ScreenAnimations &screenAnimations)
         if (!healthMap[index].active) continue;
 
         for (unsigned j = 0; j < healthMap[index].dInfo.size(); j++) {
-            staticObjects[i].damage(healthMap[index].dInfo[j]);
+            staticObjects[i].damage(messages, healthMap[index].dInfo[j]);
 
             if (healthMap[index].dInfo[j].source == "player") {
                 // Start shake

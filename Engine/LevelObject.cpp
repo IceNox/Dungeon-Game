@@ -280,7 +280,7 @@ StaticObject::StaticObject(int id, Pos2D gPos, std::string data)
     }
 }
 
-void StaticObject::update(const LevelStateData &ld, long int curTime)
+void StaticObject::update(std::vector<LevelMessage> &messages, const LevelStateData &ld, long int curTime)
 {
     // Set variables
     (*scripts[scri])["moving"] = moveState.ongoing;
@@ -312,6 +312,13 @@ void StaticObject::update(const LevelStateData &ld, long int curTime)
         update_movement(ld);
     }
 
+    // Get messages
+    int count = (*scripts[scri])["messagecount"].get<int>();
+    for (int i = 0; i < count; i++) {
+        messages.push_back((*scripts[scri])["get_message"](i));
+    }
+    (*scripts[scri])["clear_messages"]();
+
     // Set grid position
     gPos = cPos / cellSize;
 
@@ -340,7 +347,7 @@ void StaticObject::update(const LevelStateData &ld, long int curTime)
     return;
 }
 
-void StaticObject::damage(const DamageInfo &di)
+void StaticObject::damage(std::vector<LevelMessage> &messages, const DamageInfo &di)
 {
     destroyed = (*scripts[scri])["damage"](di, destroyed);
 
