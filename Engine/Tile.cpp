@@ -140,6 +140,11 @@ void Tile::update_tile
     transparent = true;
     if (type == WALL && active) transparent = false;
 
+    // Set power from wires
+    if (powerGrid.is_powered(gridPos)) {
+        powered = true;
+    }
+
     // Update light level
     {
         //std::chrono::duration<float> elapsed_seconds = std::chrono::system_clock::now() - lastLightLevelChange;
@@ -154,7 +159,7 @@ void Tile::update_tile
     // Set state
     if (activatable) {
         int index = gridPos.index(_LEVEL_WIDTH);
-        if (powerGrid.is_powered(gridPos)) {
+        if (powered) {
             if (toggleable && active && wasPoweredOff) {
                 active          = false;
                 wasPoweredOff = false;

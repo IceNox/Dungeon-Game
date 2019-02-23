@@ -45,6 +45,7 @@ class PowerGrid
 
     std::vector<WireTile> wireGrid;
     std::vector<GateTile> gates;
+    std::vector<bool> tilesPowered;
 
     int width;
     int height;

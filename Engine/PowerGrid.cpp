@@ -4,18 +4,21 @@ PowerGrid::PowerGrid()
 {
     wireGrid.clear();
     gates.clear();
+    tilesPowered.clear();
 }
 
 void PowerGrid::set_dimensions(int width, int height)
 {
     wireGrid.clear();
     gates.clear();
+    tilesPowered.clear();
 
     this->width = width;
     this->height = height;
 
     for (int i = 0; i < width * height; i++) {
         wireGrid.push_back(WireTile());
+        tilesPowered.push_back(false);
     }
 }
 
@@ -62,8 +65,21 @@ bool PowerGrid::is_powered(Pos2D pos) const
 
 void PowerGrid::update(const std::vector<TileData>& td)
 {
+    for (unsigned i = 0; i < td.size(); i++) {
+        if (td[i].powered) {
+            tilesPowered[i] = true;
+        }
+    }
+
     int msElapsed = (maintime::now() - lastUpdate).get_duration(MILLISECONDS);
-    while (msElapsed > MS_PER_TICK) {
+    if (msElapsed > MS_PER_TICK) {
+        // Reset wire power
+        for (unsigned i = 0; i < wireGrid.size(); i++) {
+            for (unsigned j = 0; j < wireGrid[i].powered.size(); j++) {
+                wireGrid[i].powered[j] = false;
+            }
+        }
+
         // Get which gates should send power this tick
         std::vector<int> indices;
         for (unsigned i = 0; i < gates.size(); i++) {
@@ -102,7 +118,12 @@ void PowerGrid::update(const std::vector<TileData>& td)
 
         // Send power from those gates
         for (unsigned i = 0; i < indices.size(); i++) {
-            GateTile gate = gates[indices[i]];
+            GateTile &gate = gates[indices[i]];
+
+            gate.poweredL = false;
+            gate.poweredR = false;
+            gate.poweredB = false;
+
             power(gate.pos.index(width, gate.facing, 1), gate.facing);
         }
 
@@ -113,8 +134,13 @@ void PowerGrid::update(const std::vector<TileData>& td)
             }
         }
 
+        // Set variables
         msElapsed -= MS_PER_TICK;
         lastUpdate += Duration(MS_PER_TICK);
+
+        for (unsigned i = 0; i < tilesPowered.size(); i++) {
+            tilesPowered[i] = false;
+        }
     }
 }
 
@@ -142,6 +168,8 @@ void PowerGrid::power(int index, Direction dir, int type)
         for (unsigned i = 0; i < wireGrid[index].types.size(); i++) {
             if (wireGrid[index].powered[i]) continue;
 
+            wireGrid[index].powered[i] = true;
+
             // Power all 4 directions (except input)
             for (int count = 0; count < 4; count++) {
                 Direction powerDir = static_cast<Direction>(count);
@@ -157,6 +185,8 @@ void PowerGrid::power(int index, Direction dir, int type)
     else {
         for (unsigned i = 0; i < wireGrid[index].types.size(); i++) {
             if (wireGrid[index].powered[i] || wireGrid[index].types[i] != type) continue;
+
+            wireGrid[index].powered[i] = true;
 
             // Power all 4 directions (except input)
             for (int count = 0; count < 4; count++) {
