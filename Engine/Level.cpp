@@ -671,17 +671,21 @@ void Level::update_level(std::vector<GameMessage*> &msg, ScreenAnimations &scree
         staticObjects[i].update(levelStateData, maintime::currentGameTime);
 
         // Update tile occupation
-        int index = staticObjects[i].gPos.index(width);
-        tiles[index].occupied = true;
-        levelStateData.tiles[index].occupied = true;
+        if (staticObjects[i].obstructive) {
+            int index = staticObjects[i].gPos.index(width);
+            tiles[index].occupied = true;
+            levelStateData.tiles[index].occupied = true;
+        }
     }
     for (int i = 0; i < dynamicObjects.size(); i++) {
         dynamicObjects[i].update(messages, levelStateData, maintime::currentGameTime);
 
         // Update tile occupation
-        int index = dynamicObjects[i].gPos.index(width);
-        tiles[index].occupied = true;
-        levelStateData.tiles[index].occupied = true;
+        if (dynamicObjects[i].obstructive) {
+            int index = dynamicObjects[i].gPos.index(width);
+            tiles[index].occupied = true;
+            levelStateData.tiles[index].occupied = true;
+        }
     }
     for (auto it : entities) {
         it->update();
@@ -1777,10 +1781,14 @@ void Level::update_tile_info()
 // Transparency
     // Objects
     for (unsigned i = 0; i < staticObjects.size(); i++) {
-        tiles[staticObjects[i].gPos.index(width)].transparent = staticObjects[i].transparent;
+        if (staticObjects[i].transparent) {
+            tiles[staticObjects[i].gPos.index(width)].transparent = true;
+        }
     }
     for (unsigned i = 0; i < dynamicObjects.size(); i++) {
-        tiles[dynamicObjects[i].gPos.index(width)].transparent = dynamicObjects[i].transparent;
+        if (dynamicObjects[i].transparent) {
+            tiles[dynamicObjects[i].gPos.index(width)].transparent = true;
+        }
     }
 
 // Occupation
@@ -1794,10 +1802,14 @@ void Level::update_tile_info()
 
     // Objects
     for (unsigned i = 0; i < staticObjects.size(); i++) {
-        tiles[staticObjects[i].gPos.index(width)].occupied = staticObjects[i].obstructive;
+        if (staticObjects[i].obstructive) {
+            tiles[staticObjects[i].gPos.index(width)].occupied = true;
+        }
     }
     for (unsigned i = 0; i < dynamicObjects.size(); i++) {
-        tiles[dynamicObjects[i].gPos.index(width)].occupied = dynamicObjects[i].obstructive;
+        if (dynamicObjects[i].obstructive) {
+            tiles[dynamicObjects[i].gPos.index(width)].occupied = true;
+        }
     }
 
     // Crates
